@@ -10,7 +10,7 @@ public class HelloWorld
 {
     
     public static void main(String[] args) {
-        //JOptionPane.showMessageDialog(null,"Welcome");
-        System.out.println("Hello");
+        JOptionPane.showMessageDialog(null,"Welcome");
+        //System.out.println("Hello");
     }
 }
