@@ -15,7 +15,7 @@ public class HelloWorld
         Scanner sn = new Scanner(System.in);
         System.out.print("Please put your name: ");
         name = sn.nextLine();
-        //JOptionPane.showMessageDialog(null,name);
+        JOptionPane.showMessageDialog(null,name);
 
         //JOptionPane.showMessageDialog(null,"Welcome");
         //System.out.println("Hello");
