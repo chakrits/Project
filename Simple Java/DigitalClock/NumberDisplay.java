@@ -12,7 +12,7 @@ public class NumberDisplay
   }
 
   public void setValue(int newValue)
-  /* Set currValue to the new value.    If the new value is less than    zero or over maxValue, don't set it.
+  /* Set currValue to the new value. If the new value is less than zero or over maxValue, don't set it.
   */
   { if ((newValue >= 0) && (newValue < maxValue))
       currValue = newValue;
