@@ -5,4 +5,7 @@
 
 **Code Langauge**
 1. Java
+    #### ```Java
+            System.out.print("Hello Java);
+
 2. C/C++
