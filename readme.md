@@ -15,4 +15,4 @@
 
 
 Image
-Inline-style:![alt text](https://github.com/chakrits/Project/tree/master/Image/../../../../../../../Image/img1.png "Logo Title Text 1")
+Inline-style:![alt text](https://github.com/chakrits/Project/tree/master/Image/img1.png "Logo Title Text 1")
