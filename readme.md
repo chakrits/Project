@@ -9,5 +9,5 @@
      System.out.print("Hello Java);
 
 2. C/C++
-    ```C++
+    ```C
     printf("Hellow C++");
