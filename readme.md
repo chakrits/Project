@@ -7,6 +7,7 @@
 1. Java
     ```Java
      System.out.print("Hello Java);
+![alt text](https://github.com/chakrits/Project/blob/master/Image/img1.png)
 
 2. C/C++
     ```C
