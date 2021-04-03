@@ -13,7 +13,3 @@
     ```C
     printf("Hellow C++");
 
-
-
-Image
-Inline-style:![alt text](https://github.com/chakrits/Project/blob/master/Image/img1.png)
