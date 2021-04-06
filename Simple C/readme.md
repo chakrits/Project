@@ -24,9 +24,9 @@ for(i=1;i<=row;i++)
  ```
  
  #### this formula `j <= i ` can be change if you want to print difference shape.
-|row,col||row,col||row,col||row,col||row,col|
+|row,col||row,col|
 | --- | --- |
-|1,1|1,2|1,3|1,4|1,5|
+|1,1|1,2|
 
 
 |2,1|2,2|2,3|2,4|2,5|
