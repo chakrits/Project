@@ -26,7 +26,7 @@ int main (void){
         while(j<=row)
         {
             //formula for print * in any shape
-            if(jj+i == row+1 || j==i)
+            if(j+i == row+1 || j==i)
                 printf("*");
             else
                 printf(" ");
