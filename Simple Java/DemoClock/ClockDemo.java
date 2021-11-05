@@ -1,18 +1,20 @@
-package DigitalClock;
+package DemoClock;
 
 public class ClockDemo {
     public static void main(String[] args)
   {
     ClockDisplay clock = new ClockDisplay();
     clock.setTime(1, 10, 1);  // set time to 20:10
-
+    //Frame f = new Frame(clock.getTime());
+    
+    
     while(true) {
       clock.minIncrement();
       //System.out.println(" tick...");
       System.out.println("Current time: " + clock.getTime());
 
       wait(1000);   // slow down the looping
-    }
+    } 
 
 }// end of main()
 

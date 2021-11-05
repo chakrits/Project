@@ -1,4 +1,4 @@
-package DigitalClock;
+package DemoClock;
 
 public class ClockDisplay {
     private NumberDisplay hours;

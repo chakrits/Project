@@ -1,4 +1,4 @@
-package DigitalClock;
+package DemoClock;
 
 public class NumberDisplay
 {
