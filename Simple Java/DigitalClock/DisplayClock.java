@@ -4,41 +4,36 @@ import javax.print.attribute.SetOfIntegerSyntax;
 // Import essential package
 import javax.swing.*;
 import javax.swing.plaf.synth.SynthInternalFrameUI;
-
-import DemoClock.Frame;
-
 import java.awt.*;
 
 
-public class DisplayClock {
+public class DisplayClock extends JFrame {
 
-    private JFrame f;
     private JPanel p;
+    private ClockDisplay clock ;
 
     public DisplayClock ()
     {
-        ClockDisplay clock = new ClockDisplay();
 
-         f = new JFrame("Digital Clock");;
          p = new JPanel();
-         p = setPanel(p);
-         f = setFrame(f);
+         p.setLayout(new BorderLayout());
+         p.setBackground(Color.GRAY);
+
+
+         ClockDisplay clock = new ClockDisplay();
+         clock.setTime(15, 00, 00); 
+         JLabel mLabel = new JLabel(clock.getTime(),SwingConstants.CENTER);
+         mLabel.setOpaque(true);
+         
+         clock.minIncrement();
+         mLabel.setText(clock.getTime());
+
+         p.add(mLabel);
+         
+         add(p);
 
     }
 
-    private JFrame setFrame (JFrame f)
-    {
-        f.add(p);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(250, 200);
-        f.setVisible(true);
-        return f;
-    }
 
-    private JPanel setPanel (JPanel p)
-    {
-        p.setBackground(Color.GRAY);
-        return p;
-    }
 }
 

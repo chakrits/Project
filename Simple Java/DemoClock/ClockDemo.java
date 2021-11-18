@@ -5,8 +5,6 @@ public class ClockDemo {
   {
     ClockDisplay clock = new ClockDisplay();
     clock.setTime(1, 10, 1);  // set time to 20:10
-    //Frame f = new Frame(clock.getTime());
-    
     
     while(true) {
       clock.minIncrement();
