@@ -1,4 +1,4 @@
-### **PROJECT TITLE:** Simple Coding
+### **PROJECT TITLE:** 
 **PURPOSE OF PROJECT:** For practicing coding skill.
 
 **AUTHORS**: "Chakrit Salaeman"
