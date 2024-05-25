@@ -1,6 +1,5 @@
 package GUI;
 
-import javax.naming.ldap.ManageReferralControl;
 import javax.swing.*;
 import java.awt.*;
 
