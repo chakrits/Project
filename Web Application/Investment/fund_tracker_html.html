@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบติดตามการซื้อขายกองทุน</title>
+    <link rel="stylesheet" href="css/fund_tracker.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 ระบบติดตามการซื้อขายกองทุน</h1>
+            <p class="subtitle">จัดการข้อมูลการลงทุนของคุณอย่างเป็นระบบ</p>
+        </header>
+
+        <div class="control-panel">
+            <div class="file-operations">
+                <button id="importBtn" class="btn btn-primary">
+                    📤 นำเข้าไฟล์ Excel
+                </button>
+                <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;">
+                
+                <button id="exportBtn" class="btn btn-success">
+                    📥 ส่งออกเป็น Excel
+                </button>
+                
+                <button id="addTransactionBtn" class="btn btn-info">
+                    ➕ เพิ่มรายการใหม่
+                </button>
+            </div>
+
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>💰 มูลค่ารวม</h3>
+                    <p id="totalValue">฿ 0</p>
+                </div>
+                <div class="card">
+                    <h3>📈 กำไร/ขาดทุน</h3>
+                    <p id="totalPnL">฿ 0</p>
+                </div>
+                <div class="card">
+                    <h3>📊 จำนวนกองทุน</h3>
+                    <p id="fundCount">0 กองทุน</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form สำหรับเพิ่มรายการใหม่ -->
+        <div id="transactionModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>📝 เพิ่มรายการซื้อขายใหม่</h2>
+                <form id="transactionForm">
+                    <div class="form-group">
+                        <label for="fundCode">รหัสกองทุน:</label>
+                        <input type="text" id="fundCode" name="fundCode" required placeholder="เช่น K-TNZ-ThaiESG">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fundName">ชื่อกองทุน:</label>
+                        <input type="text" id="fundName" name="fundName" required placeholder="เช่น K Target Net Zero Thai Equity Fund">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionType">ประเภทรายการ:</label>
+                            <select id="transactionType" name="transactionType" required>
+                                <option value="BUY">ซื้อ</option>
+                                <option value="SELL">ขาย</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transactionDate">วันที่ทำรายการ:</label>
+                            <input type="date" id="transactionDate" name="transactionDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="units">จำนวนหน่วย:</label>
+                            <input type="number" id="units" name="units" step="0.0001" required placeholder="0.0000">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pricePerUnit">ราคาต่อหน่วย:</label>
+                            <input type="number" id="pricePerUnit" name="pricePerUnit" step="0.0001" required placeholder="0.0000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="totalAmount">จำนวนเงินรวม:</label>
+                        <input type="number" id="totalAmount" name="totalAmount" step="0.01" required placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">หมายเหตุ:</label>
+                        <textarea id="notes" name="notes" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">💾 บันทึก</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">❌ ยกเลิก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ตารางแสดงข้อมูล -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>📋 รายการซื้อขายกองทุน</h2>
+                <div class="filter-controls">
+                    <input type="text" id="searchInput" placeholder="🔍 ค้นหา...">
+                    <select id="filterType">
+                        <option value="ALL">แสดงทั้งหมด</option>
+                        <option value="BUY">แสดงเฉพาะการซื้อ</option>
+                        <option value="SELL">แสดงเฉพาะการขาย</option>
+                    </select>
+                </div>
+            </div>
+            
+            <table id="transactionTable">
+                <thead>
+                    <tr>
+                        <th>วันที่</th>
+                        <th>รหัสกองทุน</th>
+                        <th>ชื่อกองทุน</th>
+                        <th>ประเภท</th>
+                        <th>จำนวนหน่วย</th>
+                        <th>ราคาต่อหน่วย</th>
+                        <th>จำนวนเงิน</th>
+                        <th>หมายเหตุ</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                    <!-- ข้อมูลจะถูกเพิ่มที่นี่ -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ส่วนสรุปผลการลงทุนแต่ละกองทุน -->
+        <div class="portfolio-summary">
+            <h2>📊 สรุปพอร์ตการลงทุน</h2>
+            <div id="portfolioCards">
+                <!-- การ์ดสรุปแต่ละกองทุนจะถูกเพิ่มที่นี่ -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/fund_tracker.js"></script>
+</body>
+</html>
