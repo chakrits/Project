@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>JSON Converter - Test Center</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="../assets/img/kaiadmin/tester-sign.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="../assets/css/custom.css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="../index.html" class="logo">
+              <div class="test-center-logo">
+                <span class="logo-icon"><i class="fas fa-vial"></i></span>
+                <span class="logo-text">Test Center</span>
+              </div>
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item">
+                <a
+                  data-bs-toggle="collapse"
+                  href="#dashboard"
+                  class="collapsed"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-home"></i>
+                  <p>Home</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="../index.html">
+                        <span class="sub-item">Dashboard</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Content</h4>
+              </li>
+              <li class="nav-item active submenu">
+                <a data-bs-toggle="collapse" href="#tools">
+                  <i class="fas fa-cog"></i>
+                  <p>Tools</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="tools">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="aes-encryption.html">
+                        <span class="sub-item">Encryption/Decryption</span>
+                      </a>
+                    </li>
+                    <li class="active">
+                      <a href="json-converter.html">
+                        <span class="sub-item">Convert String JSON</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="base64-pdf.html">
+                        <span class="sub-item">Base64toPDF</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="pdf-base64.html">
+                        <span class="sub-item">PDFtoBase64</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#eform">
+                  <i class="fas fa-file-alt"></i>
+                  <p>E-Form</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="eform">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="#">
+                        <span class="sub-item">Auto Login</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="../index.html" class="logo">
+                <div class="test-center-logo">
+                  <span class="logo-icon"><i class="fas fa-vial"></i></span>
+                  <span class="logo-text">Test Center</span>
+                </div>
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+            <div class="container-fluid">
+              <nav
+                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+              >
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-search pe-1">
+                      <i class="fa fa-search search-icon"></i>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search ..."
+                    class="form-control"
+                  />
+                </div>
+              </nav>
+
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li
+                  class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none"
+                >
+                  <a
+                    class="nav-link dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    role="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                  >
+                    <i class="fa fa-search"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-search animated fadeIn">
+                    <form class="navbar-left navbar-form nav-search">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          placeholder="Search ..."
+                          class="form-control"
+                        />
+                      </div>
+                    </form>
+                  </ul>
+                </li>
+
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+                      <img
+                        src="../assets/img/profile.jpg"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                    <span class="profile-username">
+                      <span class="op-7">Hi,</span>
+                      <span class="fw-bold">Hizrian</span>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <div class="user-box">
+                          <div class="avatar-lg">
+                            <img
+                              src="../assets/img/profile.jpg"
+                              alt="image profile"
+                              class="avatar-img rounded"
+                            />
+                          </div>
+                          <div class="u-text">
+                            <h4>Hizrian</h4>
+                            <p class="text-muted">hello@example.com</p>
+                            <a
+                              href="profile.html"
+                              class="btn btn-xs btn-secondary btn-sm"
+                              >View Profile</a
+                            >
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">My Profile</a>
+                        <a class="dropdown-item" href="#">My Balance</a>
+                        <a class="dropdown-item" href="#">Inbox</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Account Setting</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+
+        <div class="container">
+          <div class="page-inner">
+            <div class="page-header">
+              <h3 class="fw-bold mb-3">JSON String Converter</h3>
+              <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                  <a href="../index.html">
+                    <i class="icon-home"></i>
+                  </a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Tools</a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Convert String JSON</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Info Card -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-code me-2"></i>About JSON String
+                      Converter
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-muted">
+                      <strong>JSON String Converter</strong> helps you convert
+                      Python-style strings or malformed JSON strings into valid
+                      JSON format. This tool automatically handles common issues
+                      like single quotes, unquoted keys, Python boolean values
+                      (True/False), and None values.
+                    </p>
+                    <div class="alert alert-info">
+                      <strong>Supported Conversions:</strong>
+                      • Python dictionaries → JSON objects • Single quotes →
+                      Double quotes • True/False/None → true/false/null •
+                      Unquoted keys → Quoted keys
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Statistics Card -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-primary bubble-shadow-small"
+                        >
+                          <i class="fas fa-chart-bar"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Input Statistics</p>
+                          <h4 class="card-title">
+                            Lines: <span id="lineCount">0</span> | Characters:
+                            <span id="charCount">0</span>
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sample Data Section -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-lightbulb me-2"></i>Quick Test Samples
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                      <button
+                        class="btn btn-outline-info btn-sm"
+                        onclick="loadSample('python')"
+                      >
+                        <i class="fab fa-python me-1"></i>Python Dict
+                      </button>
+                      <button
+                        class="btn btn-outline-info btn-sm"
+                        onclick="loadSample('nested')"
+                      >
+                        <i class="fas fa-sitemap me-1"></i>Nested Objects
+                      </button>
+                      <button
+                        class="btn btn-outline-info btn-sm"
+                        onclick="loadSample('array')"
+                      >
+                        <i class="fas fa-list me-1"></i>Arrays & Lists
+                      </button>
+                      <button
+                        class="btn btn-outline-info btn-sm"
+                        onclick="loadSample('complex')"
+                      >
+                        <i class="fas fa-project-diagram me-1"></i>Complex Data
+                      </button>
+                      <button
+                        class="btn btn-outline-info btn-sm"
+                        onclick="loadSample('edge')"
+                      >
+                        <i class="fas fa-exclamation-triangle me-1"></i>Edge
+                        Cases
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Main Converter Tool -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-exchange-alt me-2"></i>JSON String
+                      Converter Tool
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <!-- Input Section -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputArea" class="form-label">
+                            <i class="fas fa-edit me-2"></i
+                            ><strong>Input (String-like JSON)</strong>
+                          </label>
+                          <textarea
+                            id="inputArea"
+                            class="form-control"
+                            rows="15"
+                            placeholder="Paste your string-like JSON here...
+Example:
+{
+  name: 'John Doe',
+  age: 30,
+  active: True,
+  salary: None,
+  skills: ['Python', 'JavaScript']
+}"
+                            oninput="updateStats()"
+                          ></textarea>
+                          <small class="form-text text-muted">
+                            Supports Python-style dictionaries, single quotes,
+                            unquoted keys, True/False/None values
+                          </small>
+                        </div>
+                      </div>
+
+                      <!-- Output Section -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">
+                            <i class="fas fa-code me-2"></i
+                            ><strong>Output (Valid JSON)</strong>
+                          </label>
+                          <div class="json-output-container">
+                            <pre id="outputArea" class="json-output">{}</pre>
+                          </div>
+                          <small class="form-text text-muted">
+                            Converted JSON will appear here with proper
+                            formatting
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Control Buttons -->
+                    <div class="row mt-3">
+                      <div class="col-md-12">
+                        <div
+                          class="d-flex gap-2 flex-wrap justify-content-center"
+                        >
+                          <button class="btn btn-primary" onclick="convert()">
+                            <i class="fas fa-sync-alt me-1"></i>Convert to JSON
+                          </button>
+                          <button
+                            class="btn btn-success"
+                            onclick="copyToClipboard()"
+                          >
+                            <i class="fas fa-clipboard me-1"></i>Copy Result
+                          </button>
+                          <button
+                            class="btn btn-success"
+                            onclick="downloadJson()"
+                          >
+                            <i class="fas fa-download me-1"></i>Download JSON
+                          </button>
+                          <button
+                            class="btn btn-outline-secondary"
+                            onclick="clearAll()"
+                          >
+                            <i class="fas fa-trash me-1"></i>Clear All
+                          </button>
+                          <button
+                            class="btn btn-outline-info"
+                            onclick="validateJson()"
+                          >
+                            <i class="fas fa-check-circle me-1"></i>Validate
+                            Only
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Status Display -->
+                    <div class="row mt-3">
+                      <div class="col-md-12">
+                        <div id="statusMsg"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Result Display (Error Analysis) -->
+            <div class="row" id="resultsSection" style="display: none">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-bug me-2"></i>Error Analysis
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="results"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Features Info -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-star me-2"></i>Key Features &
+                      Capabilities
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6><strong>Conversion Features:</strong></h6>
+                        <ul class="list-unstyled">
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i>Python
+                            boolean values (True/False) → JSON (true/false)
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i>Python
+                            None values → JSON null
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i>Single
+                            quotes → Double quotes
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i
+                            >Unquoted object keys → Quoted keys
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6">
+                        <h6><strong>Advanced Features:</strong></h6>
+                        <ul class="list-unstyled">
+                          <li>
+                            <i class="fas fa-cog text-primary me-2"></i
+                            >Real-time validation and error detection
+                          </li>
+                          <li>
+                            <i class="fas fa-search text-primary me-2"></i
+                            >Detailed error analysis with line numbers
+                          </li>
+                          <li>
+                            <i class="fas fa-download text-primary me-2"></i
+                            >Download converted JSON as file
+                          </li>
+                          <li>
+                            <i class="fas fa-keyboard text-primary me-2"></i
+                            >Keyboard shortcuts support
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="container-fluid d-flex justify-content-between">
+            <nav class="pull-left">
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Test Center </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Help </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Licenses </a>
+                </li>
+              </ul>
+            </nav>
+            <div class="copyright">
+              2024, developed with
+              <i class="fa fa-heart heart text-danger"></i> by
+              <strong>Chakrit Salaeman & Claude</strong>
+            </div>
+            <div>Test Center Management</div>
+          </div>
+        </footer>
+      </div>
+
+      <!-- Custom template | don't include it in your project! -->
+      <div class="custom-template">
+        <div class="title">Settings</div>
+        <div class="custom-content">
+          <div class="switcher">
+            <div class="switch-block">
+              <h4>Logo Header</h4>
+              <div class="btnSwitch">
+                <button
+                  type="button"
+                  class="selected changeLogoHeaderColor"
+                  data-color="dark"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="purple"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="light-blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="green"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="orange"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="red"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="white"
+                ></button>
+                <br />
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="dark2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="purple2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="light-blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="green2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="orange2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="red2"
+                ></button>
+              </div>
+            </div>
+            <div class="switch-block">
+              <h4>Navbar Header</h4>
+              <div class="btnSwitch">
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="dark"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="purple"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="light-blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="green"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="orange"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="red"
+                ></button>
+                <button
+                  type="button"
+                  class="selected changeTopBarColor"
+                  data-color="white"
+                ></button>
+                <br />
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="dark2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="purple2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="light-blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="green2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="orange2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="red2"
+                ></button>
+              </div>
+            </div>
+            <div class="switch-block">
+              <h4>Sidebar</h4>
+              <div class="btnSwitch">
+                <button
+                  type="button"
+                  class="changeSideBarColor"
+                  data-color="white"
+                ></button>
+                <button
+                  type="button"
+                  class="selected changeSideBarColor"
+                  data-color="dark"
+                ></button>
+                <button
+                  type="button"
+                  class="changeSideBarColor"
+                  data-color="dark2"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="custom-toggle">
+          <i class="icon-settings"></i>
+        </div>
+      </div>
+      <!-- End Custom template -->
+    </div>
+
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- Chart JS -->
+    <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="../assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="../assets/js/kaiadmin.min.js"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="../assets/js/setting-demo.js"></script>
+
+    <!-- JSON Converter Logic -->
+    <script>
+      // Sample data for testing different scenarios
+      const samples = {
+        python: `{
+  name: 'John Doe',
+  age: 30,
+  active: True,
+  salary: None,
+  skills: ['Python', 'JavaScript', 'Testing']
+}`,
+        nested: `{
+  user: {
+    profile: {
+      name: 'Jane Smith',
+      settings: {
+        theme: 'dark',
+        notifications: True
+      }
+    }
+  },
+  status: 'active'
+}`,
+        array: `{
+  users: [
+    {name: 'Alice', active: True},
+    {name: 'Bob', active: False},
+    {name: 'Charlie', active: None}
+  ],
+  count: 3
+}`,
+        complex: `{
+  api_response: {
+    success: True,
+    data: {
+      items: ['item1', 'item2', 'item3'],
+      meta: {
+        total: 100,
+        page: 1,
+        has_next: False
+      }
+    },
+    errors: None
+  }
+}`,
+        edge: `{
+  'quoted-key': 'value',
+  123: 'numeric key',
+  special_chars: "string with 'quotes'",
+  empty_obj: {},
+  empty_array: [],
+  boolean_false: False,
+  null_value: None
+}`,
+      };
+
+      /**
+       * Load sample data into the input area
+       */
+      function loadSample(type) {
+        clearInput();
+        if (samples[type]) {
+          document.getElementById("inputArea").value = samples[type];
+          updateStats();
+          convert();
+        }
+      }
+
+      /**
+       * Update character and line count statistics
+       */
+      function updateStats() {
+        const input = document.getElementById("inputArea").value;
+        const lines = input.split("\n").length;
+        const chars = input.length;
+
+        document.getElementById("lineCount").textContent = lines;
+        document.getElementById("charCount").textContent = chars;
+      }
+
+      /**
+       * Convert string-like JSON to proper JSON object
+       */
+      function convertStringLikeJsonToObject(rawString) {
+        try {
+          // Enhanced regex patterns for better parsing
+          let fixed = rawString
+            // Handle Python boolean and None values
+            .replace(/\bNone\b/g, "null")
+            .replace(/\bTrue\b/g, "true")
+            .replace(/\bFalse\b/g, "false")
+            // Convert single quotes to double quotes (but be careful with nested quotes)
+            .replace(/'/g, '"')
+            // Handle unquoted keys (improved pattern)
+            .replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":')
+            // Handle numeric keys
+            .replace(/([{,]\s*)(\d+)\s*:/g, '$1"$2":')
+            // Clean up extra whitespace
+            .replace(/\s+/g, " ")
+            .trim();
+
+          // Validate bracket matching
+          if (!validateBrackets(fixed)) {
+            throw new Error("Mismatched brackets detected");
+          }
+
+          const result = JSON.parse(fixed);
+          return result;
+        } catch (e) {
+          // Enhanced error reporting with line numbers
+          const errorInfo = getErrorLineInfo(rawString, e.message);
+          throw new Error(`Conversion failed: ${e.message}${errorInfo}`);
+        }
+      }
+
+      /**
+       * Validate that brackets are properly matched
+       */
+      function validateBrackets(str) {
+        const stack = [];
+        const pairs = { "(": ")", "[": "]", "{": "}" };
+
+        for (let i = 0; i < str.length; i++) {
+          const char = str[i];
+          if (char in pairs) {
+            stack.push(char);
+          } else if (Object.values(pairs).includes(char)) {
+            const last = stack.pop();
+            if (pairs[last] !== char) {
+              return false;
+            }
+          }
+        }
+        return stack.length === 0;
+      }
+
+      /**
+       * Get additional error information
+       */
+      function getErrorLineInfo(text, errorMsg) {
+        const lines = text.split("\n");
+        if (lines.length > 1) {
+          return ` (Input has ${lines.length} lines)`;
+        }
+        return "";
+      }
+
+      /**
+       * Main conversion function
+       */
+      function convert() {
+        const input = document.getElementById("inputArea").value.trim();
+        const outputEl = document.getElementById("outputArea");
+        const statusEl = document.getElementById("statusMsg");
+
+        if (!input) {
+          showStatus("⚠️ Please enter some data to convert", "warning");
+          return;
+        }
+
+        try {
+          const jsonObj = convertStringLikeJsonToObject(input);
+          const formatted = JSON.stringify(jsonObj, null, 2);
+          outputEl.textContent = formatted;
+
+          const objCount = countObjects(jsonObj);
+          showStatus(
+            `✅ Conversion successful! Found ${objCount.objects} objects, ${objCount.arrays} arrays, ${objCount.primitives} primitive values`,
+            "success"
+          );
+
+          // Hide results section on success
+          document.getElementById("resultsSection").style.display = "none";
+        } catch (e) {
+          outputEl.textContent = "{}";
+          showStatus(`❌ ${e.message}`, "error");
+
+          // Show error analysis
+          const errorInfo = analyzeError(e, input);
+          displayError(errorInfo);
+          document.getElementById("resultsSection").style.display = "block";
+        }
+      }
+
+      /**
+       * Count different types of objects in the JSON structure
+       */
+      function countObjects(
+        obj,
+        counts = { objects: 0, arrays: 0, primitives: 0 }
+      ) {
+        if (Array.isArray(obj)) {
+          counts.arrays++;
+          obj.forEach((item) => countObjects(item, counts));
+        } else if (typeof obj === "object" && obj !== null) {
+          counts.objects++;
+          Object.values(obj).forEach((value) => countObjects(value, counts));
+        } else {
+          counts.primitives++;
+        }
+        return counts;
+      }
+
+      /**
+       * Validate JSON without converting
+       */
+      function validateJson() {
+        const input = document.getElementById("inputArea").value.trim();
+        if (!input) {
+          showStatus("⚠️ Please enter some data to validate", "warning");
+          return;
+        }
+
+        try {
+          convertStringLikeJsonToObject(input);
+          showStatus(
+            "✅ Input can be successfully converted to valid JSON!",
+            "success"
+          );
+          document.getElementById("resultsSection").style.display = "none";
+        } catch (e) {
+          showStatus(`❌ Validation failed: ${e.message}`, "error");
+          const errorInfo = analyzeError(e, input);
+          displayError(errorInfo);
+          document.getElementById("resultsSection").style.display = "block";
+        }
+      }
+
+      /**
+       * Copy result to clipboard
+       */
+      function copyToClipboard() {
+        const output = document.getElementById("outputArea").textContent;
+        if (output === "{}") {
+          showStatus(
+            "⚠️ Nothing to copy. Please convert some data first.",
+            "warning"
+          );
+          return;
+        }
+
+        navigator.clipboard
+          .writeText(output)
+          .then(() => {
+            showStatus("📋 JSON copied to clipboard!", "success");
+          })
+          .catch(() => {
+            showStatus("❌ Failed to copy to clipboard", "error");
+          });
+      }
+
+      /**
+       * Download JSON as file
+       */
+      function downloadJson() {
+        const output = document.getElementById("outputArea").textContent;
+        if (output === "{}") {
+          showStatus(
+            "⚠️ Nothing to download. Please convert some data first.",
+            "warning"
+          );
+          return;
+        }
+
+        const blob = new Blob([output], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `converted-${new Date().getTime()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showStatus("💾 JSON file downloaded!", "success");
+      }
+
+      /**
+       * Clear all inputs and outputs
+       */
+      function clearAll() {
+        document.getElementById("inputArea").value = "";
+        document.getElementById("outputArea").textContent = "{}";
+        document.getElementById("statusMsg").innerHTML = "";
+        document.getElementById("results").innerHTML = "";
+        document.getElementById("resultsSection").style.display = "none";
+        updateStats();
+        showStatus("🗑️ All data cleared", "info");
+      }
+
+      /**
+       * Clear input only
+       */
+      function clearInput() {
+        document.getElementById("inputArea").value = "";
+        document.getElementById("results").innerHTML = "";
+        document.getElementById("resultsSection").style.display = "none";
+      }
+
+      /**
+       * Show status message with appropriate styling
+       */
+      function showStatus(message, type) {
+        const statusEl = document.getElementById("statusMsg");
+        let alertClass = "";
+
+        switch (type) {
+          case "success":
+            alertClass = "alert alert-success";
+            break;
+          case "error":
+            alertClass = "alert alert-danger";
+            break;
+          case "warning":
+            alertClass = "alert alert-warning";
+            break;
+          case "info":
+            alertClass = "alert alert-info";
+            break;
+        }
+
+        statusEl.className = alertClass;
+        statusEl.innerHTML = `<strong>${message}</strong>`;
+
+        // Auto-hide after 5 seconds for success/info messages
+        if (type === "success" || type === "info") {
+          setTimeout(() => {
+            statusEl.innerHTML = "";
+            statusEl.className = "";
+          }, 5000);
+        }
+      }
+
+      /**
+       * Analyze error details
+       */
+      function analyzeError(error, input) {
+        const errorMessage = error.message;
+        let position = -1;
+        let lineNumber = 1;
+        let columnNumber = 1;
+
+        // Extract position from error message
+        const positionMatch = errorMessage.match(/at position (\d+)/);
+        if (positionMatch) {
+          position = parseInt(positionMatch[1]);
+        }
+
+        // Calculate line and column
+        if (position >= 0) {
+          for (let i = 0; i < position && i < input.length; i++) {
+            if (input[i] === "\n") {
+              lineNumber++;
+              columnNumber = 1;
+            } else {
+              columnNumber++;
+            }
+          }
+        }
+
+        // Find context around error
+        const contextStart = Math.max(0, position - 50);
+        const contextEnd = Math.min(input.length, position + 50);
+        const context = input.substring(contextStart, contextEnd);
+
+        // Find nearest key
+        const keyInfo = findNearestKey(input, position);
+
+        return {
+          originalError: errorMessage,
+          position: position,
+          line: lineNumber,
+          column: columnNumber,
+          context: context,
+          contextStart: contextStart,
+          keyInfo: keyInfo,
+          errorChar: position >= 0 ? input[position] : null,
+        };
+      }
+
+      /**
+       * Find the nearest key to error position
+       */
+      function findNearestKey(input, position) {
+        if (position < 0) return null;
+
+        let keyStart = -1;
+        let keyEnd = -1;
+        let inString = false;
+        let stringChar = "";
+
+        for (let i = position - 1; i >= 0; i--) {
+          const char = input[i];
+
+          if (
+            (char === '"' || char === "'") &&
+            (i === 0 || input[i - 1] !== "\\")
+          ) {
+            if (!inString) {
+              keyEnd = i;
+              inString = true;
+              stringChar = char;
+            } else if (char === stringChar) {
+              keyStart = i + 1;
+              break;
+            }
+          }
+        }
+
+        if (keyStart >= 0 && keyEnd >= 0) {
+          const key = input.substring(keyStart, keyEnd);
+          const valueInfo = findValueForKey(input, keyEnd);
+
+          return {
+            key: key,
+            keyStart: keyStart,
+            keyEnd: keyEnd,
+            valueInfo: valueInfo,
+          };
+        }
+
+        return null;
+      }
+
+      /**
+       * Find value associated with a key
+       */
+      function findValueForKey(input, keyEnd) {
+        let colonPos = -1;
+        for (let i = keyEnd; i < input.length; i++) {
+          if (input[i] === ":") {
+            colonPos = i;
+            break;
+          }
+        }
+
+        if (colonPos < 0) return null;
+
+        let valueStart = -1;
+        for (let i = colonPos + 1; i < input.length; i++) {
+          if (input[i].trim() !== "") {
+            valueStart = i;
+            break;
+          }
+        }
+
+        if (valueStart < 0) return null;
+
+        const valuePreview = input.substring(
+          valueStart,
+          Math.min(valueStart + 100, input.length)
+        );
+
+        return {
+          valueStart: valueStart,
+          valuePreview: valuePreview,
+        };
+      }
+
+      /**
+       * Display detailed error information
+       */
+      function displayError(errorInfo) {
+        const resultsDiv = document.getElementById("results");
+
+        let html = `
+          <div class="alert alert-danger">
+            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>JSON Parse Error</h5>
+            
+            <div class="mb-3">
+              <strong>📍 Error Position:</strong><br>
+              Position: ${errorInfo.position}<br>
+              Line: ${errorInfo.line}, Column: ${errorInfo.column}
+        `;
+
+        if (errorInfo.errorChar) {
+          html += `<br><strong>Character at error position:</strong> <code class="bg-danger text-white px-1">'${errorInfo.errorChar}'</code>`;
+        }
+
+        html += `</div>`;
+
+        if (errorInfo.keyInfo) {
+          html += `
+            <div class="mb-3">
+              <strong>🔑 Related Key:</strong> <code class="bg-info text-white px-1">${errorInfo.keyInfo.key}</code><br>
+          `;
+
+          if (errorInfo.keyInfo.valueInfo) {
+            html += `<strong>💡 Value Preview:</strong> <code class="bg-secondary text-white px-1">${errorInfo.keyInfo.valueInfo.valuePreview}...</code><br>`;
+          }
+
+          html += `</div>`;
+        }
+
+        html += `
+          <div class="mb-3">
+            <strong>🔍 Error Message:</strong><br>
+            <code>${errorInfo.originalError}</code>
+          </div>
+        `;
+
+        if (errorInfo.context) {
+          const contextWithHighlight = highlightErrorInContext(
+            errorInfo.context,
+            errorInfo.position - errorInfo.contextStart
+          );
+
+          html += `
+            <div class="mb-3">
+              <strong>📝 Context around Error:</strong>
+              <div class="bg-light p-2 border rounded">
+                <code>${contextWithHighlight}</code>
+              </div>
+            </div>
+          `;
+        }
+
+        html += `
+          <div class="mb-0">
+            <strong>💡 Fix Suggestions:</strong><br>
+            ${getFixSuggestion(errorInfo.originalError)}
+          </div>
+        `;
+
+        resultsDiv.innerHTML = html;
+      }
+
+      /**
+       * Highlight error character in context
+       */
+      function highlightErrorInContext(context, relativePosition) {
+        if (relativePosition < 0 || relativePosition >= context.length) {
+          return context;
+        }
+
+        const before = context.substring(0, relativePosition);
+        const errorChar = context.substring(
+          relativePosition,
+          relativePosition + 1
+        );
+        const after = context.substring(relativePosition + 1);
+
+        return (
+          before +
+          `<span class="bg-danger text-white px-1">${errorChar}</span>` +
+          after
+        );
+      }
+
+      /**
+       * Get fix suggestion based on error message
+       */
+      function getFixSuggestion(errorMessage) {
+        if (errorMessage.includes("Expected ',' or '}'")) {
+          return "Missing comma (,) or closing brace (}). Check object or array structure.";
+        } else if (errorMessage.includes("Unexpected token")) {
+          return "Invalid character found. Check for incorrect quote marks or syntax errors.";
+        } else if (errorMessage.includes("Expected property name")) {
+          return 'Property keys must be enclosed in double quotes (").';
+        } else if (errorMessage.includes("Unterminated string")) {
+          return "String is not properly closed. Check quote marks.";
+        }
+        return "Please check JSON syntax for correctness.";
+      }
+
+      // Initialize when page loads
+      $(document).ready(function () {
+        updateStats();
+
+        // Add keyboard shortcuts
+        document.addEventListener("keydown", function (e) {
+          // Ctrl+Enter or Cmd+Enter to convert
+          if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            e.preventDefault();
+            convert();
+          }
+
+          // Ctrl+Shift+C or Cmd+Shift+C to copy
+          if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "C") {
+            e.preventDefault();
+            copyToClipboard();
+          }
+
+          // Ctrl+Shift+D or Cmd+Shift+D to download
+          if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "D") {
+            e.preventDefault();
+            downloadJson();
+          }
+        });
+      });
+    </script>
+
+    <!-- Custom CSS for JSON Converter -->
+    <style>
+      .json-output-container {
+        position: relative;
+      }
+
+      .json-output {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 1rem;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 400px;
+        overflow-y: auto;
+        margin: 0;
+      }
+
+      .sample-btn {
+        transition: all 0.2s ease;
+      }
+
+      .sample-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-stats {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .card-stats .numbers {
+        color: white;
+      }
+
+      .card-stats .card-category {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .icon-big {
+        font-size: 3rem;
+        opacity: 0.8;
+      }
+
+      /* Error display styles */
+      .alert {
+        border-radius: 0.5rem;
+        border: none;
+      }
+
+      .alert-danger {
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+      }
+
+      .alert-success {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+        border-left: 4px solid #28a745;
+      }
+
+      .alert-warning {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        color: #856404;
+        border-left: 4px solid #ffc107;
+      }
+
+      .alert-info {
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        color: #0c5460;
+        border-left: 4px solid #17a2b8;
+      }
+
+      /* Button hover effects */
+      .btn {
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .d-flex.gap-2.flex-wrap {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+
+        .btn-sm {
+          width: auto;
+          display: inline-block;
+          margin: 0.2rem;
+        }
+      }
+    </style>
+  </body>
+</html>
