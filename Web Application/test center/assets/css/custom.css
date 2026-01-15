@@ -236,45 +236,8 @@
   border-radius: 8px;
 }
 
-.stat-card {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #e3e6f0;
-}
-
-.stat-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  color: white;
-  font-size: 24px;
-}
-
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: #6c757d;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-
-.stat-value {
-  font-size: 18px;
-  font-weight: 600;
-  color: #495057;
-}
+/* Note: .stat-card, .stat-icon, .stat-info, .stat-label, .stat-value 
+   are defined earlier in this file (around line 77) */
 
 #base64Output {
   font-family: "Courier New", monospace;

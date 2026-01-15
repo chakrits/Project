@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>E-Form</title>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
-        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-        
-        <style>
+    <title>E-Form - Test Center</title>
+    <meta name="description" content="E-Form search interface for HN/EN lookup with personal details management.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    
+    <style>
 html, body {
 min-height: 100%;
 }
@@ -84,7 +86,7 @@ justify-content: space-between;
 .birthdate select.day {
 width: 35px;
 }
-.birthdate select.mounth {
+.birthdate select.month {
 width: calc(100% - 94px);
 }
 .birthdate input {
@@ -129,40 +131,57 @@ select, .children, .gender, .bdate-block {
 width: calc(60% + 16px);
 }
 }
-        </style>
+    </style>
 
-    </head>
+  </head>
     
 <body>
-    <div class="main-block">
-        <form action="/">
-        <h1>Search HN</h1>
-        <fieldset>
-            <legend>
-                <h3>Account Details</h3>
-            </legend>
-            <div class="account-details">
-                <div><label>HN*</label><input type="text" name="name" required></div>
-                <div><label>EN*</label><input type="password" name="name" required></div>
-            </div>
-        </fieldset>
+  <div class="main-block">
+    <form action="/">
+      <h1>Search HN</h1>
+      <fieldset>
+        <legend>
+          <h3>Account Details</h3>
+        </legend>
+        <div class="account-details">
+          <div>
+            <label for="hn">HN*</label>
+            <input type="text" id="hn" name="hn" required>
+          </div>
+          <div>
+            <label for="en">EN*</label>
+            <input type="password" id="en" name="en" required>
+          </div>
+        </div>
+      </fieldset>
 
-        <!--  Personal Details   -->
-        <fieldset>
-            <legend>
-                <h3>Personal Details</h3>
-            </legend>
+      <!--  Personal Details   -->
+      <fieldset>
+        <legend>
+          <h3>Personal Details</h3>
+        </legend>
 
-            <div class="personal-details">
-                <div>
-                <div><label>Name*</label><input type="text" name="name" required></div>
-                <div><label>Phone*</label><input type="text" name="name" required></div>
-                <div><label>Street</label><input type="text" name="name"></div>
-                <div><label>City*</label><input type="text" name="name" required></div>
+        <div class="personal-details">
+          <div>
             <div>
-
-            <label>Country*</label> 
-            <select>
+              <label for="fullname">Name*</label>
+              <input type="text" id="fullname" name="fullname" required>
+            </div>
+            <div>
+              <label for="phone">Phone*</label>
+              <input type="text" id="phone" name="phone" required>
+            </div>
+            <div>
+              <label for="street">Street</label>
+              <input type="text" id="street" name="street">
+            </div>
+            <div>
+              <label for="city">City*</label>
+              <input type="text" id="city" name="city" required>
+            </div>
+            <div>
+              <label for="country">Country*</label> 
+              <select id="country" name="country">
                 <option value=""></option>
                 <option value="Armenia">Armenia</option>
                 <option value="Russia">Russia</option>
@@ -170,82 +189,86 @@ width: calc(60% + 16px);
                 <option value="France">France</option>
                 <option value="USA">USA</option>
                 <option value="UK">UK</option>
-            </select>
+              </select>
+            </div>
+            <div>
+              <label for="website">Website</label>
+              <input type="text" id="website" name="website">
+            </div>
+          </div>
 
-            </div>
-                <div><label>Website</label><input type="text" name="name"></div>
-            </div>
+          <div>
             <div>
-            <div>
-                <label>Gender*</label>
-                <div class="gender">
-                <input type="radio" value="none" id="male" name="gender" required/>
+              <label>Gender*</label>
+              <div class="gender">
+                <input type="radio" value="male" id="male" name="gender" required/>
                 <label for="male" class="radio">Male</label>
-                <input type="radio" value="none" id="female" name="gender" required/>
+                <input type="radio" value="female" id="female" name="gender" required/>
                 <label for="female" class="radio">Female</label>
+              </div>
             </div>
-        </div>
-        <div class="birthdate">
-            <label>Birthdate*</label>
-            <div class="bdate-block">
-            <select class="day" required>
-                <option value=""></option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-                <option value="05">05</option>
-                <option value="06">06</option>
-                <option value="07">07</option>
-                <option value="08">08</option>
-                <option value="09">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-                <option value="25">25</option>
-                <option value="26">26</option>
-                <option value="27">27</option>
-                <option value="28">28</option>
-                <option value="29">29</option>
-                <option value="30">30</option>
-                <option value="31">31</option>
-            </select>
 
-            <select class="mounth" required>
-                <option value=""></option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-            </select>
+            <div class="birthdate">
+              <label>Birthdate*</label>
+              <div class="bdate-block">
+                <select class="day" name="birthday" required>
+                  <option value=""></option>
+                  <option value="01">01</option>
+                  <option value="02">02</option>
+                  <option value="03">03</option>
+                  <option value="04">04</option>
+                  <option value="05">05</option>
+                  <option value="06">06</option>
+                  <option value="07">07</option>
+                  <option value="08">08</option>
+                  <option value="09">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+                  <option value="30">30</option>
+                  <option value="31">31</option>
+                </select>
 
-            <input type="text" name="name" required>
-        </div>
-        </div>
+                <select class="month" name="birthmonth" required>
+                  <option value=""></option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
 
-        <div>
-            <label>Nationality*</label> 
-            <select required>
+                <input type="text" id="birthyear" name="birthyear" placeholder="Year" required>
+              </div>
+            </div>
+
+            <div>
+              <label for="nationality">Nationality*</label> 
+              <select id="nationality" name="nationality" required>
                 <option value=""></option>
                 <option value="Armenian">Armenian</option>
                 <option value="Russian">Russian</option>
@@ -253,31 +276,30 @@ width: calc(60% + 16px);
                 <option value="French">French</option>
                 <option value="American">American</option>
                 <option value="English">English</option>
-            </select>
+              </select>
+            </div>
+
+            <div>
+              <label for="hasChildren">Children*</label>
+              <div class="children">
+                <input type="checkbox" id="hasChildren" name="hasChildren">
+              </div>
+            </div>
+          </div>
         </div>
+      </fieldset>
 
-        <div>
-            <label>Children*</label>
-        <div class="children"><input type="checkbox" name="name" required></div>
-    </div>
-    </div>
-    </div>
-        </fieldset>
+      <fieldset>
+        <legend>
+          <h3>Terms and Mailing</h3>
+        </legend>
+        <div class="terms-mailing">
+          <!-- Terms and mailing content here -->
+        </div>
+      </fieldset>
 
-        <fieldset>
-            <legend>
-                <h3>Terms and Mailing</h3>
-            </legend>
-            <div class="terms-mailing">
-
-        </fieldset>
-
-            <button type="submit" href="/">Submit</button>
-
-        </form>
-    
-    
-         </div> 
-    </body>
+      <button type="submit">Submit</button>
+    </form>
+  </div> 
+</body>
 </html>
-
