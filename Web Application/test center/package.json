@@ -1,0 +1,21 @@
+{
+  "name": "test-center",
+  "version": "1.0.0",
+  "description": "Test Center Admin Dashboard - Tools for encryption, JSON conversion, PDF utilities, and automated testing forms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "test-center",
+    "admin-dashboard",
+    "encryption",
+    "tools"
+  ],
+  "author": "Chakrit Salaeman",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

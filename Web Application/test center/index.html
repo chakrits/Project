@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Test Center - Admin Dashboard</title>
+    <meta name="description" content="Test Center Admin Dashboard - Tools for encryption, JSON conversion, PDF utilities, and automated testing forms.">
     <meta
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
       name="viewport"
@@ -88,7 +89,7 @@
                 <div class="collapse show" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="">
+                      <a href="index.html">
                         <span class="sub-item">Dashboard</span>
                       </a>
                     </li>
@@ -525,10 +526,11 @@
               </ul>
             </nav>
             <div class="copyright">
-              2024, developed with
+              <span id="currentYear"></span>, developed with
               <i class="fa fa-heart heart text-danger"></i> by
               <strong>Chakrit Salaeman & Claude</strong>
             </div>
+            <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
             <div>Test Center Management</div>
           </div>
         </footer>
