@@ -73,87 +73,8 @@
         </div>
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
-            <ul class="nav nav-secondary">
-              <li class="nav-item">
-                <a
-                  data-bs-toggle="collapse"
-                  href="#dashboard"
-                  class="collapsed"
-                  aria-expanded="false"
-                >
-                  <i class="fas fa-home"></i>
-                  <p>Home</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="dashboard">
-                  <ul class="nav nav-collapse">
-                    <li>
-                      <a href="../index.html">
-                        <span class="sub-item">Dashboard</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Content</h4>
-              </li>
-              <li class="nav-item active submenu">
-                <a data-bs-toggle="collapse" href="#tools">
-                  <i class="fas fa-cog"></i>
-                  <p>Tools</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse show" id="tools">
-                  <ul class="nav nav-collapse">
-                    <li class="active">
-                      <a href="../tools/aes-encryption.html">
-                        <span class="sub-item">Encryption/Decryption</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="../tools/json-converter.html">
-                        <span class="sub-item">Convert String JSON</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="../tools/base64-pdf.html">
-                        <span class="sub-item">Base64toPDF</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="../tools/pdf-base64.html">
-                        <span class="sub-item">PDFtoBase64</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#eform">
-                  <i class="fas fa-file-alt"></i>
-                  <p>E-Form</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse " id="eform">
-                  <ul class="nav nav-collapse">
-                    <li>
-                      <a href="../forms/auto-login.html">
-                        <span class="sub-item">Auto Login</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="../forms/auto-login-burt.html">
-                        <span class="sub-item">Auto Login BURT</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
+            <!-- Dynamic sidebar loaded from navigation.json -->
+            <div id="sidebar-content"></div>
           </div>
         </div>
       </div>
@@ -1068,5 +989,8 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
     </style>
+
+    <!-- Sidebar Loader - loads navigation from JSON -->
+    <script src="../assets/js/sidebar-loader.js"></script>
   </body>
 </html>
