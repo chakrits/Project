@@ -1,0 +1,314 @@
+/* Test Center Logo Base Styles */
+.test-center-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+/* Dark Background Colors - BRIGHT White Text (เพิ่มความสว่าง) */
+[data-background-color="dark"] .logo-icon,
+[data-background-color="dark"] .logo-text,
+[data-background-color="dark2"] .logo-icon,
+[data-background-color="dark2"] .logo-text,
+[data-background-color="blue"] .logo-icon,
+[data-background-color="blue"] .logo-text,
+[data-background-color="blue2"] .logo-icon,
+[data-background-color="blue2"] .logo-text,
+[data-background-color="purple"] .logo-icon,
+[data-background-color="purple"] .logo-text,
+[data-background-color="purple2"] .logo-icon,
+[data-background-color="purple2"] .logo-text,
+[data-background-color="green"] .logo-icon,
+[data-background-color="green"] .logo-text,
+[data-background-color="green2"] .logo-icon,
+[data-background-color="green2"] .logo-text,
+[data-background-color="red"] .logo-icon,
+[data-background-color="red"] .logo-text,
+[data-background-color="red2"] .logo-icon,
+[data-background-color="red2"] .logo-text,
+[data-background-color="orange"] .logo-icon,
+[data-background-color="orange"] .logo-text,
+[data-background-color="orange2"] .logo-icon,
+[data-background-color="orange2"] .logo-text,
+[data-background-color="light-blue"] .logo-icon,
+[data-background-color="light-blue"] .logo-text,
+[data-background-color="light-blue2"] .logo-icon,
+[data-background-color="light-blue2"] .logo-text {
+  color: #ffffff !important; /* ใช้ !important เพื่อให้แน่ใจว่าสีนี้จะถูกใช้ */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* เพิ่ม text shadow เพื่อให้อ่านง่ายขึ้น */
+  opacity: 1; /* กำหนดให้มีความทึบ 100% */
+}
+
+/* Light Background Colors - DARK Black Text (เพิ่มความเข้ม) */
+[data-background-color="white"] .logo-icon,
+[data-background-color="white"] .logo-text {
+  color: #000000 !important; /* ใช้สีดำเข้มกว่าเดิม */
+  text-shadow: none; /* ไม่ต้องใช้ shadow บนพื้นขาว */
+}
+
+/* เพิ่มเอฟเฟกต์สำหรับไอคอน */
+.logo-icon i {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3)); /* เพิ่ม shadow ให้ไอคอน */
+}
+
+/* เพิ่มกรณีเมื่อ hover เพื่อเพิ่มการโต้ตอบ */
+.test-center-logo:hover .logo-icon,
+.test-center-logo:hover .logo-text {
+  opacity: 0.9; /* ลดความทึบเล็กน้อยเมื่อ hover */
+}
+
+/* Custom styles for Base64 to PDF tool */
+/* base64-pdf.html */
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #e3e6f0;
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: white;
+  font-size: 24px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6c757d;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #495057;
+}
+
+#base64Input {
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 200px;
+}
+
+.card-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* PDF Preview container */
+#pdfPreview {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+#pdfPreview:has(iframe) {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-style: solid;
+}
+
+/* Loading animation */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stat-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* Custom styles for PDF to Base64 tool */
+/* pdf-base64.html */
+
+/* Custom styles for PDF to Base64 tool */
+.upload-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 60px 20px;
+  text-align: center;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-zone:hover {
+  border-color: #007bff;
+  background: #e3f2fd;
+}
+
+.upload-zone.drag-over {
+  border-color: #28a745;
+  background: #d4edda;
+  transform: scale(1.02);
+}
+
+.upload-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.file-info {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.file-icon {
+  font-size: 48px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.file-details {
+  min-width: 0;
+}
+
+.file-details h6 {
+  margin: 0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.progress-container {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+/* Note: .stat-card, .stat-icon, .stat-info, .stat-label, .stat-value 
+   are defined earlier in this file (around line 77) */
+
+#base64Output {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  resize: vertical;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+.card-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.format-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.format-item {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #007bff;
+}
+
+.format-item code {
+  display: block;
+  margin-top: 5px;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .file-info .d-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .file-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stat-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .upload-zone {
+    padding: 40px 15px;
+  }
+}
+
+/* Animation for progress bar */
+.progress-bar {
+  transition: width 0.3s ease;
+}
+
+/* Button states */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

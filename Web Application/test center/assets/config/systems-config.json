@@ -1,0 +1,46 @@
+{
+  "systems": [
+    {
+      "id": "bpk_ims",
+      "organization": "BPK",
+      "name": "BPK IMS",
+      "bu_code": "005",
+      "app_id": "6",
+      "secret_key": "752e9c79fb6c4ad0",
+      "encryption_type": "AES",
+      "encryption_mode": "ECB",
+      "key_size": 128,
+      "iv": "",
+      "user": "iscreen",
+      "description": "Bangkok Hospital Phuket"
+    },
+    {
+      "id": "bsi_ims",
+      "organization": "BSI",
+      "name": "BSI IMS",
+      "bu_code": "067",
+      "app_id": "85",
+      "secret_key": "0rfj6q^w%spk%bz%",
+      "encryption_type": "AES",
+      "encryption_mode": "ECB",
+      "key_size": 128,
+      "iv": "",
+      "user": "icash",
+      "description": "Bangkok Hospital Siriroj"
+    },
+    {
+      "id": "custom_config",
+      "organization": "Custom",
+      "name": "Custom Configuration",
+      "bu_code": "",
+      "app_id": "",
+      "secret_key": "",
+      "encryption_type": "AES",
+      "encryption_mode": "CBC",
+      "key_size": 256,
+      "iv": "",
+      "user": "",
+      "description": "Custom manual configuration"
+    }
+  ]
+}

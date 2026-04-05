@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>AES Encryption/Decryption - Test Center</title>
+    <meta name="description" content="AES Encryption and Decryption Tool - Encrypt and decrypt text using AES-128, AES-192, or AES-256 with ECB, CBC, CTR, and GCM modes.">
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="../assets/img/kaiadmin/tester-sign.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="../assets/css/custom.css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Crypto JS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="../index.html" class="logo">
+              <div class="test-center-logo">
+                <span class="logo-icon"><i class="fas fa-vial"></i></span>
+                <span class="logo-text">Test Center</span>
+              </div>
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <!-- Dynamic sidebar loaded from navigation.json -->
+            <div id="sidebar-content"></div>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="../index.html" class="logo">
+                <div class="test-center-logo">
+                  <span class="logo-icon"><i class="fas fa-vial"></i></span>
+                  <span class="logo-text">Test Center</span>
+                </div>
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+            <div class="container-fluid">
+              <nav
+                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+              >
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-search pe-1">
+                      <i class="fa fa-search search-icon"></i>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search ..."
+                    class="form-control"
+                  />
+                </div>
+              </nav>
+
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li
+                  class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none"
+                >
+                  <a
+                    class="nav-link dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    role="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                  >
+                    <i class="fa fa-search"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-search animated fadeIn">
+                    <form class="navbar-left navbar-form nav-search">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          placeholder="Search ..."
+                          class="form-control"
+                        />
+                      </div>
+                    </form>
+                  </ul>
+                </li>
+
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+                      <img
+                        src="../assets/img/kaiadmin/tester-sign.jpg"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                    <span class="profile-username">
+                      <span class="op-7">Hi,</span>
+                      <span class="fw-bold">Test Center</span>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <div class="user-box">
+                          <div class="avatar-lg">
+                            <img
+                              src="../assets/img/profile.jpg"
+                              alt="image profile"
+                              class="avatar-img rounded"
+                            />
+                          </div>
+                          <div class="u-text">
+                            <h4>Hizrian</h4>
+                            <p class="text-muted">hello@example.com</p>
+                            <a
+                              href="profile.html"
+                              class="btn btn-xs btn-secondary btn-sm"
+                              >View Profile</a
+                            >
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">My Profile</a>
+                        <a class="dropdown-item" href="#">My Balance</a>
+                        <a class="dropdown-item" href="#">Inbox</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Account Setting</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+
+        <div class="container">
+          <div class="page-inner">
+            <div class="page-header">
+              <h3 class="fw-bold mb-3">AES Encryption/Decryption</h3>
+              <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                  <a href="../index.html">
+                    <i class="icon-home"></i>
+                  </a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Tools</a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Encryption/Decryption</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Info Card -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-shield-alt me-2"></i>About AES Encryption
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-muted">
+                      <strong>Advanced Encryption Standard (AES)</strong> is a
+                      symmetric encryption algorithm. AES is the industry
+                      standard as it allows 128 bit, 192 bit and 256 bits
+                      encryption. This tool provides multiple modes of
+                      encryption and decryption such as ECB, CBC, CTR and GCM
+                      mode.
+                    </p>
+                    <div class="alert alert-info">
+                      <strong>Security Notice:</strong> Any secret key value
+                      that you enter is not stored on this site. All
+                      encryption/decryption is performed locally in your
+                      browser.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AES Tool Form -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-key me-2"></i>AES Encryption/Decryption
+                      Tool
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <form id="aesForm">
+                      <!-- System Configuration Selector -->
+                      <div class="row mb-4">
+                        <div class="col-md-12">
+                          <div
+                            class="card bg-primary bg-opacity-10 border-primary"
+                          >
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <div class="col-md-6">
+                                  <label for="systemSelect" class="form-label">
+                                    <i class="fas fa-server me-2"></i
+                                    ><strong>System Configuration</strong>
+                                  </label>
+                                  <select
+                                    class="form-control"
+                                    id="systemSelect"
+                                  >
+                                    <option value="">
+                                      Select System Configuration...
+                                    </option>
+                                  </select>
+                                  <small class="form-text text-muted">
+                                    Choose a predefined system configuration or
+                                    use custom settings
+                                  </small>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="text-center">
+                                    <i
+                                      class="fas fa-cogs fa-3x text-primary opacity-50"
+                                    ></i>
+                                    <div class="mt-2">
+                                      <small class="text-muted">
+                                        System configurations are loaded from
+                                        JSON config file
+                                      </small>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- System Information Card (Hidden by default) -->
+                      <div
+                        class="row mb-4"
+                        id="systemInfoCard"
+                        style="display: none"
+                      >
+                        <div class="col-md-12">
+                          <div class="card bg-info bg-opacity-10 border-info">
+                            <div class="card-header bg-info bg-opacity-25">
+                              <h6 class="card-title mb-0 text-info">
+                                <i class="fas fa-info-circle me-2"></i>System
+                                Information
+                              </h6>
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-4">
+                                  <small class="text-muted">System Name:</small>
+                                  <div class="fw-bold" id="systemName">-</div>
+                                </div>
+                                <div class="col-md-4">
+                                  <small class="text-muted"
+                                    >Organization:</small
+                                  >
+                                  <div class="fw-bold" id="systemOrg">-</div>
+                                </div>
+                                <div class="col-md-4">
+                                  <small class="text-muted">BU Code:</small>
+                                  <div class="fw-bold" id="systemBU">-</div>
+                                </div>
+                              </div>
+                              <div class="row mt-2">
+                                <div class="col-md-4">
+                                  <small class="text-muted">App ID:</small>
+                                  <div class="fw-bold" id="systemAppId">-</div>
+                                </div>
+                                <div class="col-md-4">
+                                  <small class="text-muted">User:</small>
+                                  <div class="fw-bold" id="systemUser">-</div>
+                                </div>
+                                <div class="col-md-4">
+                                  <small class="text-muted">Description:</small>
+                                  <div class="fw-bold" id="systemDesc">-</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="inputText"
+                              ><strong
+                                >Plain Text / Encrypted Text</strong
+                              ></label
+                            >
+                            <textarea
+                              class="form-control"
+                              id="inputText"
+                              rows="8"
+                              placeholder="Enter your text here..."
+                            ></textarea>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="secretKey"
+                              ><strong>Secret Key</strong></label
+                            >
+                            <div class="input-group">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="secretKey"
+                                placeholder="Enter secret key (16, 24, or 32 characters)"
+                              />
+                              <div class="input-group-append">
+                                <button
+                                  class="btn btn-outline-secondary"
+                                  type="button"
+                                  id="generateKey"
+                                >
+                                  Generate
+                                </button>
+                              </div>
+                            </div>
+                            <small class="form-text text-muted">
+                              Key must be 16 (128-bit), 24 (192-bit), or 32
+                              (256-bit) characters long
+                            </small>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="keySize"
+                                  ><strong>Key Size</strong></label
+                                >
+                                <select class="form-control" id="keySize">
+                                  <option value="128" selected>128 bits</option>
+                                  <option value="192">192 bits</option>
+                                  <option value="256">256 bits</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="mode"><strong>Mode</strong></label>
+                                <select class="form-control" id="mode">
+                                  <option value="ECB">ECB</option>
+                                  <option value="CBC" selected>CBC</option>
+                                  <option value="CTR">CTR</option>
+                                  <option value="GCM">GCM</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group" id="ivGroup">
+                            <label for="iv"
+                              ><strong
+                                >Initialization Vector (IV)</strong
+                              ></label
+                            >
+                            <div class="input-group">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="iv"
+                                placeholder="Enter IV (16 characters) - Optional"
+                              />
+                              <div class="input-group-append">
+                                <button
+                                  class="btn btn-outline-secondary"
+                                  type="button"
+                                  id="generateIV"
+                                >
+                                  Generate
+                                </button>
+                              </div>
+                            </div>
+                            <small class="form-text text-muted">
+                              Leave empty to use default zero IV
+                            </small>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="inputFormat"
+                                  ><strong>Input Format</strong></label
+                                >
+                                <select class="form-control" id="inputFormat">
+                                  <option value="Text" selected>
+                                    Plain Text
+                                  </option>
+                                  <option value="Base64">Base64</option>
+                                  <option value="Hex">Hex</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="outputFormat"
+                                  ><strong>Output Format</strong></label
+                                >
+                                <select class="form-control" id="outputFormat">
+                                  <option value="Base64" selected>
+                                    Base64
+                                  </option>
+                                  <option value="Hex">Hex</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="btn-group w-100" role="group">
+                              <button
+                                type="button"
+                                class="btn btn-primary"
+                                id="encryptBtn"
+                              >
+                                <i class="fas fa-lock me-1"></i>Encrypt
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-warning"
+                                id="decryptBtn"
+                              >
+                                <i class="fas fa-unlock me-1"></i>Decrypt
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-secondary"
+                                id="clearBtn"
+                              >
+                                <i class="fas fa-eraser me-1"></i>Clear
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="outputText"
+                              ><strong>Result</strong></label
+                            >
+                            <textarea
+                              class="form-control"
+                              id="outputText"
+                              rows="8"
+                              readonly
+                              placeholder="Result will appear here..."
+                            ></textarea>
+                          </div>
+
+                          <div class="form-group">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              id="copyResult"
+                            >
+                              <i class="fas fa-copy me-1"></i>Copy Result
+                            </button>
+                          </div>
+
+                          <!-- Information Panel -->
+                          <div class="card bg-light">
+                            <div class="card-header">
+                              <h6 class="card-title mb-0">
+                                <i class="fas fa-info-circle me-1"></i
+                                >Information
+                              </h6>
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-6">
+                                  <small class="text-muted"
+                                    >Input Length:</small
+                                  >
+                                  <div id="inputLength" class="fw-bold">0</div>
+                                </div>
+                                <div class="col-6">
+                                  <small class="text-muted"
+                                    >Output Length:</small
+                                  >
+                                  <div id="outputLength" class="fw-bold">0</div>
+                                </div>
+                              </div>
+                              <hr class="my-2" />
+                              <div class="row">
+                                <div class="col-6">
+                                  <small class="text-muted">Key Length:</small>
+                                  <div id="keyLength" class="fw-bold">0</div>
+                                </div>
+                                <div class="col-6">
+                                  <small class="text-muted">IV Length:</small>
+                                  <div id="ivLength" class="fw-bold">0</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Sample Data -->
+                          <div class="card bg-light mt-3">
+                            <div class="card-header">
+                              <h6 class="card-title mb-0">
+                                <i class="fas fa-lightbulb me-1"></i>Sample Data
+                              </h6>
+                            </div>
+                            <div class="card-body">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success btn-sm mb-2"
+                                id="loadSample"
+                              >
+                                <i class="fas fa-download me-1"></i>Load Sample
+                              </button>
+                              <div class="sample-data">
+                                <small class="text-muted">Sample Text:</small>
+                                <div class="text-break small">
+                                  Hello World! This is a test message for AES
+                                  encryption.
+                                </div>
+                                <small class="text-muted mt-2 d-block"
+                                  >Sample Key (256-bit):</small
+                                >
+                                <div class="text-break small font-monospace">
+                                  MySecretKey123456789012345678901
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Key Features Card -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-star me-2"></i>Key Features & Modes
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6><strong>Encryption Modes:</strong></h6>
+                        <ul class="list-unstyled">
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i
+                            ><strong>ECB:</strong> Electronic Code Book - Simple
+                            but less secure
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i
+                            ><strong>CBC:</strong> Cipher Block Chaining -
+                            Recommended, requires IV
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i
+                            ><strong>CTR:</strong> Counter Mode - Stream cipher,
+                            good for parallel processing
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i
+                            ><strong>GCM:</strong> Galois/Counter Mode - Most
+                            secure with authentication
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6">
+                        <h6><strong>Key Features:</strong></h6>
+                        <ul class="list-unstyled">
+                          <li>
+                            <i class="fas fa-shield-alt text-primary me-2"></i
+                            >Industry standard encryption
+                          </li>
+                          <li>
+                            <i class="fas fa-key text-primary me-2"></i>128,
+                            192, 256-bit key sizes
+                          </li>
+                          <li>
+                            <i class="fas fa-lock text-primary me-2"></i
+                            >Symmetric key algorithm
+                          </li>
+                          <li>
+                            <i
+                              class="fas fa-lightning-bolt text-primary me-2"
+                            ></i
+                            >Fast and secure encryption
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="container-fluid d-flex justify-content-between">
+            <nav class="pull-left">
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Test Center </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Help </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Licenses </a>
+                </li>
+              </ul>
+            </nav>
+            <div class="copyright">
+              2024, developed with
+              <i class="fa fa-heart heart text-danger"></i> by
+              <strong>Chakrit Salaeman & Claude</strong>
+            </div>
+            <div>Test Center Management</div>
+          </div>
+        </footer>
+      </div>
+
+      <!-- Custom template | don't include it in your project! -->
+      <div class="custom-template">
+        <div class="title">Settings</div>
+        <div class="custom-content">
+          <div class="switcher">
+            <div class="switch-block">
+              <h4>Logo Header</h4>
+              <div class="btnSwitch">
+                <button
+                  type="button"
+                  class="selected changeLogoHeaderColor"
+                  data-color="dark"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="purple"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="light-blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="green"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="orange"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="red"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="white"
+                ></button>
+                <br />
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="dark2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="purple2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="light-blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="green2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="orange2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeLogoHeaderColor"
+                  data-color="red2"
+                ></button>
+              </div>
+            </div>
+            <div class="switch-block">
+              <h4>Navbar Header</h4>
+              <div class="btnSwitch">
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="dark"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="purple"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="light-blue"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="green"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="orange"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="red"
+                ></button>
+                <button
+                  type="button"
+                  class="selected changeTopBarColor"
+                  data-color="white"
+                ></button>
+                <br />
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="dark2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="purple2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="light-blue2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="green2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="orange2"
+                ></button>
+                <button
+                  type="button"
+                  class="changeTopBarColor"
+                  data-color="red2"
+                ></button>
+              </div>
+            </div>
+            <div class="switch-block">
+              <h4>Sidebar</h4>
+              <div class="btnSwitch">
+                <button
+                  type="button"
+                  class="changeSideBarColor"
+                  data-color="white"
+                ></button>
+                <button
+                  type="button"
+                  class="selected changeSideBarColor"
+                  data-color="dark"
+                ></button>
+                <button
+                  type="button"
+                  class="changeSideBarColor"
+                  data-color="dark2"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="custom-toggle">
+          <i class="icon-settings"></i>
+        </div>
+      </div>
+      <!-- End Custom template -->
+    </div>
+
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- Chart JS -->
+    <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="../assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="../assets/js/kaiadmin.min.js"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="../assets/js/setting-demo.js"></script>
+
+    <!-- AES Encryption/Decryption Logic -->
+    <script src="../../assets/js/aes.js"></script>
+
+    <!-- Custom CSS for locked configuration -->
+    <style>
+      .config-locked::after {
+        content: " 🔒";
+        color: #ffc107;
+        font-size: 0.8em;
+      }
+
+      .form-control:disabled {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        opacity: 0.8;
+      }
+
+      .config-locked-icon {
+        display: none !important;
+      }
+
+      .config-locked + .config-locked-icon {
+        display: inline !important;
+      }
+
+      .system-config-card {
+        transition: all 0.3s ease;
+      }
+
+      .system-config-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+
+    <!-- Sidebar Loader - loads navigation from JSON -->
+    <script src="../assets/js/sidebar-loader.js"></script>
+  </body>
+</html>

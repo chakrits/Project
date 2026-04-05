@@ -1,0 +1,45 @@
+{
+  "logo": {
+    "icon": "fas fa-vial",
+    "text": "Test Center",
+    "href": "index.html"
+  },
+  "sections": [
+    {
+      "type": "menu",
+      "id": "dashboard",
+      "icon": "fas fa-home",
+      "title": "Home",
+      "expanded": true,
+      "items": [
+        { "title": "Dashboard", "href": "index.html" }
+      ]
+    },
+    {
+      "type": "divider",
+      "title": "Content"
+    },
+    {
+      "type": "menu",
+      "id": "tools",
+      "icon": "fas fa-cog",
+      "title": "Tools",
+      "items": [
+        { "title": "Encryption/Decryption", "href": "tools/aes-encryption.html" },
+        { "title": "Convert String JSON", "href": "tools/json-converter.html" },
+        { "title": "Base64toPDF", "href": "tools/base64-pdf.html" },
+        { "title": "PDFtoBase64", "href": "tools/pdf-base64.html" }
+      ]
+    },
+    {
+      "type": "menu",
+      "id": "eform",
+      "icon": "fas fa-file-alt",
+      "title": "E-Form",
+      "items": [
+        { "title": "Auto Login", "href": "forms/auto-login.html" },
+        { "title": "Auto Login BURT", "href": "forms/auto-login-burt.html" }
+      ]
+    }
+  ]
+}
