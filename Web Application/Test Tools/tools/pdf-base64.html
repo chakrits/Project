@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>PDF to Base64 Converter - Test Center</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="../assets/img/kaiadmin/tester-sign.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+
+    <!-- Custom CSS File-->
+    <link rel="stylesheet" href="../assets/css/custom.css" />
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+      <script src="/assets/js/layout.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="layout-sidebar"></div>
+
+      <div class="main-panel">
+        <div class="main-header">
+          
+
+          <div id="layout-navbar"></div>
+        </div>
+
+        <!-- Edit Container -->
+        <div class="container">
+          <div class="page-inner">
+            <div class="page-header">
+              <h3 class="fw-bold mb-3">PDF to Base64 Converter</h3>
+              <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                  <a href="/">
+                    <i class="icon-home"></i>
+                  </a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Tools</a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">PDF to Base64</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="row">
+              <!-- File Upload Section -->
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-head-row">
+                      <div class="card-title">
+                        <i class="fas fa-upload me-2"></i>
+                        PDF File Upload
+                      </div>
+                      <div class="card-tools">
+                        <button id="clearUpload" class="btn btn-danger btn-sm" style="display: none;">
+                          <i class="fas fa-trash me-1"></i>Clear
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <!-- File Drop Zone -->
+                    <div class="upload-zone" id="uploadZone">
+                      <div class="upload-zone-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h4>Drop your PDF file here</h4>
+                        <p class="text-muted">or click to browse files</p>
+                        <button type="button" class="btn btn-primary" id="browseBtn">
+                          <i class="fas fa-folder-open me-2"></i>Choose PDF File
+                        </button>
+                      </div>
+                      <input type="file" id="fileInput" accept=".pdf,application/pdf" style="display: none;">
+                    </div>
+
+                    <!-- File Information -->
+                    <div id="fileInfo" class="file-info" style="display: none;">
+                      <div class="d-flex align-items-center">
+                        <div class="file-icon">
+                          <i class="fas fa-file-pdf text-danger"></i>
+                        </div>
+                        <div class="file-details flex-grow-1">
+                          <h6 id="fileName" class="mb-1"></h6>
+                          <small class="text-muted">
+                            <span id="fileSize"></span> • 
+                            <span id="fileType">PDF Document</span> • 
+                            <span id="lastModified"></span>
+                          </small>
+                        </div>
+                        <div class="file-actions">
+                          <button id="convertBtn" class="btn btn-success">
+                            <i class="fas fa-magic me-2"></i>Convert to Base64
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div id="statusMessage" class="alert" style="display: none;"></div>
+
+                    <!-- Progress Bar -->
+                    <div id="progressContainer" class="progress-container" style="display: none;">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="text-muted">Processing PDF...</small>
+                        <small class="text-muted"><span id="progressPercent">0</span>%</small>
+                      </div>
+                      <div class="progress">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Output Section -->
+              <div class="col-md-12">
+                <div class="card" id="resultCard" style="display: none;">
+                  <div class="card-header">
+                    <div class="card-head-row">
+                      <div class="card-title">
+                        <i class="fas fa-code me-2"></i>
+                        Base64 Output & Export Options
+                      </div>
+                      <div class="card-tools">
+                        <div class="btn-group">
+                          <button id="copyBtn" class="btn btn-info btn-sm">
+                            <i class="fas fa-copy me-1"></i>Copy Base64
+                          </button>
+                          <button id="downloadTxtBtn" class="btn btn-success btn-sm">
+                            <i class="fas fa-download me-1"></i>Download .txt
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <!-- Output Format Selection -->
+                    <div class="mb-4">
+                      <h6><i class="fas fa-cogs me-2"></i>Output Format:</h6>
+                      <div class="btn-group" role="group" id="formatOptions">
+                        <input type="radio" class="btn-check" name="outputFormat" id="plainFormat" value="plain" checked>
+                        <label class="btn btn-outline-primary" for="plainFormat">Plain Base64</label>
+
+                        <input type="radio" class="btn-check" name="outputFormat" id="dataUriFormat" value="datauri">
+                        <label class="btn btn-outline-primary" for="dataUriFormat">Data URI</label>
+
+                        <input type="radio" class="btn-check" name="outputFormat" id="htmlEmbedFormat" value="htmlembed">
+                        <label class="btn btn-outline-primary" for="htmlEmbedFormat">HTML Embed</label>
+
+                        <input type="radio" class="btn-check" name="outputFormat" id="htmlObjectFormat" value="htmlobject">
+                        <label class="btn btn-outline-primary" for="htmlObjectFormat">HTML Object</label>
+                      </div>
+                    </div>
+
+                    <!-- Base64 Output -->
+                    <div class="mb-4">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0"><i class="fas fa-file-code me-2"></i>Base64 String:</h6>
+                        <small class="text-muted">Length: <span id="base64Length">0</span> characters</small>
+                      </div>
+                      
+                      <textarea 
+                        id="base64Output" 
+                        class="form-control" 
+                        rows="12" 
+                        readonly 
+                        placeholder="Base64 encoded string will appear here...">
+                      </textarea>
+                    </div>
+
+                    <!-- Conversion Details -->
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="stat-card">
+                          <div class="stat-icon bg-primary">
+                            <i class="fas fa-file-pdf"></i>
+                          </div>
+                          <div class="stat-info">
+                            <span class="stat-label">Original Size</span>
+                            <span class="stat-value" id="originalSize">-</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="stat-card">
+                          <div class="stat-icon bg-success">
+                            <i class="fas fa-code"></i>
+                          </div>
+                          <div class="stat-info">
+                            <span class="stat-label">Base64 Size</span>
+                            <span class="stat-value" id="base64Size">-</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="stat-card">
+                          <div class="stat-icon bg-warning">
+                            <i class="fas fa-chart-line"></i>
+                          </div>
+                          <div class="stat-info">
+                            <span class="stat-label">Size Increase</span>
+                            <span class="stat-value" id="sizeIncrease">-</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="stat-card">
+                          <div class="stat-icon bg-info">
+                            <i class="fas fa-clock"></i>
+                          </div>
+                          <div class="stat-info">
+                            <span class="stat-label">Process Time</span>
+                            <span class="stat-value" id="processTime">-</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Instructions Card -->
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <i class="fas fa-question-circle me-2"></i>
+                      How to Use & Output Formats
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6><i class="fas fa-list-ol me-2"></i>Instructions:</h6>
+                        <ol class="ps-3">
+                          <li>Click "Choose PDF File" or drag & drop your PDF</li>
+                          <li>Wait for the file to be processed</li>
+                          <li>Select your preferred output format</li>
+                          <li>Copy the Base64 string or download as text file</li>
+                        </ol>
+                        
+                        <h6 class="mt-4"><i class="fas fa-info-circle me-2"></i>File Limitations:</h6>
+                        <ul class="ps-3">
+                          <li><strong>Max File Size:</strong> 50 MB</li>
+                          <li><strong>Supported Types:</strong> PDF files only</li>
+                          <li><strong>Processing:</strong> Client-side (secure)</li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6">
+                        <h6><i class="fas fa-code me-2"></i>Output Formats:</h6>
+                        <div class="format-examples">
+                          <div class="format-item">
+                            <strong>Plain Base64:</strong>
+                            <code class="small">JVBERi0xLjUKJYCBgoMK...</code>
+                          </div>
+                          <div class="format-item">
+                            <strong>Data URI:</strong>
+                            <code class="small">data:application/pdf;base64,JVBERi0x...</code>
+                          </div>
+                          <div class="format-item">
+                            <strong>HTML Embed:</strong>
+                            <code class="small">&lt;embed type="application/pdf" src="data:..." /&gt;</code>
+                          </div>
+                          <div class="format-item">
+                            <strong>HTML Object:</strong>
+                            <code class="small">&lt;object type="application/pdf" data="data:..." &gt;&lt;/object&gt;</code>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                      <i class="fas fa-shield-alt me-2"></i>
+                      <strong>Privacy & Security:</strong> All PDF encoding is performed client-side in your browser. 
+                      Your files never leave your device, ensuring complete privacy and security.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="layout-footer"></div>
+      </div>
+
+      <div id="layout-custom-template"></div>
+    </div>
+
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- Chart JS -->
+    <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="../assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="../assets/js/kaiadmin.min.js"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="../assets/js/setting-demo.js"></script>
+    <script src="../assets/js/demo.js"></script>
+
+    <!-- Custom PDF to Base64 Script -->
+    <script src="../assets/js/pdf-base64.js"></script>
+
+
+  </body>
+</html>

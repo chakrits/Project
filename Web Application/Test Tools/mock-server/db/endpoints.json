@@ -1,0 +1,440 @@
+[
+  {
+    "id": "e1",
+    "method": "GET",
+    "path": "/api/users/:id",
+    "description": "Get user by ID",
+    "responses": [
+      {
+        "label": "Success",
+        "status": 200,
+        "body": {
+          "id": ":id",
+          "name": "John Doe",
+          "email": "john@example.com"
+        },
+        "isDefault": true
+      },
+      {
+        "label": "Not Found",
+        "status": 404,
+        "body": {
+          "error": "User not found"
+        },
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "id": "e2",
+    "method": "GET",
+    "path": "/api/users",
+    "description": "List all users",
+    "responses": [
+      {
+        "label": "Success",
+        "status": 200,
+        "body": [
+          {
+            "id": "1",
+            "name": "Chakrit Salaeman",
+            "Role": "Senior Tester"
+          },
+          {
+            "id": "2",
+            "name": "Jane Smith"
+          }
+        ],
+        "isDefault": true
+      }
+    ]
+  },
+  {
+    "id": "e3",
+    "method": "POST",
+    "path": "/api/users",
+    "description": "Create a new user",
+    "responses": [
+      {
+        "label": "Created",
+        "status": 201,
+        "body": {
+          "id": "3",
+          "name": "New User",
+          "message": "User created successfully"
+        },
+        "isDefault": true
+      },
+      {
+        "label": "Validation Error",
+        "status": 400,
+        "body": {
+          "error": "Validation failed",
+          "details": [
+            "Name is required",
+            "Email is required"
+          ]
+        },
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "id": "e4",
+    "method": "GET",
+    "path": "/api/orders/:orderId/items",
+    "description": "Get items for an order",
+    "responses": [
+      {
+        "label": "Success",
+        "status": 200,
+        "body": {
+          "orderId": ":orderId",
+          "items": [
+            {
+              "productId": "p1",
+              "quantity": 2
+            },
+            {
+              "productId": "p2",
+              "quantity": 1
+            }
+          ]
+        },
+        "isDefault": true
+      }
+    ]
+  },
+  {
+    "id": "2fbc1e0a",
+    "method": "GET",
+    "path": "/products",
+    "description": "List products",
+    "responses": [
+      {
+        "label": "OK",
+        "status": 200,
+        "body": {},
+        "isDefault": true
+      }
+    ]
+  },
+  {
+    "id": "d4122afa",
+    "method": "GET",
+    "path": "/products/:id",
+    "description": "Get product by ID",
+    "responses": [
+      {
+        "label": "Found",
+        "status": 200,
+        "body": {},
+        "isDefault": true
+      },
+      {
+        "label": "Not Found",
+        "status": 404,
+        "body": {},
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "id": "798be565",
+    "method": "POST",
+    "path": "/api/claim_classification_list",
+    "description": "IMS Get icon BURT",
+    "responses": [
+      {
+        "label": "Success",
+        "status": 200,
+        "body": [
+          {
+            "en": "I01-26-000xxxx",
+            "predictionResult": [
+              {
+                "classification_type": "admission",
+                "informationDatetime": "2025-05-09 06:59",
+                "classificationRemark": "",
+                "classificationResult": "Borderline",
+                "success": true
+              },
+              {
+                "classification_type": "attention",
+                "informationDatetime": "2025-05-09 06:59",
+                "classificationRemark": "Stool Count,Med concern: ภาวะผู้ผลิต?",
+                "classificationResult": "",
+                "success": true
+              },
+              {
+                "classification_type": "admission",
+                "informationDatetime": "2025-05-09 06:59",
+                "classificationRemark": "",
+                "classificationResult": "Borderline",
+                "success": true
+              },
+              {
+                "classification_type": "intervention",
+                "classificationResult": "Borderline",
+                "classificationRemark": "",
+                "informationDatetime": "2025-05-09 06:59",
+                "success": true
+              }
+            ]
+          }
+        ],
+        "isDefault": true
+      }
+    ]
+  },
+  {
+    "id": "ce80ec4b",
+    "method": "GET",
+    "path": "/api/test",
+    "description": "Demo: query template + conditions",
+    "responses": [
+      {
+        "label": "NamedGreeting",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "message": "Hello {{query.name}}"
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "query",
+            "field": "name",
+            "operator": "exists"
+          }
+        ]
+      },
+      {
+        "label": "Default",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "message": "Hello stranger"
+        },
+        "isDefault": true,
+        "conditions": []
+      }
+    ]
+  },
+  {
+    "id": "test-post-01",
+    "method": "POST",
+    "path": "/api/demo",
+    "description": "Demo: body condition + body template",
+    "responses": [
+      {
+        "label": "AdminWelcome",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "welcome": "Hello {{body.name}}",
+          "role": "admin",
+          "access": "full"
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "body",
+            "field": "role",
+            "operator": "eq",
+            "value": "admin"
+          }
+        ]
+      },
+      {
+        "label": "GuestWelcome",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "welcome": "Hello {{body.name}}",
+          "role": "guest",
+          "access": "limited"
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "body",
+            "field": "role",
+            "operator": "eq",
+            "value": "guest"
+          }
+        ]
+      },
+      {
+        "label": "BadRequest",
+        "status": 400,
+        "delay": 0,
+        "body": {
+          "error": "role is required (admin | guest)"
+        },
+        "isDefault": true,
+        "conditions": []
+      }
+    ]
+  },
+  {
+    "id": "test-put-01",
+    "method": "PUT",
+    "path": "/api/demo/:id",
+    "description": "Demo: PUT with path param + body template",
+    "responses": [
+      {
+        "label": "Updated",
+        "status": 201,
+        "delay": 0,
+        "body": {
+          "id": ":id",
+          "updated": true,
+          "name": "{{body.name}}",
+          "lastname": "{{body.lastname}}"
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "body",
+            "field": "name",
+            "operator": "exists",
+            "value": "true"
+          },
+          {
+            "source": "body",
+            "field": "lastname",
+            "operator": "exists",
+            "value": ""
+          },
+          {
+            "source": "params",
+            "field": "id",
+            "operator": "eq",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "label": "NotFound",
+        "status": 404,
+        "delay": 0,
+        "body": {
+          "error": "Record :id not found"
+        },
+        "isDefault": true,
+        "conditions": []
+      }
+    ]
+  },
+  {
+    "id": "test-patch-01",
+    "method": "PATCH",
+    "path": "/api/demo/:id",
+    "description": "Demo: PATCH with header condition (auth)",
+    "responses": [
+      {
+        "label": "Patched",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "id": ":id",
+          "patched": true,
+          "field": "{{body.field}}",
+          "value": "{{body.value}}"
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "header",
+            "field": "authorization",
+            "operator": "exists"
+          }
+        ]
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "delay": 0,
+        "body": {
+          "error": "Authorization header required"
+        },
+        "isDefault": true,
+        "conditions": []
+      }
+    ]
+  },
+  {
+    "id": "test-delete-01",
+    "method": "DELETE",
+    "path": "/api/demo/:id",
+    "description": "Demo: DELETE with header condition (auth)",
+    "responses": [
+      {
+        "label": "Deleted",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "id": ":id",
+          "deleted": true
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "header",
+            "field": "authorization",
+            "operator": "exists"
+          }
+        ]
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "delay": 0,
+        "body": {
+          "error": "Authorization header required"
+        },
+        "isDefault": true,
+        "conditions": []
+      }
+    ]
+  },
+  {
+    "id": "test-params-01",
+    "method": "GET",
+    "path": "/api/items/:id",
+    "description": "Demo: path param condition (params source)",
+    "responses": [
+      {
+        "label": "SpecialItem",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "id": ":id",
+          "message": "Special response for item id=1",
+          "special": true
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "params",
+            "field": "id",
+            "operator": "eq",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "label": "GenericItem",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "id": ":id",
+          "message": "Generic item response"
+        },
+        "isDefault": true,
+        "conditions": []
+      }
+    ]
+  }
+]

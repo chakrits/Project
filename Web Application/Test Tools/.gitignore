@@ -1,0 +1,41 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Mock Server — build artifacts & runtime data
+mock-server/frontend/dist/
+mock-server/db/logs.json
+
+# Playwright test artifacts
+playwright-report/
+test-results/
+
+# Third-party template (reference only, not part of source)
+kaiadmin-lite-1.2.0/
+
+# Local config (contains machine-specific paths)
+mcp.json
+
+# Claude Code internal project files
+.claude/

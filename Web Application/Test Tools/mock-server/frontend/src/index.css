@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* ─── Custom Design Tokens ─── */
+@theme {
+  --color-surface-primary: #0f1117;
+  --color-surface-secondary: #1a1d27;
+  --color-surface-tertiary: #242836;
+  --color-surface-elevated: #2a2f3e;
+  --color-surface-hover: #323848;
+  
+  --color-border-default: #2e3446;
+  --color-border-subtle: #252938;
+  --color-border-focus: #6366f1;
+  
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  
+  --color-method-get: #10b981;
+  --color-method-post: #3b82f6;
+  --color-method-put: #f59e0b;
+  --color-method-patch: #a855f7;
+  --color-method-delete: #ef4444;
+  
+  --color-status-2xx: #10b981;
+  --color-status-3xx: #3b82f6;
+  --color-status-4xx: #f59e0b;
+  --color-status-5xx: #ef4444;
+  
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+}
+
+/* ─── Base Styles ─── */
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-surface-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Scrollbar Styling ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-elevated);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-surface-hover);
+}
+
+/* ─── JSON Editor ─── */
+.json-editor {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 2;
+  resize: vertical;
+}
+
+/* ─── Glassmorphism Card ─── */
+.glass-card {
+  background: linear-gradient(135deg, rgba(26, 29, 39, 0.8), rgba(36, 40, 54, 0.6));
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+}
+
+/* ─── Animations ─── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.25s ease-out;
+}
+
+/* ─── Toast Notification ─── */
+.toast-enter {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.toast-exit {
+  animation: fadeIn 0.3s ease-out reverse;
+}
