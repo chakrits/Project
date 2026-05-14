@@ -1,385 +1,326 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Mini Postman - Test Center</title>
-    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Mini Postman - Test Center</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } }</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+  <style>
+    .kv-row{display:flex;gap:10px;margin-bottom:10px;}
+    .kv-row input{flex:1;}
+    .response-code{background:#1e1e1e;color:#d4d4d4;padding:15px;border-radius:5px;min-height:200px;max-height:500px;overflow-y:auto;white-space:pre-wrap;font-family:monospace;font-size:13px;}
+    .response-headers{max-height:200px;overflow-y:auto;font-family:monospace;font-size:12px;}
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+<div class="flex min-h-screen">
 
-    <!-- Fonts and icons -->
-    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
-    <script>
-      WebFont.load({
-        google: { families: ["Public Sans:300,400,500,600,700"] },
-        custom: { families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ["../assets/css/fonts.min.css"] },
-        active: function () { sessionStorage.fonts = true; },
-      });
-    </script>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden" onclick="closeSidebar()"></div>
 
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
-    <link rel="stylesheet" href="../assets/css/custom.css" />
-    
-    <script src="/assets/js/layout.js"></script>
-    <style>
-      .kv-row { display: flex; gap: 10px; margin-bottom: 10px; }
-      .kv-row input { flex: 1; }
-      .response-code { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; min-height: 200px; max-height: 500px; overflow-y: auto; white-space: pre-wrap; font-family: monospace; font-size: 13px; }
-      .response-headers { max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; }
-    </style>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div id="layout-sidebar"></div>
+  <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 flex flex-col z-30 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-gray-700 flex items-center gap-3">
+      <span class="text-blue-400 text-lg">⚗</span>
+      <a href="/" class="text-white font-bold text-sm tracking-wide hover:text-blue-400 transition-colors">Test Center</a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
+      <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors mb-1"><i class="fas fa-home w-4 text-center text-xs"></i><span>Dashboard</span></a>
+      <a href="/tools/mock-server" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-server w-4 text-center text-xs"></i><span>Mock Server</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Tools</span></div>
+      <a href="/tools/aes-encryption" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-lock w-4 text-center text-xs"></i><span>AES Encryption</span></a>
+      <a href="/tools/json-converter" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-code w-4 text-center text-xs"></i><span>JSON Converter</span></a>
+      <a href="/tools/base64-pdf" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-pdf w-4 text-center text-xs"></i><span>Base64 &#8644; PDF</span></a>
+      <a href="/tools/pdf-base64" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-export w-4 text-center text-xs"></i><span>PDF &#8594; Base64</span></a>
+      <a href="/tools/mini_postman" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-paper-plane w-4 text-center text-xs"></i><span>Mini Postman</span></a>
+      <a href="/tools/url-generator" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-list w-4 text-center text-xs"></i><span>URL Generator</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">E-Forms</span></div>
+      <a href="/forms/auto-login" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-alt w-4 text-center text-xs"></i><span>Claim Form Patient</span></a>
+      <a href="/forms/auto-login-burt" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-id-card w-4 text-center text-xs"></i><span>Auto Login BURT</span></a>
+    </nav>
+    <div class="px-5 py-3 border-t border-gray-700"><span class="text-xs text-gray-600">v1.0 · Test Center</span></div>
+  </aside>
 
-      <div class="main-panel">
-        <div class="main-header">
-          <div id="layout-navbar"></div>
-        </div>
+  <div class="flex flex-col flex-1 min-h-screen lg:ml-64">
+    <nav class="bg-gray-900 border-b border-gray-700 px-6 py-3 flex items-center justify-between flex-shrink-0 sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded" aria-label="Toggle sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="text-gray-400 text-sm font-medium">Mini Postman</span>
+      </div>
+      <div id="navbar-user-slot" class="flex items-center gap-2.5 text-sm text-gray-400">
+        <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
+        <span class="hidden sm:inline">Tester</span>
+      </div>
+    </nav>
 
-        <div class="container">
-          <div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Mini Postman</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Tools</a></li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Mini Postman</a></li>
-              </ul>
+    <main class="flex-1 overflow-auto">
+      <div class="container">
+        <div class="page-inner">
+          <div class="page-header">
+            <h3 class="fw-bold mb-3">Mini Postman</h3>
+            <ul class="breadcrumbs mb-3">
+              <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Tools</a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Mini Postman</a></li>
+            </ul>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="card">
+                <div class="card-header"><div class="card-title">Collections</div></div>
+                <div class="card-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action" onclick="loadExample('GET','https://httpbin.org/get')">
+                      <span class="badge badge-success me-2">GET</span> httpbin.org/get
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="loadExample('POST','https://httpbin.org/post')">
+                      <span class="badge badge-warning me-2">POST</span> httpbin.org/post
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <!-- Main Layout: 2 Columns (Collections & Request) -->
-            <div class="row">
-              <!-- Collections Sidebar -->
-              <div class="col-md-3">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">Collections</div>
+            <div class="col-md-9">
+              <div class="card">
+                <div class="card-body">
+                  <div class="input-group mb-3">
+                    <select class="form-select" id="method" style="max-width: 120px;">
+                      <option>GET</option>
+                      <option>POST</option>
+                      <option>PUT</option>
+                      <option>PATCH</option>
+                      <option>DELETE</option>
+                      <option>HEAD</option>
+                      <option>OPTIONS</option>
+                    </select>
+                    <input type="text" class="form-control" id="url" placeholder="https://api.example.com/endpoint" />
+                    <button class="btn btn-primary" id="sendBtn" onclick="sendRequest()"><i class="fas fa-paper-plane me-1"></i> Send</button>
                   </div>
-                  <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                      <a href="#" class="list-group-item list-group-item-action" onclick="loadExample('GET','https://httpbin.org/get')">
-                        <span class="badge badge-success me-2">GET</span> httpbin.org/get
-                      </a>
-                      <a href="#" class="list-group-item list-group-item-action" onclick="loadExample('POST','https://httpbin.org/post')">
-                        <span class="badge badge-warning me-2">POST</span> httpbin.org/post
-                      </a>
+
+                  <ul class="nav nav-tabs nav-line nav-color-secondary" id="requestTabs" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#params" role="tab">Params</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#headers" role="tab">Headers</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#body" role="tab">Body</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#auth" role="tab">Auth</a></li>
+                  </ul>
+
+                  <div class="tab-content mt-3 mb-3">
+                    <div class="tab-pane fade show active" id="params" role="tabpanel">
+                      <div id="params-container"></div>
+                      <button class="btn btn-sm btn-outline-secondary mt-2" onclick="addParam()">+ Add Param</button>
+                    </div>
+                    <div class="tab-pane fade" id="headers" role="tabpanel">
+                      <div id="headers-container"></div>
+                      <button class="btn btn-sm btn-outline-secondary mt-2" onclick="addHeader()">+ Add Header</button>
+                    </div>
+                    <div class="tab-pane fade" id="body" role="tabpanel">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <select class="form-select form-select-sm" id="bodyType" style="max-width: 250px;">
+                          <option value="raw">raw (application/json)</option>
+                          <option value="form">x-www-form-urlencoded</option>
+                        </select>
+                        <button class="btn btn-sm btn-outline-info" onclick="formatBody()">Format JSON</button>
+                      </div>
+                      <div id="bodyRawWrap">
+                        <textarea id="bodyRaw" class="form-control" rows="8" placeholder='{"key":"value"}'></textarea>
+                      </div>
+                      <div id="bodyForm" style="display:none">
+                        <div id="formPairs"></div>
+                        <button class="btn btn-sm btn-outline-secondary mt-2" onclick="addFormPair()">+ Add Field</button>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="auth" role="tabpanel">
+                      <select class="form-select form-select-sm mb-3" id="authType" style="max-width: 200px;">
+                        <option value="none">None</option>
+                        <option value="bearer">Bearer Token</option>
+                        <option value="basic">Basic Auth</option>
+                      </select>
+                      <div id="authBearer" style="display:none">
+                        <input type="text" class="form-control" id="bearerToken" placeholder="Token" />
+                      </div>
+                      <div id="authBasic" style="display:none" class="row">
+                        <div class="col"><input type="text" class="form-control" id="basicUser" placeholder="Username" /></div>
+                        <div class="col"><input type="text" class="form-control" id="basicPass" placeholder="Password" /></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Request Area -->
-              <div class="col-md-9">
-                <div class="card">
-                  <div class="card-body">
-                    <!-- URL Bar -->
-                    <div class="input-group mb-3">
-                      <select class="form-select" id="method" style="max-width: 120px;">
-                        <option>GET</option>
-                        <option>POST</option>
-                        <option>PUT</option>
-                        <option>PATCH</option>
-                        <option>DELETE</option>
-                        <option>HEAD</option>
-                        <option>OPTIONS</option>
-                      </select>
-                      <input type="text" class="form-control" id="url" placeholder="https://api.example.com/endpoint" />
-                      <button class="btn btn-primary" id="sendBtn" onclick="sendRequest()">
-                        <i class="fas fa-paper-plane me-1"></i> Send
-                      </button>
-                    </div>
-
-                    <!-- Request Tabs -->
-                    <ul class="nav nav-tabs nav-line nav-color-secondary" id="requestTabs" role="tablist">
-                      <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#params" role="tab">Params</a></li>
-                      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#headers" role="tab">Headers</a></li>
-                      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#body" role="tab">Body</a></li>
-                      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#auth" role="tab">Auth</a></li>
-                    </ul>
-
-                    <div class="tab-content mt-3 mb-3">
-                      <!-- Params Tab -->
-                      <div class="tab-pane fade show active" id="params" role="tabpanel">
-                        <div id="params-container"></div>
-                        <button class="btn btn-sm btn-outline-secondary mt-2" onclick="addParam()">+ Add Param</button>
-                      </div>
-
-                      <!-- Headers Tab -->
-                      <div class="tab-pane fade" id="headers" role="tabpanel">
-                        <div id="headers-container"></div>
-                        <button class="btn btn-sm btn-outline-secondary mt-2" onclick="addHeader()">+ Add Header</button>
-                      </div>
-
-                      <!-- Body Tab -->
-                      <div class="tab-pane fade" id="body" role="tabpanel">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                          <select class="form-select form-select-sm" id="bodyType" style="max-width: 250px;">
-                            <option value="raw">raw (application/json)</option>
-                            <option value="form">x-www-form-urlencoded</option>
-                          </select>
-                          <button class="btn btn-sm btn-outline-info" onclick="formatBody()">Format JSON</button>
-                        </div>
-                        <div id="bodyRawWrap">
-                          <textarea id="bodyRaw" class="form-control" rows="8" placeholder='{"key":"value"}'></textarea>
-                        </div>
-                        <div id="bodyForm" style="display:none">
-                          <div id="formPairs"></div>
-                          <button class="btn btn-sm btn-outline-secondary mt-2" onclick="addFormPair()">+ Add Field</button>
-                        </div>
-                      </div>
-
-                      <!-- Auth Tab -->
-                      <div class="tab-pane fade" id="auth" role="tabpanel">
-                        <select class="form-select form-select-sm mb-3" id="authType" style="max-width: 200px;">
-                          <option value="none">None</option>
-                          <option value="bearer">Bearer Token</option>
-                          <option value="basic">Basic Auth</option>
-                        </select>
-                        <div id="authBearer" style="display:none">
-                          <input type="text" class="form-control" id="bearerToken" placeholder="Token" />
-                        </div>
-                        <div id="authBasic" style="display:none" class="row">
-                          <div class="col"><input type="text" class="form-control" id="basicUser" placeholder="Username" /></div>
-                          <div class="col"><input type="text" class="form-control" id="basicPass" placeholder="Password" /></div>
-                        </div>
-                      </div>
-                    </div>
-
+              <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <div class="card-title">Response</div>
+                  <div>
+                    <span id="statusBadge" class="badge badge-secondary me-2">Status: -</span>
+                    <span id="timeBadge" class="badge badge-secondary me-2">Time: - ms</span>
+                    <span id="sizeBadge" class="badge badge-secondary">Size: -</span>
                   </div>
                 </div>
-
-                <!-- Response Area -->
-                <div class="card">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <div class="card-title">Response</div>
-                    <div>
-                      <span id="statusBadge" class="badge badge-secondary me-2">Status: -</span>
-                      <span id="timeBadge" class="badge badge-secondary me-2">Time: - ms</span>
-                      <span id="sizeBadge" class="badge badge-secondary">Size: -</span>
+                <div class="card-body">
+                  <ul class="nav nav-pills nav-secondary nav-pills-no-bd mb-3" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#resp-body-tab" role="tab">Body</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#resp-headers-tab" role="tab">Headers</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane fade show active" id="resp-body-tab" role="tabpanel">
+                      <div class="d-flex justify-content-end mb-2">
+                        <button class="btn btn-xs btn-outline-secondary me-2" onclick="copyBody()"><i class="far fa-copy"></i> Copy</button>
+                        <button class="btn btn-xs btn-outline-secondary" onclick="downloadBody()"><i class="fas fa-download"></i> Download</button>
+                      </div>
+                      <pre id="respBody" class="response-code">Hit Send to get a response...</pre>
                     </div>
-                  </div>
-                  <div class="card-body">
-                    <ul class="nav nav-pills nav-secondary nav-pills-no-bd mb-3" role="tablist">
-                      <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#resp-body-tab" role="tab">Body</a></li>
-                      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#resp-headers-tab" role="tab">Headers</a></li>
-                    </ul>
-                    <div class="tab-content">
-                      <div class="tab-pane fade show active" id="resp-body-tab" role="tabpanel">
-                        <div class="d-flex justify-content-end mb-2">
-                          <button class="btn btn-xs btn-outline-secondary me-2" onclick="copyBody()"><i class="far fa-copy"></i> Copy</button>
-                          <button class="btn btn-xs btn-outline-secondary" onclick="downloadBody()"><i class="fas fa-download"></i> Download</button>
-                        </div>
-                        <pre id="respBody" class="response-code">Hit Send to get a response...</pre>
-                      </div>
-                      <div class="tab-pane fade" id="resp-headers-tab" role="tabpanel">
-                        <div id="respHeaders" class="response-headers p-3 bg-light border rounded"></div>
-                      </div>
+                    <div class="tab-pane fade" id="resp-headers-tab" role="tabpanel">
+                      <div id="respHeaders" class="response-headers p-3 bg-light border rounded"></div>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
-
-        <div id="layout-footer"></div>
       </div>
-      <div id="layout-custom-template"></div>
-    </div>
+    </main>
 
-    <!-- Core JS Files -->
-    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="../assets/js/kaiadmin.min.js"></script>
+    <footer class="border-t border-gray-700 bg-gray-900 text-gray-500 text-xs px-6 py-3 flex flex-wrap justify-between items-center gap-2 flex-shrink-0">
+      <nav class="flex gap-4"><a href="/" class="hover:text-gray-300 transition-colors">Test Center</a><a href="#" class="hover:text-gray-300 transition-colors">Help</a></nav>
+      <span>2025 &middot; Developed by <strong class="text-gray-400">Chakrit Salaeman &amp; Claude</strong></span>
+      <span class="hidden md:inline">Test Center Management</span>
+    </footer>
+  </div>
+</div>
 
-    <script>
-      // Postman Logic
+<script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
 
-      /* ------------ Params / Headers UI ------------ */
-      function kvRow(containerId) {
-        const wrap = document.getElementById(containerId);
-        const div = document.createElement('div');
-        div.className = 'kv-row';
-        div.innerHTML = `
-          <input type="text" class="form-control form-control-sm" placeholder="Key" />
-          <input type="text" class="form-control form-control-sm" placeholder="Value" />
-          <button class="btn btn-sm btn-danger" onclick="this.parentNode.remove()"><i class="fas fa-times"></i></button>
-        `;
-        wrap.appendChild(div);
-      }
-      function addParam(){ kvRow('params-container'); }
-      function addHeader(){ kvRow('headers-container'); }
-      function addFormPair(){ kvRow('formPairs'); }
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
+document.querySelectorAll('#sidebar nav a[href]').forEach(function(a){if(a.pathname===window.location.pathname){a.classList.remove('text-gray-400','hover:text-white','hover:bg-gray-800');a.classList.add('bg-blue-600','text-white');}});
 
-      /* ------------ Body type toggle ------------ */
-      const bodyType = document.getElementById('bodyType');
-      bodyType.addEventListener('change', () => {
-        const isRaw = bodyType.value === 'raw';
-        const isForm = bodyType.value === 'form';
-        document.getElementById('bodyRawWrap').style.display = isRaw ? 'block' : 'none';
-        document.getElementById('bodyForm').style.display = isForm ? 'block' : 'none';
-      });
+function kvRow(containerId){
+  const wrap=document.getElementById(containerId);
+  const div=document.createElement('div');
+  div.className='kv-row';
+  div.innerHTML=`<input type="text" class="form-control form-control-sm" placeholder="Key" /><input type="text" class="form-control form-control-sm" placeholder="Value" /><button class="btn btn-sm btn-danger" onclick="this.parentNode.remove()"><i class="fas fa-times"></i></button>`;
+  wrap.appendChild(div);
+}
+function addParam(){kvRow('params-container');}
+function addHeader(){kvRow('headers-container');}
+function addFormPair(){kvRow('formPairs');}
 
-      /* ------------ Auth toggle ------------ */
-      const authType = document.getElementById('authType');
-      authType.addEventListener('change', () => {
-        document.getElementById('authBearer').style.display = authType.value === 'bearer' ? 'block' : 'none';
-        document.getElementById('authBasic').style.display = authType.value === 'basic'  ? 'flex' : 'none';
-      });
+const bodyType=document.getElementById('bodyType');
+bodyType.addEventListener('change',()=>{
+  const isRaw=bodyType.value==='raw';
+  document.getElementById('bodyRawWrap').style.display=isRaw?'block':'none';
+  document.getElementById('bodyForm').style.display=isRaw?'none':'block';
+});
 
-      /* ------------ Utilities ------------ */
-      function buildObjectFrom(containerId){
-        const obj={};
-        [...document.getElementById(containerId).querySelectorAll('.kv-row')].forEach(row=>{
-          const [k,v]=[...row.querySelectorAll('input')].map(i=>i.value.trim());
-          if(k) obj[k]=v;
-        });
-        return obj;
-      }
-      function appendParamsToUrl(url, params){
-        try {
-          const u = new URL(url);
-          Object.entries(params).forEach(([k,v])=>{ if(v!==undefined) u.searchParams.set(k,v) });
-          return u.toString();
-        } catch(e) { return url; }
-      }
-      function pretty(val){
-        try{ return JSON.stringify(JSON.parse(val),null,2) }catch(e){ return val }
-      }
-      function formatBody(){
-        const ta = document.getElementById('bodyRaw');
-        ta.value = pretty(ta.value || '{}');
-      }
+const authType=document.getElementById('authType');
+authType.addEventListener('change',()=>{
+  document.getElementById('authBearer').style.display=authType.value==='bearer'?'block':'none';
+  document.getElementById('authBasic').style.display=authType.value==='basic'?'flex':'none';
+});
 
-      /* ------------ Send request ------------ */
-      async function sendRequest(){
-        const method=document.getElementById('method').value;
-        let url=document.getElementById('url').value.trim();
-        if(!url) return alert("Please enter a URL");
-        if(!url.startsWith("http")) url = "http://" + url;
+function buildObjectFrom(containerId){
+  const obj={};
+  [...document.getElementById(containerId).querySelectorAll('.kv-row')].forEach(row=>{
+    const [k,v]=[...row.querySelectorAll('input')].map(i=>i.value.trim());
+    if(k) obj[k]=v;
+  });
+  return obj;
+}
+function appendParamsToUrl(url,params){
+  try{const u=new URL(url);Object.entries(params).forEach(([k,v])=>{if(v!==undefined)u.searchParams.set(k,v)});return u.toString();}catch(e){return url;}
+}
+function pretty(val){try{return JSON.stringify(JSON.parse(val),null,2)}catch(e){return val}}
+function formatBody(){const ta=document.getElementById('bodyRaw');ta.value=pretty(ta.value||'{}');}
 
-        const params=buildObjectFrom('params-container');
-        if(Object.keys(params).length) url=appendParamsToUrl(url, params);
+async function sendRequest(){
+  const method=document.getElementById('method').value;
+  let url=document.getElementById('url').value.trim();
+  if(!url) return alert("Please enter a URL");
+  if(!url.startsWith("http")) url="http://"+url;
 
-        const headers=buildObjectFrom('headers-container');
+  const params=buildObjectFrom('params-container');
+  if(Object.keys(params).length) url=appendParamsToUrl(url,params);
+  const headers=buildObjectFrom('headers-container');
 
-        // Auth
-        const at=authType.value;
-        if(at==='bearer' && document.getElementById('bearerToken').value){
-          headers['Authorization'] = 'Bearer ' + document.getElementById('bearerToken').value.trim();
-        } else if(at==='basic'){
-          const u=document.getElementById('basicUser').value||'';
-          const p=document.getElementById('basicPass').value||'';
-          headers['Authorization'] = 'Basic ' + btoa(u+":"+p);
-        }
+  const at=authType.value;
+  if(at==='bearer'&&document.getElementById('bearerToken').value){
+    headers['Authorization']='Bearer '+document.getElementById('bearerToken').value.trim();
+  } else if(at==='basic'){
+    const u=document.getElementById('basicUser').value||'';
+    const p=document.getElementById('basicPass').value||'';
+    headers['Authorization']='Basic '+btoa(u+":"+p);
+  }
 
-        let body;
-        if(['POST','PUT','PATCH','DELETE'].includes(method)){
-          const bt=bodyType.value;
-          if(bt==='raw'){
-            headers['Content-Type']= headers['Content-Type']||'application/json';
-            body=document.getElementById('bodyRaw').value||'';
-          } else if(bt==='form'){
-            headers['Content-Type']='application/x-www-form-urlencoded;charset=UTF-8';
-            const o=buildObjectFrom('formPairs');
-            body=new URLSearchParams(o).toString();
-          }
-        }
+  let body;
+  if(['POST','PUT','PATCH','DELETE'].includes(method)){
+    const bt=bodyType.value;
+    if(bt==='raw'){headers['Content-Type']=headers['Content-Type']||'application/json';body=document.getElementById('bodyRaw').value||'';}
+    else if(bt==='form'){headers['Content-Type']='application/x-www-form-urlencoded;charset=UTF-8';body=new URLSearchParams(buildObjectFrom('formPairs')).toString();}
+  }
 
-        document.getElementById('sendBtn').disabled = true;
-        document.getElementById('sendBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  document.getElementById('sendBtn').disabled=true;
+  document.getElementById('sendBtn').innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-        const t0=performance.now();
-        let resp, text, size='-';
-        try{
-          // ส่งผ่าน Proxy เพื่อทะลุ CORS
-          resp = await fetch('/api/proxy', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url, method, headers, body })
-          });
-          
-          const buf=await resp.arrayBuffer();
-          size=(buf.byteLength/1024).toFixed(1)+' KB';
-          const ct=resp.headers.get('content-type')||'';
-          text = (/application\/json|text\//.test(ct)) ? new TextDecoder().decode(buf) : '[binary '+size+']';
-          const ms=(performance.now()-t0).toFixed(0);
-          renderResponse(resp, text, ms, size);
-        }catch(e){
-          renderError(e);
-        } finally {
-          document.getElementById('sendBtn').disabled = false;
-          document.getElementById('sendBtn').innerHTML = '<i class="fas fa-paper-plane me-1"></i> Send';
-        }
-      }
+  const t0=performance.now();
+  try{
+    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,method,headers,body})});
+    const buf=await resp.arrayBuffer();
+    const size=(buf.byteLength/1024).toFixed(1)+' KB';
+    const ct=resp.headers.get('content-type')||'';
+    const text=(/application\/json|text\//.test(ct))?new TextDecoder().decode(buf):'[binary '+size+']';
+    const ms=(performance.now()-t0).toFixed(0);
+    renderResponse(resp,text,ms,size);
+  }catch(e){renderError(e);}
+  finally{document.getElementById('sendBtn').disabled=false;document.getElementById('sendBtn').innerHTML='<i class="fas fa-paper-plane me-1"></i> Send';}
+}
 
-      function renderResponse(resp, text, ms, size){
-        const statusEl=document.getElementById('statusBadge');
-        statusEl.textContent='Status: '+resp.status+' '+resp.statusText;
-        statusEl.className='badge '+(resp.ok?'badge-success':'badge-danger') + ' me-2';
-        document.getElementById('timeBadge').textContent='Time: '+ms+' ms';
-        document.getElementById('sizeBadge').textContent='Size: '+size;
+function renderResponse(resp,text,ms,size){
+  const statusEl=document.getElementById('statusBadge');
+  statusEl.textContent='Status: '+resp.status+' '+resp.statusText;
+  statusEl.className='badge '+(resp.ok?'badge-success':'badge-danger')+' me-2';
+  document.getElementById('timeBadge').textContent='Time: '+ms+' ms';
+  document.getElementById('sizeBadge').textContent='Size: '+size;
+  const hdrs=[...resp.headers.entries()].map(([k,v])=>`<div><strong>${k}:</strong> ${escapeHtml(v)}</div>`).join('');
+  document.getElementById('respHeaders').innerHTML=hdrs||'<span class="text-muted">(No headers)</span>';
+  const maybePretty=(()=>{try{return JSON.stringify(JSON.parse(text),null,2);}catch{return text}})();
+  document.getElementById('respBody').textContent=maybePretty||'(Empty Response)';
+}
 
-        // Headers
-        const hdrs=[...resp.headers.entries()].map(([k,v])=>`<div><strong>${k}:</strong> ${escapeHtml(v)}</div>`).join('');
-        document.getElementById('respHeaders').innerHTML=hdrs || '<span class="text-muted">(No headers)</span>';
+function renderError(e){
+  const statusEl=document.getElementById('statusBadge');
+  statusEl.textContent='ERROR';statusEl.className='badge badge-danger me-2';
+  document.getElementById('timeBadge').textContent='Time: -';document.getElementById('sizeBadge').textContent='Size: -';
+  document.getElementById('respHeaders').innerHTML='';
+  document.getElementById('respBody').textContent='⚠️ Failed to fetch: '+(e.message||e);
+}
+function escapeHtml(s){return String(s).replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));}
+function copyBody(){navigator.clipboard.writeText(document.getElementById('respBody').textContent).then(()=>{alert("Copied to clipboard!");}).catch(()=>{});}
+function downloadBody(){
+  const blob=new Blob([document.getElementById('respBody').textContent],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='response.txt';a.click();URL.revokeObjectURL(a.href);
+}
+function loadExample(m,u){
+  document.getElementById('method').value=m;document.getElementById('url').value=u;
+  document.getElementById('params-container').innerHTML='';document.getElementById('headers-container').innerHTML='';document.getElementById('bodyRaw').value='';
+}
 
-        // Body
-        const maybePretty = (()=>{ try{ return JSON.stringify(JSON.parse(text),null,2);}catch{ return text }})();
-        document.getElementById('respBody').textContent = maybePretty || '(Empty Response)';
-      }
-
-      function renderError(e){
-        const statusEl=document.getElementById('statusBadge');
-        statusEl.textContent='ERROR';
-        statusEl.className='badge badge-danger me-2';
-        document.getElementById('timeBadge').textContent='Time: -';
-        document.getElementById('sizeBadge').textContent='Size: -';
-        document.getElementById('respHeaders').innerHTML='';
-        document.getElementById('respBody').textContent = '⚠️ Failed to fetch: '+(e.message||e);
-      }
-
-      function escapeHtml(s){
-        return String(s).replace(/[&<>]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
-      }
-
-      function copyBody(){
-        const txt=document.getElementById('respBody').textContent;
-        navigator.clipboard.writeText(txt).then(()=>{
-          alert("Copied to clipboard!");
-        }).catch(()=>{});
-      }
-
-      function downloadBody(){
-        const data=document.getElementById('respBody').textContent;
-        const blob=new Blob([data],{type:'text/plain;charset=utf-8'});
-        const a=document.createElement('a');
-        a.href=URL.createObjectURL(blob);
-        a.download='response.txt';
-        a.click();
-        URL.revokeObjectURL(a.href);
-      }
-
-      function loadExample(m,u){
-        document.getElementById('method').value=m;
-        document.getElementById('url').value=u;
-        document.getElementById('params-container').innerHTML='';
-        document.getElementById('headers-container').innerHTML='';
-        document.getElementById('bodyRaw').value='';
-      }
-
-      // Initialize
-      $(document).ready(function() {
-        addHeader(); addParam(); addFormPair();
-      });
-    </script>
-  </body>
+$(document).ready(function(){addHeader();addParam();addFormPair();});
+</script>
+</body>
 </html>

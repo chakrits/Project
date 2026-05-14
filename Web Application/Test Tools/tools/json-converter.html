@@ -1,332 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>JSON Converter - Test Center</title>
-    <meta
-      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-      name="viewport"
-    />
-    <link
-      rel="icon"
-      href="../assets/img/kaiadmin/tester-sign.ico"
-      type="image/x-icon"
-    />
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>JSON Converter - Test Center</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } }</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+</head>
+<body class="bg-gray-950 text-gray-100">
+<div class="flex min-h-screen">
 
-    <!-- Fonts and icons -->
-    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
-    <script>
-      WebFont.load({
-        google: { families: ["Public Sans:300,400,500,600,700"] },
-        custom: {
-          families: [
-            "Font Awesome 5 Solid",
-            "Font Awesome 5 Regular",
-            "Font Awesome 5 Brands",
-            "simple-line-icons",
-          ],
-          urls: ["../assets/css/fonts.min.css"],
-        },
-        active: function () {
-          sessionStorage.fonts = true;
-        },
-      });
-    </script>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden" onclick="closeSidebar()"></div>
 
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
-    <link rel="stylesheet" href="../assets/css/custom.css" />
-    <link rel="stylesheet" href="../assets/css/demo.css" />
-    <script src="/assets/js/layout.js"></script>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div id="layout-sidebar"></div>
+  <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 flex flex-col z-30 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-gray-700 flex items-center gap-3">
+      <span class="text-blue-400 text-lg">⚗</span>
+      <a href="/" class="text-white font-bold text-sm tracking-wide hover:text-blue-400 transition-colors">Test Center</a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
+      <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors mb-1"><i class="fas fa-home w-4 text-center text-xs"></i><span>Dashboard</span></a>
+      <a href="/tools/mock-server" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-server w-4 text-center text-xs"></i><span>Mock Server</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Tools</span></div>
+      <a href="/tools/aes-encryption" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-lock w-4 text-center text-xs"></i><span>AES Encryption</span></a>
+      <a href="/tools/json-converter" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-code w-4 text-center text-xs"></i><span>JSON Converter</span></a>
+      <a href="/tools/base64-pdf" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-pdf w-4 text-center text-xs"></i><span>Base64 &#8644; PDF</span></a>
+      <a href="/tools/pdf-base64" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-export w-4 text-center text-xs"></i><span>PDF &#8594; Base64</span></a>
+      <a href="/tools/mini_postman" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-paper-plane w-4 text-center text-xs"></i><span>Mini Postman</span></a>
+      <a href="/tools/url-generator" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-list w-4 text-center text-xs"></i><span>URL Generator</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">E-Forms</span></div>
+      <a href="/forms/auto-login" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-alt w-4 text-center text-xs"></i><span>Claim Form Patient</span></a>
+      <a href="/forms/auto-login-burt" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-id-card w-4 text-center text-xs"></i><span>Auto Login BURT</span></a>
+    </nav>
+    <div class="px-5 py-3 border-t border-gray-700"><span class="text-xs text-gray-600">v1.0 · Test Center</span></div>
+  </aside>
 
-      <div class="main-panel">
-        <div class="main-header">
-          <div id="layout-navbar"></div>
-        </div>
+  <div class="flex flex-col flex-1 min-h-screen lg:ml-64">
+    <nav class="bg-gray-900 border-b border-gray-700 px-6 py-3 flex items-center justify-between flex-shrink-0 sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded" aria-label="Toggle sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="text-gray-400 text-sm font-medium">JSON Converter</span>
+      </div>
+      <div id="navbar-user-slot" class="flex items-center gap-2.5 text-sm text-gray-400">
+        <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
+        <span class="hidden sm:inline">Tester</span>
+      </div>
+    </nav>
 
-        <div class="container">
-          <div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">JSON String Converter</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="/">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Tools</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Convert String JSON</a>
-                </li>
-              </ul>
-            </div>
+    <main class="flex-1 overflow-auto">
+      <div class="container">
+        <div class="page-inner">
+          <div class="page-header">
+            <h3 class="fw-bold mb-3">JSON String Converter</h3>
+            <ul class="breadcrumbs mb-3">
+              <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Tools</a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Convert String JSON</a></li>
+            </ul>
+          </div>
 
-            <!-- Info Card -->
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-code me-2"></i>About JSON String
-                      Converter
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted">
-                      <strong>JSON String Converter</strong> helps you convert
-                      Python-style strings or malformed JSON strings into valid
-                      JSON format. This tool automatically handles common issues
-                      like single quotes, unquoted keys, Python boolean values
-                      (True/False), and None values.
-                    </p>
-                    <div class="alert alert-info">
-                      <strong>Supported Conversions:</strong>
-                      • Python dictionaries → JSON objects • Single quotes →
-                      Double quotes • True/False/None → true/false/null •
-                      Unquoted keys → Quoted keys
-                    </div>
-                  </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-code me-2"></i>About JSON String Converter</div></div>
+                <div class="card-body">
+                  <p class="text-muted"><strong>JSON String Converter</strong> helps you convert Python-style strings or malformed JSON strings into valid JSON format. This tool automatically handles common issues like single quotes, unquoted keys, Python boolean values (True/False), and None values.</p>
+                  <div class="alert alert-info"><strong>Supported Conversions:</strong> • Python dictionaries → JSON objects • Single quotes → Double quotes • True/False/None → true/false/null • Unquoted keys → Quoted keys</div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Statistics Card -->
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-primary bubble-shadow-small"
-                        >
-                          <i class="fas fa-chart-bar"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Input Statistics</p>
-                          <h4 class="card-title">
-                            Lines: <span id="lineCount">0</span> | Characters:
-                            <span id="charCount">0</span>
-                          </h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-<!-- Sample Data Section -->
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-lightbulb me-2"></i>Quick Test Samples
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="d-flex flex-wrap gap-2">
-                      <button class="btn btn-outline-info btn-sm" onclick="loadSample('python')"><i class="fab fa-python me-1"></i>Python Dict</button>
-                      <button class="btn btn-outline-info btn-sm" onclick="loadSample('nested')"><i class="fas fa-sitemap me-1"></i>Nested Objects</button>
-                      <button class="btn btn-outline-info btn-sm" onclick="loadSample('array')"><i class="fas fa-list me-1"></i>Arrays & Lists</button>
-                      <button class="btn btn-outline-info btn-sm" onclick="loadSample('complex')"><i class="fas fa-project-diagram me-1"></i>Complex Data</button>
-                      <button class="btn btn-outline-info btn-sm" onclick="loadSample('edge')"><i class="fas fa-exclamation-triangle me-1"></i>Edge Cases</button>
-                      <button class="btn btn-outline-info btn-sm" onclick="loadSample('escaped')"><i class="fas fa-unlock-alt me-1"></i>Escaped JSON</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Main Converter Tool -->
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-exchange-alt me-2"></i>JSON String Converter Tool
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <!-- Input Section -->
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputArea" class="form-label">
-                            <i class="fas fa-edit me-2"></i><strong>Input (String-like JSON)</strong>
-                          </label>
-                          <textarea id="inputArea" class="form-control" rows="15" placeholder="Paste your string-like JSON here...\nExample:\n{\n  name: 'John Doe',\n  age: 30,\n  active: True,\n  salary: None,\n  skills: ['Python', 'JavaScript']\n}" oninput="updateStats()"></textarea>
-                          <small class="form-text text-muted">
-                            Supports Python-style dictionaries, single quotes, unquoted keys, True/False/None values
-                          </small>
-                        </div>
-                      </div>
-
-                      <!-- Output Section -->
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label class="form-label">
-                            <i class="fas fa-code me-2"></i
-                            ><strong>Output (Valid JSON)</strong>
-                          </label>
-                          <div class="json-output-container">
-                            <pre id="outputArea" class="json-output">{}</pre>
-                          </div>
-                          <small class="form-text text-muted">
-                            Converted JSON will appear here with proper
-                            formatting
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Options -->
-                    <div class="row mt-3 mb-2">
-                      <div class="col-md-12 text-center">
-                        <div class="form-check form-switch d-inline-block">
-                          <input class="form-check-input" type="checkbox" id="deepParseToggle" checked>
-                          <label class="form-check-label" for="deepParseToggle">
-                            <strong>Deep Parse & Unescape</strong> (Automatically unescape JSON strings hidden inside payload properties)
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Control Buttons -->
-                    <div class="row mt-2">
-                      <div class="col-md-12">
-                        <div
-                          class="d-flex gap-2 flex-wrap justify-content-center"
-                        >
-                          <button class="btn btn-primary" onclick="convert()">
-                            <i class="fas fa-sync-alt me-1"></i>Convert to JSON
-                          </button>
-                          <button
-                            class="btn btn-success"
-                            onclick="copyToClipboard()"
-                          >
-                            <i class="fas fa-clipboard me-1"></i>Copy Result
-                          </button>
-                          <button
-                            class="btn btn-success"
-                            onclick="downloadJson()"
-                          >
-                            <i class="fas fa-download me-1"></i>Download JSON
-                          </button>
-                          <button
-                            class="btn btn-outline-secondary"
-                            onclick="clearAll()"
-                          >
-                            <i class="fas fa-trash me-1"></i>Clear All
-                          </button>
-                          <button
-                            class="btn btn-outline-info"
-                            onclick="validateJson()"
-                          >
-                            <i class="fas fa-check-circle me-1"></i>Validate
-                            Only
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Status Display -->
-                    <div class="row mt-3">
-                      <div class="col-md-12">
-                        <div id="statusMsg"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Result Display (Error Analysis) -->
-            <div class="row" id="resultsSection" style="display: none">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-bug me-2"></i>Error Analysis
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div id="results"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Features Info -->
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-star me-2"></i>Key Features &
-                      Capabilities
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <h6><strong>Conversion Features:</strong></h6>
-                        <ul class="list-unstyled">
-                          <li>
-                            <i class="fas fa-check text-success me-2"></i>Python
-                            boolean values (True/False) → JSON (true/false)
-                          </li>
-                          <li>
-                            <i class="fas fa-check text-success me-2"></i>Python
-                            None values → JSON null
-                          </li>
-                          <li>
-                            <i class="fas fa-check text-success me-2"></i>Single
-                            quotes → Double quotes
-                          </li>
-                          <li>
-                            <i class="fas fa-check text-success me-2"></i
-                            >Unquoted object keys → Quoted keys
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6">
-                        <h6><strong>Advanced Features:</strong></h6>
-                        <ul class="list-unstyled">
-                          <li>
-                            <i class="fas fa-cog text-primary me-2"></i
-                            >Real-time validation and error detection
-                          </li>
-                          <li>
-                            <i class="fas fa-search text-primary me-2"></i
-                            >Detailed error analysis with line numbers
-                          </li>
-                          <li>
-                            <i class="fas fa-download text-primary me-2"></i
-                            >Download converted JSON as file
-                          </li>
-                          <li>
-                            <i class="fas fa-keyboard text-primary me-2"></i
-                            >Keyboard shortcuts support
-                          </li>
-                        </ul>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-stats card-round">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-icon"><div class="icon-big text-center icon-primary bubble-shadow-small"><i class="fas fa-chart-bar"></i></div></div>
+                    <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="numbers">
+                        <p class="card-category">Input Statistics</p>
+                        <h4 class="card-title">Lines: <span id="lineCount">0</span> | Characters: <span id="charCount">0</span></h4>
                       </div>
                     </div>
                   </div>
@@ -334,158 +98,137 @@
               </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-lightbulb me-2"></i>Quick Test Samples</div></div>
+                <div class="card-body">
+                  <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-info btn-sm" onclick="loadSample('python')"><i class="fab fa-python me-1"></i>Python Dict</button>
+                    <button class="btn btn-outline-info btn-sm" onclick="loadSample('nested')"><i class="fas fa-sitemap me-1"></i>Nested Objects</button>
+                    <button class="btn btn-outline-info btn-sm" onclick="loadSample('array')"><i class="fas fa-list me-1"></i>Arrays &amp; Lists</button>
+                    <button class="btn btn-outline-info btn-sm" onclick="loadSample('complex')"><i class="fas fa-project-diagram me-1"></i>Complex Data</button>
+                    <button class="btn btn-outline-info btn-sm" onclick="loadSample('edge')"><i class="fas fa-exclamation-triangle me-1"></i>Edge Cases</button>
+                    <button class="btn btn-outline-info btn-sm" onclick="loadSample('escaped')"><i class="fas fa-unlock-alt me-1"></i>Escaped JSON</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-exchange-alt me-2"></i>JSON String Converter Tool</div></div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="inputArea" class="form-label"><i class="fas fa-edit me-2"></i><strong>Input (String-like JSON)</strong></label>
+                        <textarea id="inputArea" class="form-control" rows="15" placeholder="Paste your string-like JSON here..." oninput="updateStats()"></textarea>
+                        <small class="form-text text-muted">Supports Python-style dictionaries, single quotes, unquoted keys, True/False/None values</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label"><i class="fas fa-code me-2"></i><strong>Output (Valid JSON)</strong></label>
+                        <div class="json-output-container"><pre id="outputArea" class="json-output">{}</pre></div>
+                        <small class="form-text text-muted">Converted JSON will appear here with proper formatting</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-3 mb-2">
+                    <div class="col-md-12 text-center">
+                      <div class="form-check form-switch d-inline-block">
+                        <input class="form-check-input" type="checkbox" id="deepParseToggle" checked>
+                        <label class="form-check-label" for="deepParseToggle"><strong>Deep Parse &amp; Unescape</strong> (Automatically unescape JSON strings hidden inside payload properties)</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-md-12">
+                      <div class="d-flex gap-2 flex-wrap justify-content-center">
+                        <button class="btn btn-primary" onclick="convert()"><i class="fas fa-sync-alt me-1"></i>Convert to JSON</button>
+                        <button class="btn btn-success" onclick="copyToClipboard()"><i class="fas fa-clipboard me-1"></i>Copy Result</button>
+                        <button class="btn btn-success" onclick="downloadJson()"><i class="fas fa-download me-1"></i>Download JSON</button>
+                        <button class="btn btn-outline-secondary" onclick="clearAll()"><i class="fas fa-trash me-1"></i>Clear All</button>
+                        <button class="btn btn-outline-info" onclick="validateJson()"><i class="fas fa-check-circle me-1"></i>Validate Only</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-3"><div class="col-md-12"><div id="statusMsg"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" id="resultsSection" style="display: none">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-bug me-2"></i>Error Analysis</div></div>
+                <div class="card-body"><div id="results"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-star me-2"></i>Key Features &amp; Capabilities</div></div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6><strong>Conversion Features:</strong></h6>
+                      <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Python boolean values (True/False) → JSON (true/false)</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Python None values → JSON null</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Single quotes → Double quotes</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Unquoted object keys → Quoted keys</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <h6><strong>Advanced Features:</strong></h6>
+                      <ul class="list-unstyled">
+                        <li><i class="fas fa-cog text-primary me-2"></i>Real-time validation and error detection</li>
+                        <li><i class="fas fa-search text-primary me-2"></i>Detailed error analysis with line numbers</li>
+                        <li><i class="fas fa-download text-primary me-2"></i>Download converted JSON as file</li>
+                        <li><i class="fas fa-keyboard text-primary me-2"></i>Keyboard shortcuts support</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div id="layout-footer"></div>
       </div>
+    </main>
 
-      <div id="layout-custom-template"></div>
-    </div>
+    <footer class="border-t border-gray-700 bg-gray-900 text-gray-500 text-xs px-6 py-3 flex flex-wrap justify-between items-center gap-2 flex-shrink-0">
+      <nav class="flex gap-4"><a href="/" class="hover:text-gray-300 transition-colors">Test Center</a><a href="#" class="hover:text-gray-300 transition-colors">Help</a></nav>
+      <span>2025 &middot; Developed by <strong class="text-gray-400">Chakrit Salaeman &amp; Claude</strong></span>
+      <span class="hidden md:inline">Test Center Management</span>
+    </footer>
+  </div>
+</div>
 
-    <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/json-converter.js"></script>
 
-    <!-- jQuery Scrollbar -->
-    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-    <!-- Chart JS -->
-    <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
-
-    <!-- jQuery Sparkline -->
-    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Chart Circle -->
-    <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
-
-    <!-- Datatables -->
-    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
-
-    <!-- Bootstrap Notify -->
-    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-    <!-- jQuery Vector Maps -->
-    <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-    <script src="../assets/js/plugin/jsvectormap/world.js"></script>
-
-    <!-- Sweet Alert -->
-    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-    <!-- Kaiadmin JS -->
-    <script src="../assets/js/kaiadmin.min.js"></script>
-
-    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-    <script src="../assets/js/setting-demo.js"></script>
-
-    <!-- JSON Converter Logic -->
-    <script src="../assets/js/json-converter.js"></script>
-
-    <!-- Custom CSS for JSON Converter -->
-    <style>
-      .json-output-container {
-        position: relative;
-      }
-
-      .json-output {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 0.375rem;
-        padding: 1rem;
-        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        max-height: 400px;
-        overflow-y: auto;
-        margin: 0;
-      }
-
-      .sample-btn {
-        transition: all 0.2s ease;
-      }
-
-      .sample-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .card-stats {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-      }
-
-      .card-stats .numbers {
-        color: white;
-      }
-
-      .card-stats .card-category {
-        color: rgba(255, 255, 255, 0.8);
-      }
-
-      .icon-big {
-        font-size: 3rem;
-        opacity: 0.8;
-      }
-
-      /* Error display styles */
-      .alert {
-        border-radius: 0.5rem;
-        border: none;
-      }
-
-      .alert-danger {
-        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-        color: #721c24;
-        border-left: 4px solid #dc3545;
-      }
-
-      .alert-success {
-        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-        color: #155724;
-        border-left: 4px solid #28a745;
-      }
-
-      .alert-warning {
-        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-        color: #856404;
-        border-left: 4px solid #ffc107;
-      }
-
-      .alert-info {
-        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-        color: #0c5460;
-        border-left: 4px solid #17a2b8;
-      }
-
-      /* Button hover effects */
-      .btn {
-        transition: all 0.3s ease;
-      }
-
-      .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .d-flex.gap-2.flex-wrap {
-          flex-direction: column;
-        }
-
-        .btn {
-          width: 100%;
-          margin-bottom: 0.5rem;
-        }
-
-        .btn-sm {
-          width: auto;
-          display: inline-block;
-          margin: 0.2rem;
-        }
-      }
-    </style>
-  </body>
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
+document.querySelectorAll('#sidebar nav a[href]').forEach(function(a){if(a.pathname===window.location.pathname){a.classList.remove('text-gray-400','hover:text-white','hover:bg-gray-800');a.classList.add('bg-blue-600','text-white');}});
+</script>
+<style>
+.json-output-container{position:relative;}
+.json-output{background:#f8f9fa;border:1px solid #dee2e6;border-radius:.375rem;padding:1rem;font-family:"Monaco","Menlo","Ubuntu Mono",monospace;font-size:.875rem;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;max-height:400px;overflow-y:auto;margin:0;}
+.card-stats{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;}
+.card-stats .numbers,.card-stats .card-category{color:rgba(255,255,255,.8);}
+.icon-big{font-size:3rem;opacity:.8;}
+</style>
+</body>
 </html>

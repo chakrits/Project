@@ -1,473 +1,281 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Document List - URL Generator - Test Center</title>
-    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Document List - URL Generator - Test Center</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } }</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+  <link rel="stylesheet" href="../assets/css/auto-login-style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body class="bg-gray-950 text-gray-100">
+<div class="flex min-h-screen">
 
-    <!-- Fonts and icons -->
-    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
-    <script>
-      WebFont.load({
-        google: { families: ["Public Sans:300,400,500,600,700"] },
-        custom: {
-          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
-          urls: ["../assets/css/fonts.min.css"],
-        },
-        active: function () { sessionStorage.fonts = true; },
-      });
-    </script>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden" onclick="closeSidebar()"></div>
 
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
-    <link rel="stylesheet" href="../assets/css/custom.css" />
-    <link rel="stylesheet" href="../assets/css/demo.css" />
-
-    <!-- Reuse Auto Login CSS for consistent styling -->
-    <link rel="stylesheet" href="../assets/css/auto-login-style.css" />
-
-    <!-- Crypto JS Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script src="/assets/js/layout.js"></script>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div id="layout-sidebar"></div>
-
-      <div class="main-panel">
-        <div class="main-header">
-          <div id="layout-navbar"></div>
-        </div>
-
-        <!-- Edit Container -->
-        <div class="container">
-          <div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Document List - URL Generator</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="/"><i class="icon-home"></i></a>
-                </li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Tools</a></li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Document List</a></li>
-              </ul>
-            </div>
-
-            <div class="row">
-              <!-- Configuration Section -->
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-head-row">
-                      <div class="card-title">
-                        <i class="fas fa-cogs me-2"></i>
-                        System Configuration
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="systemSelect"><strong>System Configuration:</strong></label>
-                          <select class="form-control" id="systemSelect">
-                            <option value="">— Select System Configuration... —</option>
-                          </select>
-                          <small class="form-text text-muted">
-                            <i class="fas fa-info-circle me-1"></i>
-                            เลือก Preset หรือกรอกค่าเองด้านล่าง
-                          </small>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="targetUrl"><strong>Target URL:</strong></label>
-                          <input type="url" class="form-control" id="targetUrl"
-                            placeholder="https://test-dev.tester.co.th" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="secretKey"><strong>Secret Key:</strong></label>
-                          <div class="input-group">
-                            <input type="password" class="form-control" id="secretKey"
-                              placeholder="Enter encryption secret key" />
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary" type="button" id="toggleSecretKey" title="Show/Hide">
-                                <i class="fas fa-eye"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <label for="appId"><strong>Application ID:</strong></label>
-                          <input type="text" class="form-control" id="appId" placeholder="e.g. niIWzik5x4" />
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <label for="aesMode"><strong>AES Mode:</strong></label>
-                          <select class="form-control" id="aesMode">
-                            <option value="ECB" selected>ECB - Electronic Codebook</option>
-                            <option value="CBC">CBC - Cipher Block Chaining</option>
-                            <option value="CTR">CTR - Counter</option>
-                            <option value="CFB">CFB - Cipher Feedback</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <label for="keySize"><strong>Key Size:</strong></label>
-                          <select class="form-control" id="keySize">
-                            <option value="128" selected>128 bits</option>
-                            <option value="192">192 bits</option>
-                            <option value="256">256 bits</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-md-6" id="ivRow" style="display: none;">
-                        <div class="form-group">
-                          <label for="ivInput"><strong>Initialization Vector (IV):</strong></label>
-                          <div class="input-group">
-                            <input type="text" class="form-control" id="ivInput"
-                              placeholder="Leave empty for auto-generation" maxlength="32" />
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary" type="button" id="generateIvBtn">
-                                <i class="fas fa-random"></i> Generate
-                              </button>
-                            </div>
-                          </div>
-                          <small class="form-text text-muted">
-                            <i class="fas fa-info-circle me-1"></i>
-                            16 bytes (32 hex characters) for AES. Leave empty for zero IV.
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Parameter Input Section -->
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-head-row">
-                      <div class="card-title">
-                        <i class="fas fa-list me-2"></i>
-                        Parameters Document List
-                      </div>
-                      <div class="card-tools">
-                        <button id="enableAllBtn" class="btn btn-success btn-sm me-2">
-                          <i class="fas fa-check-double me-1"></i>Enable All
-                        </button>
-                        <button id="disableAllBtn" class="btn btn-warning btn-sm me-2">
-                          <i class="fas fa-times me-1"></i>Disable All
-                        </button>
-                        <button id="resetFormBtn" class="btn btn-secondary btn-sm">
-                          <i class="fas fa-undo me-1"></i>Reset
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="alert alert-info">
-                      <i class="fas fa-lightbulb me-2"></i>
-                      <strong>Toggle Parameters:</strong> Use the switches to
-                      enable/disable parameters. Only enabled parameters will be
-                      included in the final encrypted URL.
-                    </div>
-
-                    <div id="parametersForm" class="parameters-form">
-                      <!-- Parameters will be generated by JavaScript -->
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                      <div>
-                        <span class="badge badge-primary" id="enabledCount">0</span>
-                        parameters enabled
-                      </div>
-                      <button id="generateUrlBtn" class="btn btn-primary">
-                        <i class="fas fa-link me-2"></i>Generate URL
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Generated URL Section -->
-              <div class="col-md-12">
-                <div class="card" id="resultCard" style="display: none">
-                  <div class="card-header">
-                    <div class="card-head-row">
-                      <div class="card-title">
-                        <i class="fas fa-link me-2"></i>
-                        Generated URL
-                      </div>
-                      <div class="card-tools">
-                        <button id="copyUrlBtn" class="btn btn-info btn-sm me-2">
-                          <i class="fas fa-copy me-1"></i>Copy URL
-                        </button>
-                        <button id="openUrlBtn" class="btn btn-success btn-sm">
-                          <i class="fas fa-external-link-alt me-1"></i>Open URL
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <!-- JSON Payload Preview -->
-                    <div class="mb-4">
-                      <h6><i class="fas fa-eye me-2"></i>JSON Payload Preview:</h6>
-                      <div class="preview-box">
-                        <code id="jsonPreview"></code>
-                      </div>
-                    </div>
-
-                    <!-- Encrypted Key -->
-                    <div class="mb-4">
-                      <h6><i class="fas fa-lock me-2"></i>Encrypted Key:</h6>
-                      <div class="encrypted-key-box">
-                        <code id="encryptedKeyDisplay"></code>
-                      </div>
-                    </div>
-
-                    <!-- Final URL -->
-                    <div class="mb-4">
-                      <h6><i class="fas fa-link me-2"></i>Final URL:</h6>
-                      <div class="url-box">
-                        <input type="text" class="form-control" id="finalUrl" readonly />
-                      </div>
-                    </div>
-
-                    <!-- Statistics -->
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-primary">
-                            <i class="fas fa-list"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">Parameters</span>
-                            <span class="stat-value" id="statParamCount">0</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-success">
-                            <i class="fas fa-clock"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">Generated</span>
-                            <span class="stat-value" id="statTime">-</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-warning">
-                            <i class="fas fa-key"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">Key Length</span>
-                            <span class="stat-value" id="statKeyLength">0</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-info">
-                            <i class="fas fa-ruler"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">URL Length</span>
-                            <span class="stat-value" id="statUrlLength">0</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Instructions -->
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-question-circle me-2"></i>
-                      How to Use Document List URL Generator
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <h6><i class="fas fa-list-ol me-2"></i>Instructions:</h6>
-                        <ol class="ps-3">
-                          <li>กรอก Target URL, App ID, Secret Key</li>
-                          <li>เปิด/ปิด Parameters ที่ต้องการส่ง</li>
-                          <li>กรอกค่าใน Parameters ที่เปิดใช้งาน</li>
-                          <li>กด "Generate URL" เพื่อสร้าง Encrypted URL</li>
-                          <li>Copy หรือ Open URL ที่ได้</li>
-                        </ol>
-                      </div>
-                      <div class="col-md-6">
-                        <h6><i class="fas fa-shield-alt me-2"></i>Security Notes:</h6>
-                        <ul class="ps-3">
-                          <li><strong>AES Encryption:</strong> ข้อมูลถูก Encrypt ด้วย AES</li>
-                          <li><strong>JSON Payload:</strong> Parameters ถูกแปลงเป็น JSON ก่อน Encrypt</li>
-                          <li><strong>Local Processing:</strong> Encrypt ทำบน Browser ไม่ส่งขึ้น Server</li>
-                          <li><strong>DateTime:</strong> request_datetime +/- ได้ไม่เกิน 5 นาที</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="alert alert-warning mt-3">
-                      <i class="fas fa-exclamation-triangle me-2"></i>
-                      <strong>Important:</strong> URL ที่สร้างมีข้อมูล Authentication ที่ถูก Encrypt
-                      กรุณาเก็บรักษาและส่งต่ออย่างปลอดภัย
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="layout-footer"></div>
-      </div>
-
-      <!-- Custom template -->
-      <div class="custom-template">
-        <div class="title">Settings</div>
-        <div class="custom-content">
-          <div class="switcher">
-            <div class="switch-block">
-              <h4>Logo Header</h4>
-              <div class="btnSwitch">
-                <button type="button" class="selected changeLogoHeaderColor" data-color="dark"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="blue"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="purple"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="light-blue"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="green"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="orange"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="red"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="white"></button>
-                <br />
-                <button type="button" class="changeLogoHeaderColor" data-color="dark2"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="blue2"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="purple2"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="light-blue2"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="green2"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="orange2"></button>
-                <button type="button" class="changeLogoHeaderColor" data-color="red2"></button>
-              </div>
-            </div>
-            <div class="switch-block">
-              <h4>Navbar Header</h4>
-              <div class="btnSwitch">
-                <button type="button" class="changeTopBarColor" data-color="dark"></button>
-                <button type="button" class="changeTopBarColor" data-color="blue"></button>
-                <button type="button" class="changeTopBarColor" data-color="purple"></button>
-                <button type="button" class="changeTopBarColor" data-color="light-blue"></button>
-                <button type="button" class="changeTopBarColor" data-color="orange"></button>
-                <button type="button" class="selected changeTopBarColor" data-color="white"></button>
-                <br />
-                <button type="button" class="changeTopBarColor" data-color="dark2"></button>
-                <button type="button" class="changeTopBarColor" data-color="blue2"></button>
-                <button type="button" class="changeTopBarColor" data-color="purple2"></button>
-                <button type="button" class="changeTopBarColor" data-color="light-blue2"></button>
-                <button type="button" class="changeTopBarColor" data-color="green2"></button>
-                <button type="button" class="changeTopBarColor" data-color="orange2"></button>
-                <button type="button" class="changeTopBarColor" data-color="red2"></button>
-              </div>
-            </div>
-            <div class="switch-block">
-              <h4>Sidebar</h4>
-              <div class="btnSwitch">
-                <button type="button" class="changeSideBarColor" data-color="white"></button>
-                <button type="button" class="selected changeSideBarColor" data-color="dark"></button>
-                <button type="button" class="changeSideBarColor" data-color="dark2"></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="custom-toggle">
-          <i class="icon-settings"></i>
-        </div>
-      </div>
-      <!-- End Custom template -->
+  <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 flex flex-col z-30 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-gray-700 flex items-center gap-3">
+      <span class="text-blue-400 text-lg">⚗</span>
+      <a href="/" class="text-white font-bold text-sm tracking-wide hover:text-blue-400 transition-colors">Test Center</a>
     </div>
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
+      <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors mb-1"><i class="fas fa-home w-4 text-center text-xs"></i><span>Dashboard</span></a>
+      <a href="/tools/mock-server" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-server w-4 text-center text-xs"></i><span>Mock Server</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Tools</span></div>
+      <a href="/tools/aes-encryption" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-lock w-4 text-center text-xs"></i><span>AES Encryption</span></a>
+      <a href="/tools/json-converter" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-code w-4 text-center text-xs"></i><span>JSON Converter</span></a>
+      <a href="/tools/base64-pdf" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-pdf w-4 text-center text-xs"></i><span>Base64 &#8644; PDF</span></a>
+      <a href="/tools/pdf-base64" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-export w-4 text-center text-xs"></i><span>PDF &#8594; Base64</span></a>
+      <a href="/tools/mini_postman" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-paper-plane w-4 text-center text-xs"></i><span>Mini Postman</span></a>
+      <a href="/tools/url-generator" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-list w-4 text-center text-xs"></i><span>URL Generator</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">E-Forms</span></div>
+      <a href="/forms/auto-login" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-alt w-4 text-center text-xs"></i><span>Claim Form Patient</span></a>
+      <a href="/forms/auto-login-burt" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-id-card w-4 text-center text-xs"></i><span>Auto Login BURT</span></a>
+    </nav>
+    <div class="px-5 py-3 border-t border-gray-700"><span class="text-xs text-gray-600">v1.0 · Test Center</span></div>
+  </aside>
 
-    <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
+  <div class="flex flex-col flex-1 min-h-screen lg:ml-64">
+    <nav class="bg-gray-900 border-b border-gray-700 px-6 py-3 flex items-center justify-between flex-shrink-0 sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded" aria-label="Toggle sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="text-gray-400 text-sm font-medium">URL Generator</span>
+      </div>
+      <div id="navbar-user-slot" class="flex items-center gap-2.5 text-sm text-gray-400">
+        <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
+        <span class="hidden sm:inline">Tester</span>
+      </div>
+    </nav>
 
-    <!-- jQuery Scrollbar -->
-    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <main class="flex-1 overflow-auto">
+      <div class="container">
+        <div class="page-inner">
+          <div class="page-header">
+            <h3 class="fw-bold mb-3">Document List - URL Generator</h3>
+            <ul class="breadcrumbs mb-3">
+              <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Tools</a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Document List</a></li>
+            </ul>
+          </div>
 
-    <!-- Bootstrap Notify -->
-    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-head-row">
+                    <div class="card-title"><i class="fas fa-cogs me-2"></i>System Configuration</div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="systemSelect"><strong>System Configuration:</strong></label>
+                        <select class="form-control" id="systemSelect">
+                          <option value="">— Select System Configuration... —</option>
+                        </select>
+                        <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>เลือก Preset หรือกรอกค่าเองด้านล่าง</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="targetUrl"><strong>Target URL:</strong></label>
+                        <input type="url" class="form-control" id="targetUrl" placeholder="https://test-dev.tester.co.th" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="secretKey"><strong>Secret Key:</strong></label>
+                        <div class="input-group">
+                          <input type="password" class="form-control" id="secretKey" placeholder="Enter encryption secret key" />
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleSecretKey" title="Show/Hide"><i class="fas fa-eye"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="appId"><strong>Application ID:</strong></label>
+                        <input type="text" class="form-control" id="appId" placeholder="e.g. niIWzik5x4" />
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="aesMode"><strong>AES Mode:</strong></label>
+                        <select class="form-control" id="aesMode">
+                          <option value="ECB" selected>ECB - Electronic Codebook</option>
+                          <option value="CBC">CBC - Cipher Block Chaining</option>
+                          <option value="CTR">CTR - Counter</option>
+                          <option value="CFB">CFB - Cipher Feedback</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="keySize"><strong>Key Size:</strong></label>
+                        <select class="form-control" id="keySize">
+                          <option value="128" selected>128 bits</option>
+                          <option value="192">192 bits</option>
+                          <option value="256">256 bits</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6" id="ivRow" style="display: none;">
+                      <div class="form-group">
+                        <label for="ivInput"><strong>Initialization Vector (IV):</strong></label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="ivInput" placeholder="Leave empty for auto-generation" maxlength="32" />
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="generateIvBtn"><i class="fas fa-random"></i> Generate</button>
+                          </div>
+                        </div>
+                        <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>16 bytes (32 hex characters) for AES. Leave empty for zero IV.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-    <!-- Kaiadmin JS -->
-    <script src="../assets/js/kaiadmin.min.js"></script>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-head-row">
+                    <div class="card-title"><i class="fas fa-list me-2"></i>Parameters Document List</div>
+                    <div class="card-tools">
+                      <button id="enableAllBtn" class="btn btn-success btn-sm me-2"><i class="fas fa-check-double me-1"></i>Enable All</button>
+                      <button id="disableAllBtn" class="btn btn-warning btn-sm me-2"><i class="fas fa-times me-1"></i>Disable All</button>
+                      <button id="resetFormBtn" class="btn btn-secondary btn-sm"><i class="fas fa-undo me-1"></i>Reset</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="alert alert-info">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Toggle Parameters:</strong> Use the switches to enable/disable parameters. Only enabled parameters will be included in the final encrypted URL.
+                  </div>
+                  <div id="parametersForm" class="parameters-form"></div>
+                  <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div><span class="badge badge-primary" id="enabledCount">0</span> parameters enabled</div>
+                    <button id="generateUrlBtn" class="btn btn-primary"><i class="fas fa-link me-2"></i>Generate URL</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-    <!-- Kaiadmin DEMO methods -->
-    <script src="../assets/js/setting-demo.js"></script>
+            <div class="col-md-12">
+              <div class="card" id="resultCard" style="display: none">
+                <div class="card-header">
+                  <div class="card-head-row">
+                    <div class="card-title"><i class="fas fa-link me-2"></i>Generated URL</div>
+                    <div class="card-tools">
+                      <button id="copyUrlBtn" class="btn btn-info btn-sm me-2"><i class="fas fa-copy me-1"></i>Copy URL</button>
+                      <button id="openUrlBtn" class="btn btn-success btn-sm"><i class="fas fa-external-link-alt me-1"></i>Open URL</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="mb-4">
+                    <h6><i class="fas fa-eye me-2"></i>JSON Payload Preview:</h6>
+                    <div class="preview-box"><code id="jsonPreview"></code></div>
+                  </div>
+                  <div class="mb-4">
+                    <h6><i class="fas fa-lock me-2"></i>Encrypted Key:</h6>
+                    <div class="encrypted-key-box"><code id="encryptedKeyDisplay"></code></div>
+                  </div>
+                  <div class="mb-4">
+                    <h6><i class="fas fa-link me-2"></i>Final URL:</h6>
+                    <div class="url-box"><input type="text" class="form-control" id="finalUrl" readonly /></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-primary"><i class="fas fa-list"></i></div><div class="stat-info"><span class="stat-label">Parameters</span><span class="stat-value" id="statParamCount">0</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-success"><i class="fas fa-clock"></i></div><div class="stat-info"><span class="stat-label">Generated</span><span class="stat-value" id="statTime">-</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-warning"><i class="fas fa-key"></i></div><div class="stat-info"><span class="stat-label">Key Length</span><span class="stat-value" id="statKeyLength">0</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-info"><i class="fas fa-ruler"></i></div><div class="stat-info"><span class="stat-label">URL Length</span><span class="stat-value" id="statUrlLength">0</span></div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-    <!-- URL Generator Logic -->
-    <script src="../assets/js/url-generator.js"></script>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-question-circle me-2"></i>How to Use Document List URL Generator</div></div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6><i class="fas fa-list-ol me-2"></i>Instructions:</h6>
+                      <ol class="ps-3">
+                        <li>กรอก Target URL, App ID, Secret Key</li>
+                        <li>เปิด/ปิด Parameters ที่ต้องการส่ง</li>
+                        <li>กรอกค่าใน Parameters ที่เปิดใช้งาน</li>
+                        <li>กด "Generate URL" เพื่อสร้าง Encrypted URL</li>
+                        <li>Copy หรือ Open URL ที่ได้</li>
+                      </ol>
+                    </div>
+                    <div class="col-md-6">
+                      <h6><i class="fas fa-shield-alt me-2"></i>Security Notes:</h6>
+                      <ul class="ps-3">
+                        <li><strong>AES Encryption:</strong> ข้อมูลถูก Encrypt ด้วย AES</li>
+                        <li><strong>JSON Payload:</strong> Parameters ถูกแปลงเป็น JSON ก่อน Encrypt</li>
+                        <li><strong>Local Processing:</strong> Encrypt ทำบน Browser ไม่ส่งขึ้น Server</li>
+                        <li><strong>DateTime:</strong> request_datetime +/- ได้ไม่เกิน 5 นาที</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Important:</strong> URL ที่สร้างมีข้อมูล Authentication ที่ถูก Encrypt กรุณาเก็บรักษาและส่งต่ออย่างปลอดภัย
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-    <!-- Extra styles for array tags -->
-    <style>
-      .array-tag {
-        display: inline-flex;
-        align-items: center;
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        color: white;
-        border-radius: 4px;
-        padding: 3px 10px;
-        font-size: 13px;
-        font-family: 'Courier New', monospace;
-        margin: 2px;
-        gap: 6px;
-      }
-      .array-tag .remove-tag {
-        cursor: pointer;
-        font-weight: bold;
-        opacity: 0.8;
-        font-size: 16px;
-      }
-      .array-tag .remove-tag:hover { opacity: 1; }
-      .array-tags-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        padding: 6px;
-        border: 1px solid #ced4da;
-        border-radius: 6px;
-        min-height: 38px;
-        background: white;
-      }
-      .array-input-row {
-        display: flex;
-        gap: 6px;
-        margin-top: 6px;
-      }
-    </style>
-  </body>
+    <footer class="border-t border-gray-700 bg-gray-900 text-gray-500 text-xs px-6 py-3 flex flex-wrap justify-between items-center gap-2 flex-shrink-0">
+      <nav class="flex gap-4"><a href="/" class="hover:text-gray-300 transition-colors">Test Center</a><a href="#" class="hover:text-gray-300 transition-colors">Help</a></nav>
+      <span>2025 &middot; Developed by <strong class="text-gray-400">Chakrit Salaeman &amp; Claude</strong></span>
+      <span class="hidden md:inline">Test Center Management</span>
+    </footer>
+  </div>
+</div>
+
+<script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/url-generator.js"></script>
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
+document.querySelectorAll('#sidebar nav a[href]').forEach(function(a){if(a.pathname===window.location.pathname){a.classList.remove('text-gray-400','hover:text-white','hover:bg-gray-800');a.classList.add('bg-blue-600','text-white');}});
+</script>
+<style>
+.array-tag{display:inline-flex;align-items:center;background:linear-gradient(135deg,#007bff,#0056b3);color:white;border-radius:4px;padding:3px 10px;font-size:13px;font-family:'Courier New',monospace;margin:2px;gap:6px;}
+.array-tag .remove-tag{cursor:pointer;font-weight:bold;opacity:.8;font-size:16px;}
+.array-tag .remove-tag:hover{opacity:1;}
+.array-tags-container{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border:1px solid #ced4da;border-radius:6px;min-height:38px;background:white;}
+.array-input-row{display:flex;gap:6px;margin-top:6px;}
+</style>
+</body>
 </html>

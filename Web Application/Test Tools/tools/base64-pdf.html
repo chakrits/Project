@@ -1,439 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Base64 to PDF Converter - Test Center</title>
-    <meta
-      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-      name="viewport"
-    />
-    <link
-      rel="icon"
-      href="../assets/img/kaiadmin/tester-sign.ico"
-      type="image/x-icon"
-    />
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Base64 to PDF Converter - Test Center</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } }</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+</head>
+<body class="bg-gray-950 text-gray-100">
+<div class="flex min-h-screen">
 
-    <!-- Fonts and icons -->
-    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
-    <script>
-      WebFont.load({
-        google: { families: ["Public Sans:300,400,500,600,700"] },
-        custom: {
-          families: [
-            "Font Awesome 5 Solid",
-            "Font Awesome 5 Regular",
-            "Font Awesome 5 Brands",
-            "simple-line-icons",
-          ],
-          urls: ["../assets/css/fonts.min.css"],
-        },
-        active: function () {
-          sessionStorage.fonts = true;
-        },
-      });
-    </script>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden" onclick="closeSidebar()"></div>
 
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+  <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 flex flex-col z-30 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-gray-700 flex items-center gap-3">
+      <span class="text-blue-400 text-lg">⚗</span>
+      <a href="/" class="text-white font-bold text-sm tracking-wide hover:text-blue-400 transition-colors">Test Center</a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
+      <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors mb-1"><i class="fas fa-home w-4 text-center text-xs"></i><span>Dashboard</span></a>
+      <a href="/tools/mock-server" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-server w-4 text-center text-xs"></i><span>Mock Server</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Tools</span></div>
+      <a href="/tools/aes-encryption" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-lock w-4 text-center text-xs"></i><span>AES Encryption</span></a>
+      <a href="/tools/json-converter" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-code w-4 text-center text-xs"></i><span>JSON Converter</span></a>
+      <a href="/tools/base64-pdf" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-pdf w-4 text-center text-xs"></i><span>Base64 &#8644; PDF</span></a>
+      <a href="/tools/pdf-base64" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-export w-4 text-center text-xs"></i><span>PDF &#8594; Base64</span></a>
+      <a href="/tools/mini_postman" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-paper-plane w-4 text-center text-xs"></i><span>Mini Postman</span></a>
+      <a href="/tools/url-generator" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-list w-4 text-center text-xs"></i><span>URL Generator</span></a>
+      <div class="pt-4 pb-1 px-3"><span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">E-Forms</span></div>
+      <a href="/forms/auto-login" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-file-alt w-4 text-center text-xs"></i><span>Claim Form Patient</span></a>
+      <a href="/forms/auto-login-burt" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors"><i class="fas fa-id-card w-4 text-center text-xs"></i><span>Auto Login BURT</span></a>
+    </nav>
+    <div class="px-5 py-3 border-t border-gray-700"><span class="text-xs text-gray-600">v1.0 · Test Center</span></div>
+  </aside>
 
-    <!-- Custom CSS File-->
-    <link rel="stylesheet" href="../assets/css/custom.css" />
+  <div class="flex flex-col flex-1 min-h-screen lg:ml-64">
+    <nav class="bg-gray-900 border-b border-gray-700 px-6 py-3 flex items-center justify-between flex-shrink-0 sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded" aria-label="Toggle sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="text-gray-400 text-sm font-medium">Base64 to PDF Converter</span>
+      </div>
+      <div id="navbar-user-slot" class="flex items-center gap-2.5 text-sm text-gray-400">
+        <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
+        <span class="hidden sm:inline">Tester</span>
+      </div>
+    </nav>
 
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="../assets/css/demo.css" />
-      <script src="/assets/js/layout.js"></script>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div id="layout-sidebar"></div>
+    <main class="flex-1 overflow-auto">
+      <div class="container">
+        <div class="page-inner">
+          <div class="page-header">
+            <h3 class="fw-bold mb-3">Base64 to PDF Converter</h3>
+            <ul class="breadcrumbs mb-3">
+              <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Tools</a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Base64 to PDF</a></li>
+            </ul>
+          </div>
 
-      <div class="main-panel">
-        <div class="main-header">
-          
-
-          <div id="layout-navbar"></div>
-        </div>
-
-        <!-- Edit Container -->
-        <div class="container">
-          <div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Base64 to PDF Converter</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="/">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Tools</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Base64 to PDF</a>
-                </li>
-              </ul>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-head-row">
+                    <div class="card-title"><i class="fas fa-file-pdf me-2"></i>Base64 to PDF Decoder</div>
+                    <div class="card-tools"><button id="clearInput" class="btn btn-danger btn-sm"><i class="fas fa-trash me-1"></i>Clear</button></div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="base64Input"><strong>Paste Base64 String:</strong></label>
+                    <textarea class="form-control" id="base64Input" rows="8" placeholder="Paste your Base64 encoded PDF string here...&#10;&#10;Example: JVBERi0xLjUKJYCBgoMKMSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvRmlyc3QgMTQxL04gMjAvTGVuZ3==..."></textarea>
+                    <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>Supports both raw Base64 and data URI format (data:application/pdf;base64,...)</small>
+                  </div>
+                  <div class="d-flex gap-2 mb-3">
+                    <button id="convertBtn" class="btn btn-primary"><i class="fas fa-magic me-2"></i>Convert to PDF</button>
+                    <button id="loadSampleBtn" class="btn btn-outline-secondary"><i class="fas fa-file-alt me-2"></i>Load Sample</button>
+                  </div>
+                  <div id="statusMessage" class="alert" style="display: none"></div>
+                </div>
+              </div>
             </div>
 
-            <div class="row">
-              <!-- Input Section -->
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-head-row">
-                      <div class="card-title">
-                        <i class="fas fa-file-pdf me-2"></i>
-                        Base64 to PDF Decoder
-                      </div>
-                      <div class="card-tools">
-                        <button id="clearInput" class="btn btn-danger btn-sm">
-                          <i class="fas fa-trash me-1"></i>Clear
-                        </button>
+            <div class="col-md-12">
+              <div class="card" id="resultCard" style="display: none">
+                <div class="card-header">
+                  <div class="card-head-row">
+                    <div class="card-title"><i class="fas fa-eye me-2"></i>PDF Preview &amp; Download</div>
+                    <div class="card-tools"><span id="fileInfo" class="badge badge-info"></span></div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h6 class="mb-0"><i class="fas fa-file-pdf me-2"></i>PDF Preview:</h6>
+                      <button id="downloadBtn" class="btn btn-success btn-sm"><i class="fas fa-download me-1"></i>Download PDF</button>
+                    </div>
+                    <div id="pdfPreview" class="border rounded p-3 bg-light" style="min-height: 400px">
+                      <div class="text-center">
+                        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                        <p class="mt-2">Loading PDF preview...</p>
                       </div>
                     </div>
                   </div>
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="base64Input"
-                        ><strong>Paste Base64 String:</strong></label
-                      >
-                      <textarea
-                        class="form-control"
-                        id="base64Input"
-                        rows="8"
-                        placeholder="Paste your Base64 encoded PDF string here...&#10;&#10;Example: JVBERi0xLjUKJYCBgoMKMSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvRmlyc3QgMTQxL04gMjAvTGVuZ3==..."
-                      ></textarea>
-                      <small class="form-text text-muted">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Supports both raw Base64 and data URI format
-                        (data:application/pdf;base64,...)
-                      </small>
-                    </div>
-
-                    <div class="d-flex gap-2 mb-3">
-                      <button id="convertBtn" class="btn btn-primary">
-                        <i class="fas fa-magic me-2"></i>Convert to PDF
-                      </button>
-                      <button
-                        id="loadSampleBtn"
-                        class="btn btn-outline-secondary"
-                      >
-                        <i class="fas fa-file-alt me-2"></i>Load Sample
-                      </button>
-                    </div>
-
-                    <!-- Status Messages -->
-                    <div
-                      id="statusMessage"
-                      class="alert"
-                      style="display: none"
-                    ></div>
+                  <div class="row">
+                    <div class="col-md-4"><div class="stat-card"><div class="stat-icon bg-primary"><i class="fas fa-file-pdf"></i></div><div class="stat-info"><span class="stat-label">File Type</span><span class="stat-value" id="fileType">PDF Document</span></div></div></div>
+                    <div class="col-md-4"><div class="stat-card"><div class="stat-icon bg-success"><i class="fas fa-weight"></i></div><div class="stat-info"><span class="stat-label">File Size</span><span class="stat-value" id="fileSize">-</span></div></div></div>
+                    <div class="col-md-4"><div class="stat-card"><div class="stat-icon bg-info"><i class="fas fa-code"></i></div><div class="stat-info"><span class="stat-label">MIME Type</span><span class="stat-value" id="mimeType">application/pdf</span></div></div></div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Output Section -->
-              <div class="col-md-12">
-                <div class="card" id="resultCard" style="display: none">
-                  <div class="card-header">
-                    <div class="card-head-row">
-                      <div class="card-title">
-                        <i class="fas fa-eye me-2"></i>
-                        PDF Preview & Download
-                      </div>
-                      <div class="card-tools">
-                        <span id="fileInfo" class="badge badge-info"></span>
-                      </div>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-question-circle me-2"></i>How to Use</div></div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6><i class="fas fa-clipboard-list me-2"></i>Instructions:</h6>
+                      <ol class="ps-3">
+                        <li>Paste your Base64 encoded PDF string in the text area above</li>
+                        <li>Click "Convert to PDF" button to process the data</li>
+                        <li>Preview the PDF directly in your browser</li>
+                        <li>Download the converted PDF file to your device</li>
+                      </ol>
+                    </div>
+                    <div class="col-md-6">
+                      <h6><i class="fas fa-lightbulb me-2"></i>Features:</h6>
+                      <ul class="ps-3">
+                        <li><strong>Instant Preview:</strong> View PDF without downloading</li>
+                        <li><strong>Multiple Formats:</strong> Supports raw Base64 and data URIs</li>
+                        <li><strong>File Information:</strong> See size, type, and MIME details</li>
+                        <li><strong>Secure Processing:</strong> All conversion happens locally</li>
+                      </ul>
                     </div>
                   </div>
-                  <div class="card-body">
-                    <!-- PDF Preview -->
-                    <div class="mb-4">
-                      <div
-                        class="d-flex justify-content-between align-items-center mb-3"
-                      >
-                        <h6 class="mb-0">
-                          <i class="fas fa-file-pdf me-2"></i>PDF Preview:
-                        </h6>
-                        <button id="downloadBtn" class="btn btn-success btn-sm">
-                          <i class="fas fa-download me-1"></i>Download PDF
-                        </button>
-                      </div>
-
-                      <div
-                        id="pdfPreview"
-                        class="border rounded p-3 bg-light"
-                        style="min-height: 400px"
-                      >
-                        <div class="text-center">
-                          <div
-                            class="spinner-border text-primary"
-                            role="status"
-                          >
-                            <span class="visually-hidden">Loading...</span>
-                          </div>
-                          <p class="mt-2">Loading PDF preview...</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- File Details -->
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-primary">
-                            <i class="fas fa-file-pdf"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">File Type</span>
-                            <span class="stat-value" id="fileType"
-                              >PDF Document</span
-                            >
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-success">
-                            <i class="fas fa-weight"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">File Size</span>
-                            <span class="stat-value" id="fileSize">-</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="stat-card">
-                          <div class="stat-icon bg-info">
-                            <i class="fas fa-code"></i>
-                          </div>
-                          <div class="stat-info">
-                            <span class="stat-label">MIME Type</span>
-                            <span class="stat-value" id="mimeType"
-                              >application/pdf</span
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Instructions Card -->
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <i class="fas fa-question-circle me-2"></i>
-                      How to Use
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <h6>
-                          <i class="fas fa-clipboard-list me-2"></i
-                          >Instructions:
-                        </h6>
-                        <ol class="ps-3">
-                          <li>
-                            Paste your Base64 encoded PDF string in the text
-                            area above
-                          </li>
-                          <li>
-                            Click "Convert to PDF" button to process the data
-                          </li>
-                          <li>Preview the PDF directly in your browser</li>
-                          <li>
-                            Download the converted PDF file to your device
-                          </li>
-                        </ol>
-                      </div>
-                      <div class="col-md-6">
-                        <h6><i class="fas fa-lightbulb me-2"></i>Features:</h6>
-                        <ul class="ps-3">
-                          <li>
-                            <strong>Instant Preview:</strong> View PDF without
-                            downloading
-                          </li>
-                          <li>
-                            <strong>Multiple Formats:</strong> Supports raw
-                            Base64 and data URIs
-                          </li>
-                          <li>
-                            <strong>File Information:</strong> See size, type,
-                            and MIME details
-                          </li>
-                          <li>
-                            <strong>Secure Processing:</strong> All conversion
-                            happens locally
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="alert alert-info mt-3">
-                      <i class="fas fa-shield-alt me-2"></i>
-                      <strong>Privacy Note:</strong> All Base64 decoding is
-                      performed client-side in your browser. Your data never
-                      leaves your device, ensuring complete privacy and
-                      security.
-                    </div>
-                  </div>
+                  <div class="alert alert-info mt-3"><i class="fas fa-shield-alt me-2"></i><strong>Privacy Note:</strong> All Base64 decoding is performed client-side in your browser. Your data never leaves your device, ensuring complete privacy and security.</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div id="layout-footer"></div>
       </div>
+    </main>
 
-      <div id="layout-custom-template"></div>
-    </div>
+    <footer class="border-t border-gray-700 bg-gray-900 text-gray-500 text-xs px-6 py-3 flex flex-wrap justify-between items-center gap-2 flex-shrink-0">
+      <nav class="flex gap-4"><a href="/" class="hover:text-gray-300 transition-colors">Test Center</a><a href="#" class="hover:text-gray-300 transition-colors">Help</a></nav>
+      <span>2025 &middot; Developed by <strong class="text-gray-400">Chakrit Salaeman &amp; Claude</strong></span>
+      <span class="hidden md:inline">Test Center Management</span>
+    </footer>
+  </div>
+</div>
 
-    <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/base64-pdf.js"></script>
 
-    <!-- jQuery Scrollbar -->
-    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-    <!-- Chart JS -->
-    <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
-
-    <!-- jQuery Sparkline -->
-    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Chart Circle -->
-    <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
-
-    <!-- Datatables -->
-    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
-
-    <!-- Bootstrap Notify -->
-    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-    <!-- jQuery Vector Maps -->
-    <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-    <script src="../assets/js/plugin/jsvectormap/world.js"></script>
-
-    <!-- Sweet Alert -->
-    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-    <!-- Kaiadmin JS -->
-    <script src="../assets/js/kaiadmin.min.js"></script>
-
-    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-    <script src="../assets/js/setting-demo.js"></script>
-    <script src="../assets/js/demo.js"></script>
-
-    <!-- Custom Base64 to PDF Script -->
-    <script src="../assets/js/base64-pdf.js"></script>
-
-    <style>
-      /* Custom styles for Base64 to PDF tool */
-      .stat-card {
-        display: flex;
-        align-items: center;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        border: 1px solid #e3e6f0;
-      }
-
-      .stat-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-        color: white;
-        font-size: 24px;
-      }
-
-      .stat-info {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .stat-label {
-        font-size: 12px;
-        color: #6c757d;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-      }
-
-      .stat-value {
-        font-size: 18px;
-        font-weight: 600;
-        color: #495057;
-      }
-
-      #base64Input {
-        font-family: "Courier New", monospace;
-        font-size: 13px;
-        resize: vertical;
-        min-height: 200px;
-      }
-
-      .card-head-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .alert {
-        border-radius: 8px;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      /* PDF Preview container */
-      #pdfPreview {
-        background: #f8f9fa;
-        border: 2px dashed #dee2e6;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-      }
-
-      #pdfPreview:has(iframe) {
-        background: white;
-        border: 1px solid #dee2e6;
-        border-style: solid;
-      }
-
-      /* Loading animation */
-      .spinner-border {
-        width: 3rem;
-        height: 3rem;
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .stat-card {
-          flex-direction: column;
-          text-align: center;
-        }
-
-        .stat-icon {
-          margin-right: 0;
-          margin-bottom: 10px;
-        }
-      }
-    </style>
-  </body>
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
+document.querySelectorAll('#sidebar nav a[href]').forEach(function(a){if(a.pathname===window.location.pathname){a.classList.remove('text-gray-400','hover:text-white','hover:bg-gray-800');a.classList.add('bg-blue-600','text-white');}});
+</script>
+<style>
+.stat-card{display:flex;align-items:center;padding:20px;background:#f8f9fa;border-radius:8px;margin-bottom:15px;border:1px solid #e3e6f0;}
+.stat-icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:15px;color:white;font-size:24px;}
+.stat-info{display:flex;flex-direction:column;}
+.stat-label{font-size:12px;color:#6c757d;text-transform:uppercase;margin-bottom:5px;}
+.stat-value{font-size:18px;font-weight:600;color:#495057;}
+#base64Input{font-family:"Courier New",monospace;font-size:13px;resize:vertical;min-height:200px;}
+.card-head-row{display:flex;justify-content:space-between;align-items:center;}
+#pdfPreview{background:#f8f9fa;border:2px dashed #dee2e6;border-radius:8px;transition:all .3s ease;}
+#pdfPreview:has(iframe){background:white;border:1px solid #dee2e6;}
+</style>
+</body>
 </html>

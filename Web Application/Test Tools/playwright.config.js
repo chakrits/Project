@@ -31,9 +31,9 @@ module.exports = defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: '.\\nodejs\\node.exe server.js',
+    command: 'node server.js',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 10000,
+    timeout: 15000,
   },
 });
