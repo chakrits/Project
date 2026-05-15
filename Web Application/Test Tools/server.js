@@ -1,16 +1,18 @@
 const express = require('express');
 const path = require('path');
-const mockServer = require('./mock-server');
+const mockServer = require('./backend/mock-server');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const fs = require('fs');
 
+const FRONTEND = path.join(__dirname, 'frontend');
+
 // Middleware สำหรับจัดการ Clean URLs (ซ่อน .html) แบบชัวร์ๆ
 app.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.includes('.') && req.path !== '/') {
-        const htmlPath = path.join(__dirname, req.path + '.html');
+        const htmlPath = path.join(FRONTEND, req.path + '.html');
         if (fs.existsSync(htmlPath)) {
             req.url += '.html';
         }
@@ -18,9 +20,9 @@ app.use((req, res, next) => {
     next();
 });
 
-// ให้ express เสิร์ฟไฟล์ static จากโฟลเดอร์ root และ assets
-app.use(express.static(__dirname, { extensions: ['html'] }));
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+// ให้ express เสิร์ฟไฟล์ static จากโฟลเดอร์ frontend และ assets
+app.use(express.static(FRONTEND, { extensions: ['html'] }));
+app.use('/assets', express.static(path.join(FRONTEND, 'assets')));
 app.use(express.static('public'));
 
 app.use(express.json({ limit: '50mb' }));
@@ -29,7 +31,7 @@ app.use(express.json({ limit: '50mb' }));
 app.post('/api/proxy', async (req, res) => {
     try {
         const { url, method, headers, body } = req.body;
-        
+
         const fetchOptions = {
             method: method || 'GET',
             headers: headers || {}
@@ -46,10 +48,10 @@ app.post('/api/proxy', async (req, res) => {
         }
 
         const fetchResp = await fetch(url, fetchOptions);
-        
+
         // ส่ง status code กลับ
         res.status(fetchResp.status);
-        
+
         // ส่ง headers กลับ
         fetchResp.headers.forEach((val, key) => {
             // ไม่ส่งกลับบาง header ที่ทำให้เบราว์เซอร์มีปัญหา
@@ -75,18 +77,17 @@ app.use('/mock-api', mockServer.mockRouter);
 app.use('/api/mock-server', mockServer.managementApi);
 // React frontend (production build)
 app.use('/tools/mock-server', express.static(
-  path.join(__dirname, 'mock-server/frontend/dist')
+  path.join(__dirname, 'backend/mock-server/frontend/dist')
 ));
 app.get('/tools/mock-server/{*path}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'mock-server/frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, 'backend/mock-server/frontend/dist/index.html'));
 });
 
 // Route หลัก -> index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(FRONTEND, 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running at http://0.0.0.0:${PORT} (Clean URLs Enabled)`);
 });
-
