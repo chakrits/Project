@@ -706,3 +706,54 @@
           }
         });
       });
+
+      function runJMESPath() {
+        const expr = document.getElementById('jmespathExpr').value.trim();
+        const outputEl = document.getElementById('jmespathOutput');
+        const statusEl = document.getElementById('jmespathStatus');
+        if (!expr) {
+          statusEl.className = 'alert alert-warning';
+          statusEl.innerHTML = '<strong>⚠️ Please enter a JMESPath expression</strong>';
+          return;
+        }
+        const source = document.getElementById('outputArea').textContent;
+        if (!source || source === '{}') {
+          statusEl.className = 'alert alert-warning';
+          statusEl.innerHTML = '<strong>⚠️ Please convert some JSON first</strong>';
+          return;
+        }
+        try {
+          const data = JSON.parse(source);
+          const result = jmespath.search(data, expr);
+          outputEl.textContent = JSON.stringify(result, null, 2);
+          statusEl.className = 'alert alert-success';
+          statusEl.innerHTML = '<strong>✅ Query executed successfully</strong>';
+          setTimeout(() => { statusEl.innerHTML = ''; statusEl.className = ''; }, 3000);
+        } catch (e) {
+          outputEl.textContent = '';
+          statusEl.className = 'alert alert-danger';
+          statusEl.innerHTML = `<strong>❌ ${e.message}</strong>`;
+        }
+      }
+
+      function copyJMESPathResult() {
+        const text = document.getElementById('jmespathOutput').textContent;
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = event.currentTarget;
+          btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+          setTimeout(() => { btn.innerHTML = '<i class="far fa-copy me-1"></i>Copy'; }, 2000);
+        }).catch(() => {});
+      }
+
+      function clearJMESPath() {
+        document.getElementById('jmespathExpr').value = '';
+        document.getElementById('jmespathOutput').textContent = '';
+        document.getElementById('jmespathStatus').innerHTML = '';
+        document.getElementById('jmespathStatus').className = '';
+      }
+
+      function setJMESPathExpr(expr) {
+        document.getElementById('jmespathExpr').value = expr;
+        document.getElementById('jmespathExpr').focus();
+      }
