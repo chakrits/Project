@@ -50,6 +50,7 @@
   boolean_false: False,
   null_value: None
 }`,
+        escaped: `"{\\"hn\\":\\"38-24-704205\\",\\"patient_row_id\\":\\"667e6d5fa6f3163c42156277\\",\\"en\\":\\"O38-24-728212\\",\\"encounter_row_id\\":\\"667e6d60a6f3163c4215628e\\",\\"invoice\\":{\\"invoiceNumber\\":\\"38-CO24711484\\",\\"bill_row_id\\":\\"12343434\\",\\"invoiceStatus\\":\\"CANCELLED\\",\\"invoiceAmount\\":\\"490.00\\",\\"invoiceDateTime\\":\\"2020-10-27T09:23:18\\",\\"claim\\":{\\"reservationNumber\\":\\"API-O2010000340\\",\\"claimNumber\\":\\"C6310-00032800\\",\\"payorOfficeCode\\":\\"9000714001\\",\\"planGroup\\":\\"IPD_ILLNESS\\"}}}"`,
       };
 
       /**
@@ -623,6 +624,61 @@
           return "String is not properly closed. Check quote marks.";
         }
         return "Please check JSON syntax for correctness.";
+      }
+
+      function runJMESPath() {
+        const expr = document.getElementById('jmespathExpr').value.trim();
+        const outputEl = document.getElementById('jmespathOutput');
+        const statusEl = document.getElementById('jmespathStatus');
+
+        if (!expr) {
+          statusEl.className = 'alert alert-warning';
+          statusEl.innerHTML = '<strong>⚠️ Please enter a JMESPath expression</strong>';
+          return;
+        }
+
+        const source = document.getElementById('outputArea').textContent;
+        if (!source || source === '{}') {
+          statusEl.className = 'alert alert-warning';
+          statusEl.innerHTML = '<strong>⚠️ Please convert some JSON first</strong>';
+          return;
+        }
+
+        try {
+          const data = JSON.parse(source);
+          const result = jmespath.search(data, expr);
+          outputEl.textContent = JSON.stringify(result, null, 2);
+          statusEl.className = 'alert alert-success';
+          statusEl.innerHTML = '<strong>✅ Query executed successfully</strong>';
+          setTimeout(() => { statusEl.innerHTML = ''; statusEl.className = ''; }, 3000);
+        } catch (e) {
+          outputEl.textContent = '';
+          statusEl.className = 'alert alert-danger';
+          statusEl.innerHTML = `<strong>❌ ${e.message}</strong>`;
+        }
+      }
+
+      function copyJMESPathResult() {
+        const output = document.getElementById('jmespathOutput').textContent;
+        if (!output.trim()) {
+          showStatus('⚠️ Nothing to copy. Run a query first.', 'warning');
+          return;
+        }
+        navigator.clipboard.writeText(output)
+          .then(() => showStatus('📋 JMESPath result copied!', 'success'))
+          .catch(() => showStatus('❌ Failed to copy', 'error'));
+      }
+
+      function clearJMESPath() {
+        document.getElementById('jmespathExpr').value = '';
+        document.getElementById('jmespathOutput').textContent = '';
+        document.getElementById('jmespathStatus').innerHTML = '';
+        document.getElementById('jmespathStatus').className = '';
+      }
+
+      function setJMESPathExpr(expr) {
+        document.getElementById('jmespathExpr').value = expr;
+        document.getElementById('jmespathExpr').focus();
       }
 
       // Initialize when page loads

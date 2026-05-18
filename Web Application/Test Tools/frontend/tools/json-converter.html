@@ -163,6 +163,40 @@
             </div>
           </div>
 
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-search me-2"></i>JMESPath Query</div></div>
+                <div class="card-body">
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="setJMESPathExpr('name')" title="Select top-level key"><i class="fas fa-key me-1"></i>select key</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="setJMESPathExpr('users[?active]')" title="Filter array by boolean field"><i class="fas fa-filter me-1"></i>filter array</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="setJMESPathExpr('data.items')" title="Access nested property"><i class="fas fa-sitemap me-1"></i>nested access</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="setJMESPathExpr('users[*].name')" title="Pluck field from all array items"><i class="fas fa-list me-1"></i>pluck field</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="setJMESPathExpr('length(users)')" title="Count array items"><i class="fas fa-hashtag me-1"></i>count</button>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label class="form-label"><i class="fas fa-terminal me-1"></i><strong>Expression</strong></label>
+                      <textarea id="jmespathExpr" class="form-control" rows="3" placeholder="e.g. users[?active].name"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><i class="fas fa-code me-1"></i><strong>Result</strong></label>
+                      <pre id="jmespathOutput" class="json-output" style="min-height:88px;"></pre>
+                    </div>
+                  </div>
+                  <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-primary btn-sm" onclick="runJMESPath()"><i class="fas fa-play me-1"></i>Run Query</button>
+                    <button class="btn btn-success btn-sm" onclick="copyJMESPathResult()"><i class="fas fa-clipboard me-1"></i>Copy Result</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="clearJMESPath()"><i class="fas fa-trash me-1"></i>Clear</button>
+                  </div>
+                  <div id="jmespathStatus" class="mt-3"></div>
+                  <small class="form-text text-muted mt-2 d-block"><i class="fas fa-info-circle me-1"></i>Runs against the converted JSON output above. Convert your data first, then query it.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="row" id="resultsSection" style="display: none">
             <div class="col-md-12">
               <div class="card">
@@ -216,6 +250,7 @@
 <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jmespath@0.16.0/jmespath.min.js"></script>
 <script src="../assets/js/json-converter.js"></script>
 
 <script>
@@ -229,6 +264,7 @@ document.querySelectorAll('#sidebar nav a[href]').forEach(function(a){if(a.pathn
 .card-stats{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;}
 .card-stats .numbers,.card-stats .card-category{color:rgba(255,255,255,.8);}
 .icon-big{font-size:3rem;opacity:.8;}
+#jmespathExpr{font-family:"Courier New",monospace;font-size:13px;resize:vertical;}
 </style>
 </body>
 </html>

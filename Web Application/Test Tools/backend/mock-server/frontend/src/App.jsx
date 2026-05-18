@@ -3,6 +3,7 @@ import Header from './components/common/Header';
 import EndpointList from './components/EndpointManager/EndpointList';
 import EndpointEditor from './components/EndpointManager/EndpointEditor';
 import ImportModal from './components/EndpointManager/ImportModal';
+import ConfirmModal from './components/common/ConfirmModal';
 import LogTable from './components/TrafficInspector/LogTable';
 import LogDetail from './components/TrafficInspector/LogDetail';
 import {
@@ -27,6 +28,8 @@ export default function App() {
   const [isNewEndpoint, setIsNewEndpoint] = useState(false);
   const [endpointLoading, setEndpointLoading] = useState(true);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: '', message: '', confirmLabel: '', variant: 'danger', onConfirm: null });
+  const closeConfirm = () => setConfirmModal(prev => ({ ...prev, isOpen: false }));
 
   // ─── Traffic Inspector State ────────────────────────
   const [logs, setLogs] = useState([]);
@@ -102,20 +105,37 @@ export default function App() {
     }
   };
 
-  const handleDeleteEndpoint = async () => {
+  const handleDeleteEndpoint = () => {
     if (!selectedEndpointId) return;
-    if (!confirm('Are you sure you want to delete this endpoint?')) return;
-    
-    await deleteEndpoint(selectedEndpointId);
-    setEndpoints(prev => prev.filter(e => e.id !== selectedEndpointId));
-    setSelectedEndpointId(null);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Endpoint',
+      message: 'Are you sure you want to delete this endpoint? This action cannot be undone.',
+      confirmLabel: 'Delete',
+      variant: 'danger',
+      onConfirm: async () => {
+        await deleteEndpoint(selectedEndpointId);
+        setEndpoints(prev => prev.filter(e => e.id !== selectedEndpointId));
+        setSelectedEndpointId(null);
+        closeConfirm();
+      }
+    });
   };
 
-  const handleClearLogs = async () => {
-    if (!confirm('Clear all traffic logs?')) return;
-    await clearLogs();
-    setLogs([]);
-    setSelectedTraceId(null);
+  const handleClearLogs = () => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Clear Traffic Logs',
+      message: 'All traffic logs will be permanently deleted.',
+      confirmLabel: 'Clear',
+      variant: 'danger',
+      onConfirm: async () => {
+        await clearLogs();
+        setLogs([]);
+        setSelectedTraceId(null);
+        closeConfirm();
+      }
+    });
   };
 
   // ─── Derived ────────────────────────────────────────
@@ -209,6 +229,17 @@ export default function App() {
           loadEndpoints();
           setShowImportModal(false);
         }}
+      />
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmLabel={confirmModal.confirmLabel}
+        variant={confirmModal.variant}
+        onConfirm={confirmModal.onConfirm}
+        onClose={closeConfirm}
       />
     </div>
   );

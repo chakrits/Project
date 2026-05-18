@@ -8,20 +8,24 @@
       {
         "label": "Success",
         "status": 200,
+        "delay": 0,
         "body": {
           "id": ":id",
           "name": "John Doe",
           "email": "john@example.com"
         },
-        "isDefault": true
+        "isDefault": true,
+        "conditions": []
       },
       {
         "label": "Not Found",
         "status": 404,
+        "delay": 0,
         "body": {
           "error": "User not found"
         },
-        "isDefault": false
+        "isDefault": false,
+        "conditions": []
       }
     ]
   },
@@ -114,8 +118,10 @@
       {
         "label": "OK",
         "status": 200,
+        "delay": 0,
         "body": {},
-        "isDefault": true
+        "isDefault": true,
+        "conditions": []
       }
     ]
   },
