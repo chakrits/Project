@@ -163,6 +163,38 @@
             </div>
           </div>
 
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header"><div class="card-title"><i class="fas fa-search me-2"></i>JMESPath Query</div></div>
+                <div class="card-body">
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="text-muted small me-2">Quick:</span>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="setJMESPathExpr('keys(@)')">keys(@)</button>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="setJMESPathExpr('length(@)')">length(@)</button>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="setJMESPathExpr('[*]')">Array [*]</button>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="setJMESPathExpr('[*].id')">Pluck id</button>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="setJMESPathExpr('[?status==`active`]')">Filter active</button>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <textarea id="jmespathExpr" class="form-control mb-2" rows="3" placeholder="e.g. data.items[*].name" style="font-family:'Courier New',monospace;font-size:13px;resize:vertical;"></textarea>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary" onclick="runJMESPath()"><i class="fas fa-play me-1"></i>Run Query</button>
+                        <button class="btn btn-sm btn-outline-success" onclick="copyJMESPathResult()"><i class="far fa-copy me-1"></i>Copy</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="clearJMESPath()"><i class="fas fa-times me-1"></i>Clear</button>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <pre id="jmespathOutput" class="json-output" style="min-height:80px;max-height:200px;"></pre>
+                    </div>
+                  </div>
+                  <div id="jmespathStatus" class="mt-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="row" id="resultsSection" style="display: none">
             <div class="col-md-12">
               <div class="card">
@@ -216,6 +248,7 @@
 <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jmespath@0.16.0/jmespath.min.js"></script>
 <script src="../assets/js/json-converter.js"></script>
 
 <script>
