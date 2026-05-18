@@ -24,15 +24,12 @@ Thumbs.db
 *.sw?
 
 # Mock Server — build artifacts & runtime data
-mock-server/frontend/dist/
-mock-server/db/logs.json
+backend/mock-server/frontend/dist/
+backend/mock-server/db/logs.json
 
 # Playwright test artifacts
 playwright-report/
 test-results/
-
-# Third-party template (reference only, not part of source)
-kaiadmin-lite-1.2.0/
 
 # Local config (contains machine-specific paths)
 mcp.json

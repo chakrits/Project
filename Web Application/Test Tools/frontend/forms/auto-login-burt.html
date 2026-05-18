@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Auto Login Fast Track - Test Center</title>
+  <title>Auto Login BURT Generator - Test Center</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
   <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -48,7 +48,7 @@
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded" aria-label="Toggle sidebar">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <span class="text-gray-400 text-sm font-medium">Auto Login Fast Track</span>
+        <span class="text-gray-400 text-sm font-medium">Auto Login BURT Generator</span>
       </div>
       <div id="navbar-user-slot" class="flex items-center gap-2.5 text-sm text-gray-400">
         <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
@@ -60,15 +60,13 @@
       <div class="container">
         <div class="page-inner">
           <div class="page-header">
-            <h3 class="fw-bold mb-3">Auto Login Form Generator</h3>
+            <h3 class="fw-bold mb-3">Auto Login BURT Generator</h3>
             <ul class="breadcrumbs mb-3">
               <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
               <li class="separator"><i class="icon-arrow-right"></i></li>
               <li class="nav-item"><a href="#">E-Form</a></li>
               <li class="separator"><i class="icon-arrow-right"></i></li>
-              <li class="nav-item"><a href="#">Auto Login</a></li>
-              <li class="separator"><i class="icon-arrow-right"></i></li>
-              <li class="nav-item"><a href="">Fast Track</a></li>
+              <li class="nav-item"><a href="#">Auto Login BURT</a></li>
             </ul>
           </div>
 
@@ -77,7 +75,7 @@
               <div class="card">
                 <div class="card-header">
                   <div class="card-head-row">
-                    <div class="card-title"><i class="fas fa-cogs me-2"></i>System Configuration</div>
+                    <div class="card-title"><i class="fas fa-cogs me-2"></i>BURT System Configuration</div>
                   </div>
                 </div>
                 <div class="card-body">
@@ -85,19 +83,13 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="targetUrl"><strong>Target URL:</strong></label>
-                        <input type="url" class="form-control" id="targetUrl" placeholder="http://ta2-crmapp.bdms.co.th/digitsign/index" value="http://ta2-crmapp.bdms.co.th/digitsign/index" />
+                        <input type="url" class="form-control" id="targetUrl" placeholder="https://dev-bdmsburd2.bdms.co.th" value="https://dev-bdmsburd2.bdms.co.th" />
                       </div>
                     </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="orgCode"><strong>Organization Code:</strong></label>
-                        <input type="text" class="form-control" id="orgCode" placeholder="BPK" value="BPK" />
-                      </div>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label for="appId"><strong>Application ID:</strong></label>
-                        <input type="text" class="form-control" id="appId" placeholder="6" value="6" />
+                        <input type="text" class="form-control" id="appId" placeholder="APP ID" value="lfatiemom9a9kxnuy8110cbza0g2xiwr" />
                       </div>
                     </div>
                   </div>
@@ -157,50 +149,52 @@
               <div class="card">
                 <div class="card-header">
                   <div class="card-head-row">
-                    <div class="card-title"><i class="fas fa-list me-2"></i>Parameters Claim Form A Patient</div>
+                    <div class="card-title"><i class="fas fa-list me-2"></i>BURT Parameters Configuration</div>
                     <div class="card-tools">
                       <button id="enableAllBtn" class="btn btn-success btn-sm me-2"><i class="fas fa-check-double me-1"></i>Enable All</button>
                       <button id="disableAllBtn" class="btn btn-warning btn-sm me-2"><i class="fas fa-times me-1"></i>Disable All</button>
-                      <button id="resetFormBtn" class="btn btn-secondary btn-sm"><i class="fas fa-undo me-1"></i>Reset</button>
+                      <button id="resetFormBtn" class="btn btn-secondary btn-sm me-2"><i class="fas fa-undo me-1"></i>Reset</button>
+                      <button id="generateTimestampBtn" class="btn btn-info btn-sm"><i class="fas fa-clock me-1"></i>Gen Timestamp</button>
                     </div>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="alert alert-info">
                     <i class="fas fa-lightbulb me-2"></i>
-                    <strong>Toggle Parameters:</strong> Use the switches to enable/disable parameters. Only enabled parameters will be included in the final encrypted URL.
+                    <strong>BURT Parameters:</strong> Configure parameters for BURT system authentication. Timestamp should be Unix timestamp format.
                   </div>
                   <div id="parametersForm" class="parameters-form"></div>
                   <div class="d-flex justify-content-between align-items-center mt-4">
                     <div><span class="badge badge-primary" id="enabledCount">0</span> parameters enabled</div>
-                    <button id="generateUrlBtn" class="btn btn-primary"><i class="fas fa-link me-2"></i>Generate Auto Login URL</button>
+                    <button id="generateUrlBtn" class="btn btn-primary"><i class="fas fa-link me-2"></i>Generate BURT Login URL</button>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="col-md-12">
-              <div class="card" id="resultCard" style="display: none">
+              <div class="card" id="resultCard" style="display: none;">
                 <div class="card-header">
                   <div class="card-head-row">
-                    <div class="card-title"><i class="fas fa-link me-2"></i>Generated Auto Login URL</div>
+                    <div class="card-title"><i class="fas fa-link me-2"></i>Generated BURT Login URL</div>
                     <div class="card-tools">
                       <button id="copyUrlBtn" class="btn btn-info btn-sm me-2"><i class="fas fa-copy me-1"></i>Copy URL</button>
-                      <button id="testUrlBtn" class="btn btn-success btn-sm"><i class="fas fa-external-link-alt me-1"></i>Test URL</button>
+                      <button id="testUrlBtn" class="btn btn-success btn-sm me-2"><i class="fas fa-external-link-alt me-1"></i>Test URL</button>
+                      <button id="copyJsonBtn" class="btn btn-secondary btn-sm"><i class="fas fa-code me-1"></i>Copy JSON</button>
                     </div>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="mb-4">
-                    <h6><i class="fas fa-eye me-2"></i>Parameters Preview:</h6>
-                    <div class="preview-box"><code id="queryPreview"></code></div>
+                    <h6><i class="fas fa-code me-2"></i>JSON Parameters:</h6>
+                    <div class="preview-box"><code id="jsonPreview"></code></div>
                   </div>
                   <div class="mb-4">
                     <h6><i class="fas fa-lock me-2"></i>Encrypted Key:</h6>
                     <div class="encrypted-key-box"><code id="encryptedKey"></code></div>
                   </div>
                   <div class="mb-4">
-                    <h6><i class="fas fa-link me-2"></i>Final Auto Login URL:</h6>
+                    <h6><i class="fas fa-link me-2"></i>Final BURT Login URL:</h6>
                     <div class="url-box"><input type="text" class="form-control" id="finalUrl" readonly /></div>
                   </div>
                   <div class="row">
@@ -215,33 +209,35 @@
 
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header"><div class="card-title"><i class="fas fa-question-circle me-2"></i>How to Use Auto Login Generator</div></div>
+                <div class="card-header"><div class="card-title"><i class="fas fa-question-circle me-2"></i>How to Use BURT Auto Login Generator</div></div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-6">
                       <h6><i class="fas fa-list-ol me-2"></i>Instructions:</h6>
                       <ol class="ps-3">
-                        <li>Load system configuration or enter manually</li>
-                        <li>Configure target URL, org code, and app ID</li>
-                        <li>Toggle parameters you want to include</li>
+                        <li>Configure target URL and application ID</li>
+                        <li>Enter secret key for encryption</li>
+                        <li>Toggle BURT parameters you want to include</li>
                         <li>Fill in values for enabled parameters</li>
-                        <li>Click "Generate Auto Login URL"</li>
+                        <li>Use "Gen Timestamp" for current Unix timestamp</li>
+                        <li>Click "Generate BURT Login URL"</li>
                         <li>Copy the generated URL or test it directly</li>
                       </ol>
                     </div>
                     <div class="col-md-6">
-                      <h6><i class="fas fa-shield-alt me-2"></i>Security Notes:</h6>
+                      <h6><i class="fas fa-shield-alt me-2"></i>BURT Features:</h6>
                       <ul class="ps-3">
-                        <li><strong>AES Encryption:</strong> Uses secure AES encryption</li>
-                        <li><strong>Secret Key:</strong> Loaded from configuration</li>
-                        <li><strong>Local Processing:</strong> All encryption done client-side</li>
-                        <li><strong>DateTime Format:</strong> YYYY-MM-DDTHH:mm:ss (Local Time)</li>
+                        <li><strong>JSON Format:</strong> Parameters sent as JSON object</li>
+                        <li><strong>Unix Timestamp:</strong> Automatic timestamp generation</li>
+                        <li><strong>AES Encryption:</strong> Secure data transmission</li>
+                        <li><strong>URL Pattern:</strong> application_id and encrypted key</li>
+                        <li><strong>Client Authentication:</strong> Support for client_id</li>
                       </ul>
                     </div>
                   </div>
-                  <div class="alert alert-warning mt-3">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <strong>Important:</strong> The generated URL contains encrypted authentication data. Handle with care and ensure secure transmission.
+                  <div class="alert alert-success mt-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>URL Pattern:</strong> https://www.testurl.com?application_id={{app_id}}&amp;key={{encryption}}
                   </div>
                 </div>
               </div>
@@ -262,8 +258,9 @@
 <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 <script src="../assets/js/vendor/crypto-js.min.js"></script>
-<script src="../assets/js/auto-login-fast-track.js"></script>
+<script src="../assets/js/auto-login-burt-script.js"></script>
 
 <script>
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}

@@ -626,6 +626,61 @@
         return "Please check JSON syntax for correctness.";
       }
 
+      function runJMESPath() {
+        const expr = document.getElementById('jmespathExpr').value.trim();
+        const outputEl = document.getElementById('jmespathOutput');
+        const statusEl = document.getElementById('jmespathStatus');
+
+        if (!expr) {
+          statusEl.className = 'alert alert-warning';
+          statusEl.innerHTML = '<strong>⚠️ Please enter a JMESPath expression</strong>';
+          return;
+        }
+
+        const source = document.getElementById('outputArea').textContent;
+        if (!source || source === '{}') {
+          statusEl.className = 'alert alert-warning';
+          statusEl.innerHTML = '<strong>⚠️ Please convert some JSON first</strong>';
+          return;
+        }
+
+        try {
+          const data = JSON.parse(source);
+          const result = jmespath.search(data, expr);
+          outputEl.textContent = JSON.stringify(result, null, 2);
+          statusEl.className = 'alert alert-success';
+          statusEl.innerHTML = '<strong>✅ Query executed successfully</strong>';
+          setTimeout(() => { statusEl.innerHTML = ''; statusEl.className = ''; }, 3000);
+        } catch (e) {
+          outputEl.textContent = '';
+          statusEl.className = 'alert alert-danger';
+          statusEl.innerHTML = `<strong>❌ ${e.message}</strong>`;
+        }
+      }
+
+      function copyJMESPathResult() {
+        const output = document.getElementById('jmespathOutput').textContent;
+        if (!output.trim()) {
+          showStatus('⚠️ Nothing to copy. Run a query first.', 'warning');
+          return;
+        }
+        navigator.clipboard.writeText(output)
+          .then(() => showStatus('📋 JMESPath result copied!', 'success'))
+          .catch(() => showStatus('❌ Failed to copy', 'error'));
+      }
+
+      function clearJMESPath() {
+        document.getElementById('jmespathExpr').value = '';
+        document.getElementById('jmespathOutput').textContent = '';
+        document.getElementById('jmespathStatus').innerHTML = '';
+        document.getElementById('jmespathStatus').className = '';
+      }
+
+      function setJMESPathExpr(expr) {
+        document.getElementById('jmespathExpr').value = expr;
+        document.getElementById('jmespathExpr').focus();
+      }
+
       // Initialize when page loads
       $(document).ready(function () {
         updateStats();

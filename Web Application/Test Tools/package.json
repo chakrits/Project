@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node server.js",
-    "postinstall": "npm --prefix mock-server/frontend install && npm --prefix mock-server/frontend run build",
+    "postinstall": "npm --prefix backend/mock-server/frontend install && npm --prefix backend/mock-server/frontend run build",
     "test": "jest",
     "test:watch": "jest --watch"
   },

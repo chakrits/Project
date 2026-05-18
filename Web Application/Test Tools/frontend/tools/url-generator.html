@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Auto Login BURT Generator - Test Center</title>
+  <title>Document List - URL Generator - Test Center</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
   <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
   <link rel="stylesheet" href="../assets/css/custom.css" />
   <link rel="stylesheet" href="../assets/css/auto-login-style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body class="bg-gray-950 text-gray-100">
 <div class="flex min-h-screen">
@@ -48,7 +49,7 @@
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded" aria-label="Toggle sidebar">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <span class="text-gray-400 text-sm font-medium">Auto Login BURT Generator</span>
+        <span class="text-gray-400 text-sm font-medium">URL Generator</span>
       </div>
       <div id="navbar-user-slot" class="flex items-center gap-2.5 text-sm text-gray-400">
         <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
@@ -60,13 +61,13 @@
       <div class="container">
         <div class="page-inner">
           <div class="page-header">
-            <h3 class="fw-bold mb-3">Auto Login BURT Generator</h3>
+            <h3 class="fw-bold mb-3">Document List - URL Generator</h3>
             <ul class="breadcrumbs mb-3">
               <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
               <li class="separator"><i class="icon-arrow-right"></i></li>
-              <li class="nav-item"><a href="#">E-Form</a></li>
+              <li class="nav-item"><a href="#">Tools</a></li>
               <li class="separator"><i class="icon-arrow-right"></i></li>
-              <li class="nav-item"><a href="#">Auto Login BURT</a></li>
+              <li class="nav-item"><a href="#">Document List</a></li>
             </ul>
           </div>
 
@@ -75,21 +76,24 @@
               <div class="card">
                 <div class="card-header">
                   <div class="card-head-row">
-                    <div class="card-title"><i class="fas fa-cogs me-2"></i>BURT System Configuration</div>
+                    <div class="card-title"><i class="fas fa-cogs me-2"></i>System Configuration</div>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="targetUrl"><strong>Target URL:</strong></label>
-                        <input type="url" class="form-control" id="targetUrl" placeholder="https://dev-bdmsburd2.bdms.co.th" value="https://dev-bdmsburd2.bdms.co.th" />
+                        <label for="systemSelect"><strong>System Configuration:</strong></label>
+                        <select class="form-control" id="systemSelect">
+                          <option value="">— Select System Configuration... —</option>
+                        </select>
+                        <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>เลือก Preset หรือกรอกค่าเองด้านล่าง</small>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="appId"><strong>Application ID:</strong></label>
-                        <input type="text" class="form-control" id="appId" placeholder="APP ID" value="lfatiemom9a9kxnuy8110cbza0g2xiwr" />
+                        <label for="targetUrl"><strong>Target URL:</strong></label>
+                        <input type="url" class="form-control" id="targetUrl" placeholder="https://test-dev.tester.co.th" />
                       </div>
                     </div>
                   </div>
@@ -97,15 +101,33 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="secretKey"><strong>Secret Key:</strong></label>
-                        <input type="password" class="form-control" id="secretKey" placeholder="Enter encryption secret key" />
+                        <div class="input-group">
+                          <input type="password" class="form-control" id="secretKey" placeholder="Enter encryption secret key" />
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleSecretKey" title="Show/Hide"><i class="fas fa-eye"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="appId"><strong>Application ID:</strong></label>
+                        <input type="text" class="form-control" id="appId" placeholder="e.g. niIWzik5x4" />
                       </div>
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
                         <label for="aesMode"><strong>AES Mode:</strong></label>
-                        <select class="form-control" id="aesMode"><!-- Options populated by JS --></select>
+                        <select class="form-control" id="aesMode">
+                          <option value="ECB" selected>ECB - Electronic Codebook</option>
+                          <option value="CBC">CBC - Cipher Block Chaining</option>
+                          <option value="CTR">CTR - Counter</option>
+                          <option value="CFB">CFB - Cipher Feedback</option>
+                        </select>
                       </div>
                     </div>
+                  </div>
+                  <div class="row">
                     <div class="col-md-3">
                       <div class="form-group">
                         <label for="keySize"><strong>Key Size:</strong></label>
@@ -116,28 +138,16 @@
                         </select>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="ivRow" style="display: none;">
                       <div class="form-group">
                         <label for="ivInput"><strong>Initialization Vector (IV):</strong></label>
                         <div class="input-group">
-                          <input type="text" class="form-control" id="ivInput" placeholder="Leave empty for auto-generation" />
+                          <input type="text" class="form-control" id="ivInput" placeholder="Leave empty for auto-generation" maxlength="32" />
                           <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="generateIvBtn"><i class="fas fa-random"></i> Generate</button>
                           </div>
                         </div>
-                        <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>16 bytes (32 hex characters) for AES. Leave empty for random IV.</small>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="outputFormat"><strong>Output Format:</strong></label>
-                        <select class="form-control" id="outputFormat">
-                          <option value="base64">Base64</option>
-                          <option value="hex">Hexadecimal</option>
-                        </select>
-                        <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>Format for the encrypted key output</small>
+                        <small class="form-text text-muted"><i class="fas fa-info-circle me-1"></i>16 bytes (32 hex characters) for AES. Leave empty for zero IV.</small>
                       </div>
                     </div>
                   </div>
@@ -149,59 +159,57 @@
               <div class="card">
                 <div class="card-header">
                   <div class="card-head-row">
-                    <div class="card-title"><i class="fas fa-list me-2"></i>BURT Parameters Configuration</div>
+                    <div class="card-title"><i class="fas fa-list me-2"></i>Parameters Document List</div>
                     <div class="card-tools">
                       <button id="enableAllBtn" class="btn btn-success btn-sm me-2"><i class="fas fa-check-double me-1"></i>Enable All</button>
                       <button id="disableAllBtn" class="btn btn-warning btn-sm me-2"><i class="fas fa-times me-1"></i>Disable All</button>
-                      <button id="resetFormBtn" class="btn btn-secondary btn-sm me-2"><i class="fas fa-undo me-1"></i>Reset</button>
-                      <button id="generateTimestampBtn" class="btn btn-info btn-sm"><i class="fas fa-clock me-1"></i>Gen Timestamp</button>
+                      <button id="resetFormBtn" class="btn btn-secondary btn-sm"><i class="fas fa-undo me-1"></i>Reset</button>
                     </div>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="alert alert-info">
                     <i class="fas fa-lightbulb me-2"></i>
-                    <strong>BURT Parameters:</strong> Configure parameters for BURT system authentication. Timestamp should be Unix timestamp format.
+                    <strong>Toggle Parameters:</strong> Use the switches to enable/disable parameters. Only enabled parameters will be included in the final encrypted URL.
                   </div>
                   <div id="parametersForm" class="parameters-form"></div>
                   <div class="d-flex justify-content-between align-items-center mt-4">
                     <div><span class="badge badge-primary" id="enabledCount">0</span> parameters enabled</div>
-                    <button id="generateUrlBtn" class="btn btn-primary"><i class="fas fa-link me-2"></i>Generate BURT Login URL</button>
+                    <button id="generateUrlBtn" class="btn btn-primary"><i class="fas fa-link me-2"></i>Generate URL</button>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="col-md-12">
-              <div class="card" id="resultCard" style="display: none;">
+              <div class="card" id="resultCard" style="display: none">
                 <div class="card-header">
                   <div class="card-head-row">
-                    <div class="card-title"><i class="fas fa-link me-2"></i>Generated BURT Login URL</div>
+                    <div class="card-title"><i class="fas fa-link me-2"></i>Generated URL</div>
                     <div class="card-tools">
                       <button id="copyUrlBtn" class="btn btn-info btn-sm me-2"><i class="fas fa-copy me-1"></i>Copy URL</button>
-                      <button id="testUrlBtn" class="btn btn-success btn-sm me-2"><i class="fas fa-external-link-alt me-1"></i>Test URL</button>
-                      <button id="copyJsonBtn" class="btn btn-secondary btn-sm"><i class="fas fa-code me-1"></i>Copy JSON</button>
+                      <button id="openUrlBtn" class="btn btn-success btn-sm"><i class="fas fa-external-link-alt me-1"></i>Open URL</button>
                     </div>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="mb-4">
-                    <h6><i class="fas fa-code me-2"></i>JSON Parameters:</h6>
+                    <h6><i class="fas fa-eye me-2"></i>JSON Payload Preview:</h6>
                     <div class="preview-box"><code id="jsonPreview"></code></div>
                   </div>
                   <div class="mb-4">
                     <h6><i class="fas fa-lock me-2"></i>Encrypted Key:</h6>
-                    <div class="encrypted-key-box"><code id="encryptedKey"></code></div>
+                    <div class="encrypted-key-box"><code id="encryptedKeyDisplay"></code></div>
                   </div>
                   <div class="mb-4">
-                    <h6><i class="fas fa-link me-2"></i>Final BURT Login URL:</h6>
+                    <h6><i class="fas fa-link me-2"></i>Final URL:</h6>
                     <div class="url-box"><input type="text" class="form-control" id="finalUrl" readonly /></div>
                   </div>
                   <div class="row">
-                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-primary"><i class="fas fa-list"></i></div><div class="stat-info"><span class="stat-label">Parameters</span><span class="stat-value" id="paramCount">0</span></div></div></div>
-                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-success"><i class="fas fa-clock"></i></div><div class="stat-info"><span class="stat-label">Generated</span><span class="stat-value" id="generatedTime">-</span></div></div></div>
-                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-warning"><i class="fas fa-key"></i></div><div class="stat-info"><span class="stat-label">Key Length</span><span class="stat-value" id="keyLength">0</span></div></div></div>
-                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-info"><i class="fas fa-ruler"></i></div><div class="stat-info"><span class="stat-label">URL Length</span><span class="stat-value" id="urlLength">0</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-primary"><i class="fas fa-list"></i></div><div class="stat-info"><span class="stat-label">Parameters</span><span class="stat-value" id="statParamCount">0</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-success"><i class="fas fa-clock"></i></div><div class="stat-info"><span class="stat-label">Generated</span><span class="stat-value" id="statTime">-</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-warning"><i class="fas fa-key"></i></div><div class="stat-info"><span class="stat-label">Key Length</span><span class="stat-value" id="statKeyLength">0</span></div></div></div>
+                    <div class="col-md-3"><div class="stat-card"><div class="stat-icon bg-info"><i class="fas fa-ruler"></i></div><div class="stat-info"><span class="stat-label">URL Length</span><span class="stat-value" id="statUrlLength">0</span></div></div></div>
                   </div>
                 </div>
               </div>
@@ -209,35 +217,32 @@
 
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header"><div class="card-title"><i class="fas fa-question-circle me-2"></i>How to Use BURT Auto Login Generator</div></div>
+                <div class="card-header"><div class="card-title"><i class="fas fa-question-circle me-2"></i>How to Use Document List URL Generator</div></div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-6">
                       <h6><i class="fas fa-list-ol me-2"></i>Instructions:</h6>
                       <ol class="ps-3">
-                        <li>Configure target URL and application ID</li>
-                        <li>Enter secret key for encryption</li>
-                        <li>Toggle BURT parameters you want to include</li>
-                        <li>Fill in values for enabled parameters</li>
-                        <li>Use "Gen Timestamp" for current Unix timestamp</li>
-                        <li>Click "Generate BURT Login URL"</li>
-                        <li>Copy the generated URL or test it directly</li>
+                        <li>กรอก Target URL, App ID, Secret Key</li>
+                        <li>เปิด/ปิด Parameters ที่ต้องการส่ง</li>
+                        <li>กรอกค่าใน Parameters ที่เปิดใช้งาน</li>
+                        <li>กด "Generate URL" เพื่อสร้าง Encrypted URL</li>
+                        <li>Copy หรือ Open URL ที่ได้</li>
                       </ol>
                     </div>
                     <div class="col-md-6">
-                      <h6><i class="fas fa-shield-alt me-2"></i>BURT Features:</h6>
+                      <h6><i class="fas fa-shield-alt me-2"></i>Security Notes:</h6>
                       <ul class="ps-3">
-                        <li><strong>JSON Format:</strong> Parameters sent as JSON object</li>
-                        <li><strong>Unix Timestamp:</strong> Automatic timestamp generation</li>
-                        <li><strong>AES Encryption:</strong> Secure data transmission</li>
-                        <li><strong>URL Pattern:</strong> application_id and encrypted key</li>
-                        <li><strong>Client Authentication:</strong> Support for client_id</li>
+                        <li><strong>AES Encryption:</strong> ข้อมูลถูก Encrypt ด้วย AES</li>
+                        <li><strong>JSON Payload:</strong> Parameters ถูกแปลงเป็น JSON ก่อน Encrypt</li>
+                        <li><strong>Local Processing:</strong> Encrypt ทำบน Browser ไม่ส่งขึ้น Server</li>
+                        <li><strong>DateTime:</strong> request_datetime +/- ได้ไม่เกิน 5 นาที</li>
                       </ul>
                     </div>
                   </div>
-                  <div class="alert alert-success mt-3">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>URL Pattern:</strong> https://www.testurl.com?application_id={{app_id}}&amp;key={{encryption}}
+                  <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Important:</strong> URL ที่สร้างมีข้อมูล Authentication ที่ถูก Encrypt กรุณาเก็บรักษาและส่งต่ออย่างปลอดภัย
                   </div>
                 </div>
               </div>
@@ -258,13 +263,20 @@
 <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
-<script src="../assets/js/vendor/crypto-js.min.js"></script>
-<script src="../assets/js/auto-login-burt-script.js"></script>
+<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+<script src="../assets/js/url-generator.js"></script>
 
 <script>
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
 document.querySelectorAll('#sidebar nav a[href]').forEach(function(a){if(a.pathname===window.location.pathname){a.classList.remove('text-gray-400','hover:text-white','hover:bg-gray-800');a.classList.add('bg-blue-600','text-white');}});
 </script>
+<style>
+.array-tag{display:inline-flex;align-items:center;background:linear-gradient(135deg,#007bff,#0056b3);color:white;border-radius:4px;padding:3px 10px;font-size:13px;font-family:'Courier New',monospace;margin:2px;gap:6px;}
+.array-tag .remove-tag{cursor:pointer;font-weight:bold;opacity:.8;font-size:16px;}
+.array-tag .remove-tag:hover{opacity:1;}
+.array-tags-container{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border:1px solid #ced4da;border-radius:6px;min-height:38px;background:white;}
+.array-input-row{display:flex;gap:6px;margin-top:6px;}
+</style>
 </body>
 </html>

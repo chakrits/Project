@@ -125,12 +125,16 @@ test-center/
 
 ## 🚀 **Getting Started**
 
+> **⚠️ Important:** `npm install` is **required** before starting the server.  
+> It builds the Mock Server React dashboard (`mock-server/frontend/dist/`) automatically via `postinstall`.  
+> Skipping this step will cause the server to crash when serving `/tools/mock-server`.
+
 ```bash
 # 1. Clone the repository
 git clone <repo-url>
 cd test-tools
 
-# 2. Install dependencies (also builds the Mock Server dashboard automatically)
+# 2. Install dependencies + build Mock Server dashboard (REQUIRED)
 npm install
 
 # 3. Start the server
@@ -139,8 +143,6 @@ npm start
 ```
 
 Open your browser at **http://localhost:3000** and navigate to any tool from the sidebar.
-
-> `npm install` automatically builds the React dashboard via `postinstall`. No extra steps needed.
 
 ### **Mock Server — Quick Start**
 

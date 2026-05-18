@@ -1,4 +1,4 @@
-const { selectResponse, evaluateConditions, evaluateCondition, interpolateTemplate, interpolateParams } = require('../../mock-server/engine/responseSelector');
+const { selectResponse, evaluateConditions, evaluateCondition, interpolateTemplate, interpolateParams } = require('../../backend/mock-server/engine/responseSelector');
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
