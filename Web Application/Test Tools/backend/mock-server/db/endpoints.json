@@ -134,14 +134,29 @@
       {
         "label": "Found",
         "status": 200,
-        "body": {},
-        "isDefault": true
+        "delay": 0,
+        "body": {
+          "message": "Math Condition"
+        },
+        "isDefault": false,
+        "conditions": [
+          {
+            "source": "body",
+            "field": "invoice.invoiceNumber",
+            "operator": "exists",
+            "value": ""
+          }
+        ]
       },
       {
         "label": "Not Found",
         "status": 404,
-        "body": {},
-        "isDefault": false
+        "delay": 0,
+        "body": {
+          "message": "Not found"
+        },
+        "isDefault": true,
+        "conditions": []
       }
     ]
   },
