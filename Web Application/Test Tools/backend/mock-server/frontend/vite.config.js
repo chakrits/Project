@@ -12,11 +12,11 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/mock-api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:5000',
         changeOrigin: true
       },
       '/api/mock-server': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:5000',
         changeOrigin: true
       }
     }

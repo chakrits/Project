@@ -3,11 +3,24 @@
     "start": "node server.js",
     "postinstall": "npm --prefix backend/mock-server/frontend install && npm --prefix backend/mock-server/frontend run build",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:api": "newman run automation-demo/eclaim-demo.postman_collection.json -e automation-demo/local.postman_environment.json",
+    "test:api:html": "newman run automation-demo/eclaim-demo.postman_collection.json -e automation-demo/local.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export automation-demo/report/newman-report.html",
+    "test:eclaim": "newman run automation-demo/eclaim-api.postman_collection.json -e automation-demo/local.postman_environment.json",
+    "test:eclaim:html": "newman run automation-demo/eclaim-api.postman_collection.json -e automation-demo/local.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export automation-demo/report/eclaim-report.html",
+    "test:ui": "playwright test tests/mini-postman-mock.spec.js",
+    "test:ui:report": "playwright show-report",
+    "test:eform": "playwright test tests/forms/auto-login-forms.spec.js",
+    "test:eform:demo": "SLOWMO=800 playwright test tests/forms/auto-login-forms.spec.js --headed --workers=1",
+    "diagram:png": "node automation-demo/diagram/svg-to-png.js"
   },
   "jest": {
     "testEnvironment": "node",
-    "testMatch": ["**/tests/mock-server/**/*.test.js"]
+    "testMatch": [
+      "**/tests/mock-server/**/*.test.js",
+      "**/tests/utils/**/*.test.js",
+      "**/tests/server/**/*.test.js"
+    ]
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -21,6 +34,8 @@
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "jest": "^30.4.2",
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1",
     "supertest": "^7.2.2"
   }
 }

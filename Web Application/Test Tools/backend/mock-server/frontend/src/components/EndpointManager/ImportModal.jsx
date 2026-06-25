@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, X, FileJson, AlertCircle, CheckCircle2, Download } from 'lucide-react';
 import MethodBadge from '../common/MethodBadge';
 
 /**
  * ImportModal — Drag-drop file upload with preview and import strategy
  */
-export default function ImportModal({ isOpen, onClose, onImportComplete }) {
+export default function ImportModal({ isOpen, onClose, onImportComplete, collections = [] }) {
   const [file, setFile] = useState(null);
   const [content, setContent] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -15,8 +15,24 @@ export default function ImportModal({ isOpen, onClose, onImportComplete }) {
   const [selected, setSelected] = useState(new Set());
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState(null);
+  const [assignCollectionId, setAssignCollectionId] = useState('');
+  const [isCombinedFormat, setIsCombinedFormat] = useState(false);
   const fileInputRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
+
+  // Reset all state whenever the modal opens so stale import results are cleared
+  useEffect(() => {
+    if (isOpen) {
+      setFile(null);
+      setContent(null);
+      setPreview(null);
+      setError(null);
+      setSelected(new Set());
+      setResult(null);
+      setIsCombinedFormat(false);
+      setAssignCollectionId('');
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -27,6 +43,8 @@ export default function ImportModal({ isOpen, onClose, onImportComplete }) {
     setError(null);
     setSelected(new Set());
     setResult(null);
+    setIsCombinedFormat(false);
+    setAssignCollectionId('');
   };
 
   const handleFile = async (f) => {
@@ -49,6 +67,16 @@ export default function ImportModal({ isOpen, onClose, onImportComplete }) {
       const data = await res.json();
 
       if (!res.ok) {
+        // Check if it's combined export format (not a spec file)
+        try {
+          const parsed = JSON.parse(text);
+          if (parsed.version === 1 && Array.isArray(parsed.collections) && Array.isArray(parsed.endpoints)) {
+            setIsCombinedFormat(true);
+            setPreview({ format: 'mock-server-export', title: 'Mock Server Export', endpointCount: parsed.endpoints.length, endpoints: parsed.endpoints });
+            setSelected(new Set(parsed.endpoints.map((_, i) => i)));
+            return;
+          }
+        } catch { /* not JSON */ }
         throw new Error(data.error || 'Failed to parse file');
       }
 
@@ -109,7 +137,8 @@ export default function ImportModal({ isOpen, onClose, onImportComplete }) {
         body: JSON.stringify({
           content,
           format: 'auto',
-          strategy
+          strategy,
+          collectionId: assignCollectionId || null,
         })
       });
 
@@ -132,8 +161,10 @@ export default function ImportModal({ isOpen, onClose, onImportComplete }) {
     }
   };
 
-  const formatBadge = preview?.format === 'swagger' 
-    ? `Swagger ${preview.version}` 
+  const formatBadge = preview?.format === 'mock-server-export'
+    ? 'Mock Server Export'
+    : preview?.format === 'swagger'
+    ? `Swagger ${preview.version}`
     : preview?.format === 'openapi'
     ? `OpenAPI ${preview.version}`
     : preview?.format === 'postman'
@@ -288,6 +319,32 @@ export default function ImportModal({ isOpen, onClose, onImportComplete }) {
                   ))}
                 </div>
               </div>
+
+              {/* Combined format notice */}
+              {isCombinedFormat && (
+                <div className="flex items-start gap-2 p-3 rounded-lg bg-accent/5 border border-accent/20 text-xs text-text-secondary">
+                  This export includes collection definitions and will restore them automatically.
+                </div>
+              )}
+
+              {/* Assign to collection */}
+              {!isCombinedFormat && collections.length > 0 && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-text-secondary">Assign to Collection (optional)</label>
+                  <select
+                    value={assignCollectionId}
+                    onChange={e => setAssignCollectionId(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg bg-surface-primary border border-border-default
+                      focus:outline-none focus:ring-1 focus:ring-accent/30
+                      text-sm text-text-primary cursor-pointer transition-colors"
+                  >
+                    <option value="">— Uncollected —</option>
+                    {collections.map(c => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Strategy */}
               <div className="space-y-2">

@@ -1,461 +1,789 @@
 [
   {
-    "id": "e1",
-    "method": "GET",
-    "path": "/api/users/:id",
-    "description": "Get user by ID",
+    "id": "25af7fc5",
+    "method": "POST",
+    "path": "/ims-hms-api/ws/patient/claim_form_a",
+    "description": "Claim form data for requesting admission/OPD to insurance",
     "responses": [
       {
-        "label": "Success",
+        "label": "success",
         "status": 200,
         "delay": 0,
-        "body": {
-          "id": ":id",
-          "name": "John Doe",
-          "email": "john@example.com"
-        },
-        "isDefault": true,
-        "conditions": []
+        "body": {}
       },
       {
-        "label": "Not Found",
+        "label": "Accepted",
+        "status": 202,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Bad Request",
+        "status": 400,
+        "delay": 0,
+        "body": {
+          "errors": [
+            {
+              "code": "E1003",
+              "message": "invalid required fields",
+              "severityLevel": "ERROR"
+            }
+          ]
+        }
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Forbidden Access",
+        "status": 403,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Resource Not Found",
         "status": 404,
         "delay": 0,
-        "body": {
-          "error": "User not found"
-        },
-        "isDefault": false,
-        "conditions": []
-      }
-    ]
-  },
-  {
-    "id": "e2",
-    "method": "GET",
-    "path": "/api/users",
-    "description": "List all users",
-    "responses": [
+        "body": {}
+      },
       {
-        "label": "Success",
-        "status": 200,
-        "body": [
-          {
-            "id": "1",
-            "name": "Chakrit Salaeman",
-            "Role": "Senior Tester"
-          },
-          {
-            "id": "2",
-            "name": "Jane Smith"
-          }
-        ],
-        "isDefault": true
+        "label": "Internal server error occurred",
+        "status": 500,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Service Unavailable",
+        "status": 503,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Gateway Timeout",
+        "status": 504,
+        "delay": 0,
+        "body": {}
       }
-    ]
+    ],
+    "collectionId": "6bbe0d0a",
+    "defaultResponseLabel": "success",
+    "rules": []
   },
   {
-    "id": "e3",
+    "id": "35a9001f",
     "method": "POST",
-    "path": "/api/users",
-    "description": "Create a new user",
+    "path": "/ims-hms-api/ws/patient/cancel_reserve_request",
+    "description": "Make a request for reservation cancellation to IMS",
     "responses": [
       {
-        "label": "Created",
-        "status": 201,
-        "body": {
-          "id": "3",
-          "name": "New User",
-          "message": "User created successfully"
-        },
+        "label": "success",
+        "status": 200,
+        "body": {},
         "isDefault": true
       },
       {
-        "label": "Validation Error",
+        "label": "Accepted",
+        "status": 202,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Bad Request",
         "status": 400,
         "body": {
-          "error": "Validation failed",
-          "details": [
-            "Name is required",
-            "Email is required"
+          "errors": [
+            {
+              "code": "RESERVATION_NUMBER_NOT_EXISTS",
+              "message": "The reservationNumber does not exist.",
+              "severityLevel": "WARNING"
+            }
           ]
         },
         "isDefault": false
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Forbidden Access",
+        "status": 403,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Resource Not Found",
+        "status": 404,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Internal server error occurred",
+        "status": 500,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Service Unavailable",
+        "status": 503,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Gateway Timeout",
+        "status": 504,
+        "body": {},
+        "isDefault": false
+      }
+    ],
+    "collectionId": "6bbe0d0a"
+  },
+  {
+    "id": "4c74aa9f",
+    "method": "POST",
+    "path": "/get-claimform",
+    "description": "Request claim form data",
+    "responses": [
+      {
+        "label": "success",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "hn": "01-18-045111",
+          "patient_row_id": "2276624",
+          "en": "O01-20-0000002",
+          "encounter_row_id": "19671954",
+          "admissionDate": "",
+          "admissionTime": "",
+          "dischargeDate": "",
+          "dischargeTime": "",
+          "consultationDate": "",
+          "admissionReason": "body take higher temperature than 40 degree celcius",
+          "isNeedToAdmitted": true,
+          "version": "2022.1",
+          "formType": "B",
+          "claimType": "ACCIDENT",
+          "physicianSignedDate": "2018-02-24T00:00:00.000Z",
+          "telHospital": "02-1234567",
+          "physician": {
+            "code": "DC11111",
+            "fullName": "Dr. John Thomas",
+            "specialty": "Orthopedic",
+            "medicalLicenseNumber": "V.1009"
+          },
+          "icd10s": [
+            {
+              "code": "W0149",
+              "type": "Principle",
+              "description": "Fall on same level from slipping, tripping and stumbling at street and highway During unspecified activity"
+            }
+          ],
+          "icd09s": {
+            "surgery": [
+              {
+                "code": "88.49",
+                "description": "MRA of neck (without contrast)",
+                "surgeryDate": null
+              }
+            ],
+            "anesthesia": [
+              {
+                "anesthesiatype": null,
+                "anesthesiadescription": null
+              }
+            ]
+          },
+          "treatment": {
+            "note": "medication xxx for applied for one week",
+            "result": "improved"
+          },
+          "vitalSigns": [
+            {
+              "creationDateTime": "2018-02-27T01:02:00.000Z",
+              "code": "8310-5",
+              "value": "40.5",
+              "unit": "C",
+              "note": "Body Temperature"
+            }
+          ],
+          "diagnosis": {
+            "diagnosDateTime": "",
+            "symptomDateTime": "",
+            "maternityEndDate": "",
+            "accidentDateTime": "2018-02-26T17:00:00.000Z",
+            "accidentDetails": "Fall from stair at home",
+            "chiefComplaint": null,
+            "isUnderDrugInfluence": false,
+            "underDrugInfluenceDetails": "",
+            "clinicalFindings": "Neck pain and fever 3-4 days prior",
+            "investigation": "x-ray",
+            "isPregnant": true,
+            "gestationAge": "20",
+            "isHivTested": true,
+            "hivTestDetails": "negative or possitive",
+            "isDrugAddicted": false,
+            "drugAddictedDetails": "",
+            "isInfertile": false,
+            "infertileDetails": "",
+            "wasTreatedBefore": true,
+            "priorTreatmentHospitalName": "Bangkok Hua Hin Hospital",
+            "causeOfInjury": "ตกบันได 10 ขั้น",
+            "isAlcoholFromPatient": true,
+            "alcoholFromPatientTested": "",
+            "levelOfCousinousness": "",
+            "estimatedTimeForRecovery": "",
+            "adjRW": "",
+            "pathologicalReport": "",
+            "resultComplications": "",
+            "isRelatedAlcoholOrDrug": true,
+            "isAlcohol": true,
+            "alcoholDetail": "",
+            "isDrugAbuse": true,
+            "drugAbuseDetail": "",
+            "isAddiction": true,
+            "addictionDetail": "",
+            "physicalDefects": "",
+            "congenitalAnomaly": "",
+            "degenerativeChange": "",
+            "otherComment": ""
+          },
+          "patientMedicalHistories": [
+            {
+              "creationDateTime": "2018-02-15T17:00:00.000Z",
+              "symptoms": "Neck pain",
+              "diagnosis": "Neck pain",
+              "treatment": "medication",
+              "physician": "Dr. Wirut Sarun"
+            }
+          ]
+        }
+      },
+      {
+        "label": "Accepted",
+        "status": 202,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Bad Request",
+        "status": 400,
+        "delay": 0,
+        "body": {
+          "errors": [
+            {
+              "code": "E1003",
+              "message": "invalid required fields",
+              "severityLevel": "ERROR"
+            }
+          ]
+        }
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Forbidden Access",
+        "status": 403,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Resource Not Found",
+        "status": 404,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Internal server error occurred",
+        "status": 500,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Service Unavailable",
+        "status": 503,
+        "delay": 0,
+        "body": {}
+      },
+      {
+        "label": "Gateway Timeout",
+        "status": 504,
+        "delay": 0,
+        "body": {}
+      }
+    ],
+    "collectionId": "6bbe0d0a",
+    "defaultResponseLabel": "Unauthorized",
+    "rules": [
+      {
+        "id": "907d19c5",
+        "name": "Rule for success",
+        "active": true,
+        "responseLabel": "success",
+        "conditions": [
+          {
+            "source": "header",
+            "field": "authorization",
+            "operator": "contains",
+            "value": "Bearer"
+          }
+        ]
+      },
+      {
+        "id": "15d77314",
+        "name": "New Rule",
+        "active": false,
+        "responseLabel": "Gateway Timeout",
+        "conditions": [
+          {
+            "source": "body",
+            "field": "",
+            "operator": "eq",
+            "value": ""
+          }
+        ]
       }
     ]
   },
   {
-    "id": "e4",
-    "method": "GET",
-    "path": "/api/orders/:orderId/items",
-    "description": "Get items for an order",
+    "id": "450a1b6f",
+    "method": "POST",
+    "path": "/get-admissionform",
+    "description": "Claim form data for requesting admission/OPD to insurance",
     "responses": [
       {
-        "label": "Success",
+        "label": "success",
         "status": 200,
         "body": {
-          "orderId": ":orderId",
-          "items": [
+          "hn": "01-18-045111",
+          "patient_row_id": "2276624",
+          "en": "O01-20-0000002",
+          "encounter_row_id": "19671954",
+          "formType": "OPD",
+          "version": "2022.1",
+          "admissionReason": "body take higher temperature than 40 degree celcius",
+          "expectedDaysToStay": 5,
+          "physicianSignedDate": "2018-02-24T00:00:00.000Z",
+          "physician": {
+            "code": "DC11111",
+            "fullName": "Dr. John Thomas",
+            "specialty": "Orthopedic",
+            "medicalLicenseNumber": "V.1009"
+          },
+          "observations": [
+            "require operation"
+          ],
+          "vitalSigns": [
             {
-              "productId": "p1",
-              "quantity": 2
-            },
+              "creationDateTime": "2018-02-27T01:02:00.000Z",
+              "code": "8310-5",
+              "value": "40.5",
+              "unit": "C",
+              "note": "Body Temperature"
+            }
+          ],
+          "icd10s": [
             {
-              "productId": "p2",
-              "quantity": 1
+              "code": "W0149",
+              "type": "Principle",
+              "description": "Fall on same level from slipping, tripping and stumbling at street and highway During unspecified activity"
+            }
+          ],
+          "icd09s": {
+            "surgery": [
+              {
+                "code": "88.49",
+                "description": "MRA of neck (without contrast)",
+                "surgeryDate": null
+              }
+            ],
+            "anesthesia": [
+              {
+                "anesthesiatype": null,
+                "anesthesiadescription": null
+              }
+            ]
+          },
+          "diagnosis": {
+            "symptomDetail": null,
+            "symptomDuration": null,
+            "insPreviousHospital": null,
+            "insPreviousTreatmentDate": null,
+            "insPlaceOfAccident": null,
+            "insCauseOfInjury": null,
+            "detailOfInjury": null,
+            "previousExpenseAmtForThisillnessOrInjury": null,
+            "insuredSignature": null,
+            "relationOfInsured": null,
+            "consentGrantorName": null,
+            "firstWitnessSignature": null,
+            "firstWitnessName": null,
+            "secondWitnessSignature": null,
+            "secondWitnessName": null,
+            "symptomDateTime": "2018-02-27T00:00:00.000Z",
+            "chiefComplaint": "Neck pain",
+            "priorTreatmentDetail": "took 4 medicine types from other hospital",
+            "clinicalFinding": "Neck pain and fever 3-4 days prior",
+            "accidentDateTime": "2018-02-24T00:00:00.000Z",
+            "accidentDatetimeTohospital": "2018-02-24T00:00:00.000Z",
+            "accidentDetail": "Stumble at street",
+            "isUnderDrugInfluence": false,
+            "drugInfluenceDetail": "",
+            "admissionDate": "",
+            "admissionTime": "",
+            "hosCauseOfIllnessOrInjury": "",
+            "previousTreatmentForThisIllnessOrInjury": "",
+            "claimType": "ACCIDENT",
+            "adjRW": "",
+            "isCanManagedUnderOPD": false,
+            "cannotManagedUnderOPDReason": "",
+            "indicationForAdmission": "",
+            "planOfTreatment": "",
+            "hosPreviousTreatmentDate": "",
+            "hosPreviousTreatmentPlace": "",
+            "illnessRelatedTo": {
+              "pregnancyUnspecify": false,
+              "isPregnancy": false,
+              "isChildbirth": false,
+              "isInfertility": false,
+              "isCaesareanSection": false,
+              "isMiscarriage": false,
+              "nervousUnspecify": false,
+              "isNervous": false,
+              "isMental": false,
+              "isEmotional": false,
+              "isSleepingDisorder": false,
+              "cosmeticReasonUnspecify": false,
+              "isCosmeticReason": false,
+              "isDentalCare": false,
+              "isRefractiveErrorsCorrection": false,
+              "congenitalUnspecify": false,
+              "isCongenital": false,
+              "isHereditaryDisease": false,
+              "influenceOfDrugsUnspecify": false,
+              "isInfluenceOfDrugs": false,
+              "isInfluenceOfAlcohol": false,
+              "isAIDS": false
+            }
+          }
+        },
+        "isDefault": true
+      },
+      {
+        "label": "Accepted",
+        "status": 202,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Bad Request",
+        "status": 400,
+        "body": {
+          "errors": [
+            {
+              "code": "E1003",
+              "message": "invalid required fields",
+              "severityLevel": "ERROR"
+            }
+          ]
+        },
+        "isDefault": false
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Forbidden Access",
+        "status": 403,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Resource Not Found",
+        "status": 404,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Internal server error occurred",
+        "status": 500,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Service Unavailable",
+        "status": 503,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Gateway Timeout",
+        "status": 504,
+        "body": {},
+        "isDefault": false
+      }
+    ],
+    "collectionId": "6bbe0d0a"
+  },
+  {
+    "id": "31c62f3e",
+    "method": "POST",
+    "path": "/v2/h-ims/registration/get-patient",
+    "description": "Request for patient info which include payor-office",
+    "responses": [
+      {
+        "label": "success",
+        "status": 200,
+        "body": {
+          "hn": "01-18-045111",
+          "patient_row_id": "2276624",
+          "sex": "M",
+          "dateOfBirth": "1997-08-12",
+          "estimatedBirthDate": "1997-08-12",
+          "age": "23Yrs05Mth28Days",
+          "nationality": {
+            "code": "TH",
+            "display": "THAI (ไทย)"
+          },
+          "identifiers": [
+            {
+              "type": "NID",
+              "value": "1234567890123"
+            }
+          ],
+          "names": [
+            {
+              "title": "นาย",
+              "firstName": "ปิติ",
+              "middleName": null,
+              "lastName": "มีโชค",
+              "language": "th"
+            }
+          ],
+          "communications": [
+            {
+              "language": {
+                "code": "th",
+                "display": "Thai"
+              },
+              "preferred": true
+            }
+          ],
+          "en": "O01-20-0000002",
+          "encounter_row_id": "19671954",
+          "enPeriod": {
+            "start": "2020-12-24T14:59:00",
+            "end": "2020-12-24T23:45:05"
+          },
+          "episodeLocationCode": "",
+          "episodeLocationName": "",
+          "originalEn": null,
+          "enClass": "outpatient",
+          "payorOffices": [
+            {
+              "code": "HIS01",
+              "name": "Self pay"
             }
           ]
         },
         "isDefault": true
-      }
-    ]
-  },
-  {
-    "id": "2fbc1e0a",
-    "method": "GET",
-    "path": "/products",
-    "description": "List products",
-    "responses": [
+      },
       {
-        "label": "OK",
-        "status": 200,
-        "delay": 0,
+        "label": "Accepted",
+        "status": 202,
         "body": {},
-        "isDefault": true,
-        "conditions": []
+        "isDefault": false
+      },
+      {
+        "label": "Bad Request",
+        "status": 400,
+        "body": {
+          "errors": [
+            {
+              "code": "E1003",
+              "message": "invalid required fields",
+              "severityLevel": "ERROR"
+            }
+          ]
+        },
+        "isDefault": false
+      },
+      {
+        "label": "Unauthorized",
+        "status": 401,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Forbidden Access",
+        "status": 403,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Resource Not Found",
+        "status": 404,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Internal server error occurred",
+        "status": 500,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Service Unavailable",
+        "status": 503,
+        "body": {},
+        "isDefault": false
+      },
+      {
+        "label": "Gateway Timeout",
+        "status": 504,
+        "body": {},
+        "isDefault": false
       }
-    ]
+    ],
+    "collectionId": "6bbe0d0a"
   },
   {
-    "id": "d4122afa",
-    "method": "GET",
-    "path": "/products/:id",
-    "description": "Get product by ID",
-    "responses": [
+    "id": "demoLgn1",
+    "method": "POST",
+    "path": "/demo/login",
+    "description": "[Automation Demo] Authenticate a user. Valid password=P@ssw0rd",
+    "collectionId": "demo0001",
+    "defaultResponseLabel": "unauthorized",
+    "rules": [
       {
-        "label": "Found",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "message": "Math Condition"
-        },
-        "isDefault": false,
+        "id": "r-login-ok",
+        "name": "Valid credentials",
+        "active": true,
+        "responseLabel": "success",
         "conditions": [
           {
             "source": "body",
-            "field": "invoice.invoiceNumber",
-            "operator": "exists",
-            "value": ""
+            "field": "password",
+            "operator": "eq",
+            "value": "P@ssw0rd"
+          },
+          {
+            "source": "body",
+            "field": "username",
+            "operator": "eq",
+            "value": "alice"
           }
         ]
+      }
+    ],
+    "responses": [
+      {
+        "label": "success",
+        "status": 200,
+        "delay": 0,
+        "body": {
+          "token": "mock-jwt-token-for-{{body.username}}",
+          "user": {
+            "username": "{{body.username}}",
+            "role": "admin"
+          }
+        }
       },
       {
-        "label": "Not Found",
+        "label": "unauthorized",
+        "status": 401,
+        "delay": 0,
+        "body": {
+          "error": "INVALID_CREDENTIALS",
+          "message": "username or password is incorrect"
+        }
+      }
+    ]
+  },
+  {
+    "id": "demoUsr1",
+    "method": "GET",
+    "path": "/demo/users/:id",
+    "description": "[Automation Demo] Get a user by id (path param echoed back)",
+    "collectionId": "demo0001",
+    "responses": [
+      {
+        "label": "success",
+        "status": 200,
+        "delay": 0,
+        "isDefault": true,
+        "body": {
+          "id": ":id",
+          "name": "Demo User",
+          "email": "user@demo.io",
+          "active": true
+        }
+      },
+      {
+        "label": "not_found",
         "status": 404,
         "delay": 0,
         "body": {
-          "message": "Not found"
-        },
-        "isDefault": true,
-        "conditions": []
+          "error": "NOT_FOUND",
+          "message": "user not found"
+        }
       }
     ]
   },
   {
-    "id": "798be565",
+    "id": "demoOrd1",
     "method": "POST",
-    "path": "/api/claim_classification_list",
-    "description": "IMS Get icon BURT",
+    "path": "/demo/orders",
+    "description": "[Automation Demo] Create an order. Use ?__code=400 for validation error, ?__example=slow for latency",
+    "collectionId": "demo0001",
     "responses": [
       {
-        "label": "Success",
-        "status": 200,
-        "body": [
-          {
-            "en": "I01-26-000xxxx",
-            "predictionResult": [
-              {
-                "classification_type": "admission",
-                "informationDatetime": "2025-05-09 06:59",
-                "classificationRemark": "",
-                "classificationResult": "Borderline",
-                "success": true
-              },
-              {
-                "classification_type": "attention",
-                "informationDatetime": "2025-05-09 06:59",
-                "classificationRemark": "Stool Count,Med concern: ภาวะผู้ผลิต?",
-                "classificationResult": "",
-                "success": true
-              },
-              {
-                "classification_type": "admission",
-                "informationDatetime": "2025-05-09 06:59",
-                "classificationRemark": "",
-                "classificationResult": "Borderline",
-                "success": true
-              },
-              {
-                "classification_type": "intervention",
-                "classificationResult": "Borderline",
-                "classificationRemark": "",
-                "informationDatetime": "2025-05-09 06:59",
-                "success": true
-              }
-            ]
-          }
-        ],
-        "isDefault": true
-      }
-    ]
-  },
-  {
-    "id": "ce80ec4b",
-    "method": "GET",
-    "path": "/api/test",
-    "description": "Demo: query template + conditions",
-    "responses": [
-      {
-        "label": "NamedGreeting",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "message": "Hello {{query.name}}"
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "query",
-            "field": "name",
-            "operator": "exists"
-          }
-        ]
-      },
-      {
-        "label": "Default",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "message": "Hello stranger"
-        },
-        "isDefault": true,
-        "conditions": []
-      }
-    ]
-  },
-  {
-    "id": "test-post-01",
-    "method": "POST",
-    "path": "/api/demo",
-    "description": "Demo: body condition + body template",
-    "responses": [
-      {
-        "label": "AdminWelcome",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "welcome": "Hello {{body.name}}",
-          "role": "admin",
-          "access": "full"
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "body",
-            "field": "role",
-            "operator": "eq",
-            "value": "admin"
-          }
-        ]
-      },
-      {
-        "label": "GuestWelcome",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "welcome": "Hello {{body.name}}",
-          "role": "guest",
-          "access": "limited"
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "body",
-            "field": "role",
-            "operator": "eq",
-            "value": "guest"
-          }
-        ]
-      },
-      {
-        "label": "BadRequest",
-        "status": 400,
-        "delay": 0,
-        "body": {
-          "error": "role is required (admin | guest)"
-        },
-        "isDefault": true,
-        "conditions": []
-      }
-    ]
-  },
-  {
-    "id": "test-put-01",
-    "method": "PUT",
-    "path": "/api/demo/:id",
-    "description": "Demo: PUT with path param + body template",
-    "responses": [
-      {
-        "label": "Updated",
+        "label": "created",
         "status": 201,
         "delay": 0,
         "body": {
-          "id": ":id",
-          "updated": true,
-          "name": "{{body.name}}",
-          "lastname": "{{body.lastname}}"
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "body",
-            "field": "name",
-            "operator": "exists",
-            "value": "true"
-          },
-          {
-            "source": "body",
-            "field": "lastname",
-            "operator": "exists",
-            "value": ""
-          },
-          {
-            "source": "params",
-            "field": "id",
-            "operator": "eq",
-            "value": "1"
-          }
-        ]
+          "orderId": "ORD-1001",
+          "status": "PENDING",
+          "amount": "{{body.amount}}",
+          "currency": "THB"
+        }
       },
       {
-        "label": "NotFound",
-        "status": 404,
+        "label": "bad_request",
+        "status": 400,
         "delay": 0,
         "body": {
-          "error": "Record :id not found"
-        },
-        "isDefault": true,
-        "conditions": []
-      }
-    ]
-  },
-  {
-    "id": "test-patch-01",
-    "method": "PATCH",
-    "path": "/api/demo/:id",
-    "description": "Demo: PATCH with header condition (auth)",
-    "responses": [
-      {
-        "label": "Patched",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "id": ":id",
-          "patched": true,
-          "field": "{{body.field}}",
-          "value": "{{body.value}}"
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "header",
-            "field": "authorization",
-            "operator": "exists"
-          }
-        ]
+          "errors": [
+            {
+              "code": "AMOUNT_REQUIRED",
+              "message": "amount is required"
+            }
+          ]
+        }
       },
       {
-        "label": "Unauthorized",
-        "status": 401,
-        "delay": 0,
+        "label": "slow",
+        "status": 201,
+        "delay": 2000,
         "body": {
-          "error": "Authorization header required"
-        },
-        "isDefault": true,
-        "conditions": []
+          "orderId": "ORD-SLOW",
+          "status": "PENDING",
+          "note": "simulated latency 2s"
+        }
       }
-    ]
-  },
-  {
-    "id": "test-delete-01",
-    "method": "DELETE",
-    "path": "/api/demo/:id",
-    "description": "Demo: DELETE with header condition (auth)",
-    "responses": [
-      {
-        "label": "Deleted",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "id": ":id",
-          "deleted": true
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "header",
-            "field": "authorization",
-            "operator": "exists"
-          }
-        ]
-      },
-      {
-        "label": "Unauthorized",
-        "status": 401,
-        "delay": 0,
-        "body": {
-          "error": "Authorization header required"
-        },
-        "isDefault": true,
-        "conditions": []
-      }
-    ]
-  },
-  {
-    "id": "test-params-01",
-    "method": "GET",
-    "path": "/api/items/:id",
-    "description": "Demo: path param condition (params source)",
-    "responses": [
-      {
-        "label": "SpecialItem",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "id": ":id",
-          "message": "Special response for item id=1",
-          "special": true
-        },
-        "isDefault": false,
-        "conditions": [
-          {
-            "source": "params",
-            "field": "id",
-            "operator": "eq",
-            "value": "1"
-          }
-        ]
-      },
-      {
-        "label": "GenericItem",
-        "status": 200,
-        "delay": 0,
-        "body": {
-          "id": ":id",
-          "message": "Generic item response"
-        },
-        "isDefault": true,
-        "conditions": []
-      }
-    ]
+    ],
+    "defaultResponseLabel": "created",
+    "rules": []
   }
 ]

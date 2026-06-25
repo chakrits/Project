@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Save, Trash2, Plus, Copy, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { Save, Trash2, Plus, Copy, ExternalLink, ChevronDown, ChevronUp, ToggleLeft, ToggleRight } from 'lucide-react';
 import MethodBadge from '../common/MethodBadge';
 import StatusBadge from '../common/StatusBadge';
 import ResponseEditor from './ResponseEditor';
+import { copyToClipboard } from '../../utils/clipboard';
 
 const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 const OPERATORS = ['eq', 'neq', 'contains', 'exists', 'regex'];
@@ -64,7 +65,7 @@ function ConditionRow({ condition, onChange, onRemove }) {
   );
 }
 
-function RuleCard({ rule, index, responses, onChange, onRemove }) {
+function RuleCard({ rule, responses, onChange, onRemove, onActivate }) {
   const updateCondition = (ci, updated) => {
     const conditions = [...rule.conditions];
     conditions[ci] = updated;
@@ -85,15 +86,41 @@ function RuleCard({ rule, index, responses, onChange, onRemove }) {
   const selectedResponse = responses.find(r => r.label === rule.responseLabel);
 
   return (
-    <div className="rounded-lg border border-border-default bg-surface-primary overflow-hidden">
+    <div className={`rounded-lg border overflow-hidden transition-all ${
+      rule.active ? 'border-blue-500/40 bg-blue-500/3' : 'border-border-default bg-surface-primary'
+    }`}>
       {/* Rule header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-surface-secondary border-b border-border-subtle">
-        <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider">
-          Rule {index + 1}
-        </span>
+      <div className={`flex items-center gap-2 px-3 py-2 border-b ${
+        rule.active ? 'bg-blue-500/10 border-blue-500/20' : 'bg-surface-secondary border-border-subtle'
+      }`}>
+        {/* Active toggle */}
+        <button
+          onClick={onActivate}
+          className={`flex-shrink-0 transition-all cursor-pointer ${
+            rule.active ? 'text-blue-400' : 'text-text-muted hover:text-text-secondary'
+          }`}
+          title={rule.active ? 'Active — click to deactivate' : 'Inactive — click to activate'}
+        >
+          {rule.active ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
+        </button>
+        {/* Rule name — inline editable */}
+        <input
+          type="text"
+          value={rule.name}
+          onChange={(e) => onChange({ ...rule, name: e.target.value })}
+          className={`flex-1 bg-transparent text-xs font-medium focus:outline-none min-w-0 ${
+            rule.active ? 'text-blue-300 placeholder-blue-400/40' : 'text-text-secondary placeholder-text-muted'
+          }`}
+          placeholder="Rule name..."
+        />
+        {rule.active && (
+          <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider flex-shrink-0">
+            ACTIVE
+          </span>
+        )}
         <button
           onClick={onRemove}
-          className="p-1 rounded text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+          className="p-1 rounded text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer flex-shrink-0"
           title="Remove rule"
         >
           <Trash2 size={12} />
@@ -161,46 +188,55 @@ function RuleCard({ rule, index, responses, onChange, onRemove }) {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fromBackendFormat(backendResponses) {
-  const responses = (backendResponses || []).map(r => ({
-    label: r.label || '',
-    status: r.status || 200,
-    delay: r.delay || 0,
-    body: r.body || {},
+function fromBackendEndpoint(endpoint) {
+  const backendResponses = endpoint?.responses || [];
+  const responses = backendResponses.map(r => ({
+    label:   r.label || '',
+    status:  r.status || 200,
+    delay:   r.delay || 0,
+    body:    r.body || {},
     bodyRaw: JSON.stringify(r.body || {}, null, 2),
-    isDefault: r.isDefault || false,
   }));
 
-  const rules = (backendResponses || [])
-    .filter(r => r.conditions && r.conditions.length > 0)
-    .map(r => ({ conditions: r.conditions, responseLabel: r.label }));
+  const rules = (endpoint?.rules || []).map(r => ({
+    id:            r.id || crypto.randomUUID().slice(0, 8),
+    name:          r.name || 'Unnamed Rule',
+    active:        r.active === true,
+    responseLabel: r.responseLabel || '',
+    conditions:    Array.isArray(r.conditions) ? r.conditions : [],
+  }));
 
-  const defaultResp = (backendResponses || []).find(r => r.isDefault);
-  const defaultLabel = defaultResp?.label || responses[0]?.label || '';
+  const defaultLabel = endpoint?.defaultResponseLabel || responses[0]?.label || '';
 
   return { responses, rules, defaultLabel };
 }
 
-function toBackendFormat(responses, rules, defaultLabel) {
-  return responses.map(r => {
-    const rule = rules.find(ru => ru.responseLabel === r.label);
-    return {
-      label: r.label,
-      status: r.status,
-      delay: r.delay || 0,
-      body: r.body,
-      isDefault: r.label === defaultLabel,
-      conditions: rule?.conditions || [],
-    };
-  });
+function toPayload({ method, path, description, collectionId, responses, rules, defaultLabel }) {
+  const cleanResponses = responses.map(r => ({
+    label:  r.label,
+    status: r.status,
+    delay:  r.delay || 0,
+    body:   r.body,
+  }));
+
+  const cleanRules = rules.map(r => ({
+    id:            r.id,
+    name:          r.name,
+    active:        r.active,
+    responseLabel: r.responseLabel,
+    conditions:    r.conditions,
+  }));
+
+  return { method, path, description, collectionId, defaultResponseLabel: defaultLabel, responses: cleanResponses, rules: cleanRules };
 }
 
 // ─── EndpointEditor ───────────────────────────────────────────────────────────
 
-export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
+export default function EndpointEditor({ endpoint, collections = [], onSave, onDelete, isNew }) {
   const [method, setMethod] = useState('GET');
   const [path, setPath] = useState('');
   const [description, setDescription] = useState('');
+  const [collectionId, setCollectionId] = useState(null);
   const [responses, setResponses] = useState([
     { label: 'Success', status: 200, delay: 0, body: {}, bodyRaw: '{}', isDefault: true }
   ]);
@@ -215,7 +251,8 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
       setMethod(endpoint.method || 'GET');
       setPath(endpoint.path || '');
       setDescription(endpoint.description || '');
-      const { responses: r, rules: ru, defaultLabel: dl } = fromBackendFormat(endpoint.responses);
+      setCollectionId(endpoint.collectionId || null);
+      const { responses: r, rules: ru, defaultLabel: dl } = fromBackendEndpoint(endpoint);
       setResponses(r);
       setRules(ru);
       setDefaultLabel(dl);
@@ -224,8 +261,11 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
 
   const addRule = () => {
     setRules([...rules, {
-      conditions: [{ source: 'body', field: '', operator: 'eq', value: '' }],
-      responseLabel: responses[0]?.label || ''
+      id:            crypto.randomUUID().slice(0, 8),
+      name:          'New Rule',
+      active:        false,
+      conditions:    [{ source: 'body', field: '', operator: 'eq', value: '' }],
+      responseLabel: responses[0]?.label || '',
     }]);
   };
 
@@ -233,6 +273,10 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
     const next = [...rules];
     next[i] = updated;
     setRules(next);
+  };
+
+  const activateRule = (i) => {
+    setRules(rules.map((r, idx) => ({ ...r, active: idx === i ? !r.active : false })));
   };
 
   const removeRule = (i) => setRules(rules.filter((_, idx) => idx !== i));
@@ -272,11 +316,11 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
       }
     }
 
-    const backendResponses = toBackendFormat(parsedResponses, rules, defaultLabel);
+    const payload = toPayload({ method, path, description, collectionId, responses: parsedResponses, rules, defaultLabel });
 
     setSaving(true);
     try {
-      await onSave({ method, path, description, responses: backendResponses });
+      await onSave(payload);
       setMessage({ type: 'success', text: isNew ? 'Endpoint created!' : 'Endpoint saved!' });
       setTimeout(() => setMessage(null), 3000);
     } catch (err) {
@@ -356,12 +400,31 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
             placeholder="Brief description of this endpoint" />
         </div>
 
+        {/* ── Collection ── */}
+        {collections.length > 0 && (
+          <div>
+            <label className="text-xs font-medium text-text-secondary mb-1 block">Collection</label>
+            <select
+              value={collectionId || ''}
+              onChange={e => setCollectionId(e.target.value || null)}
+              className="w-full px-3 py-2 rounded-lg bg-surface-primary border border-border-default
+                focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50
+                text-sm text-text-primary cursor-pointer transition-colors"
+            >
+              <option value="">— Uncollected —</option>
+              {collections.map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* ── Mock URL ── */}
         {path && (
           <div className="flex items-center gap-2 p-2.5 rounded-lg bg-surface-primary border border-border-subtle">
             <ExternalLink size={12} className="text-text-muted flex-shrink-0" />
             <code className="text-xs text-text-secondary truncate">{mockUrl}</code>
-            <button onClick={() => navigator.clipboard.writeText(mockUrl)}
+            <button onClick={() => copyToClipboard(mockUrl)}
               className="ml-auto p-1 rounded text-text-muted hover:text-accent transition-colors cursor-pointer flex-shrink-0"
               title="Copy URL">
               <Copy size={12} />
@@ -398,12 +461,12 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
             <div className="space-y-3">
               {rules.map((rule, i) => (
                 <RuleCard
-                  key={i}
+                  key={rule.id || i}
                   rule={rule}
-                  index={i}
                   responses={responses}
                   onChange={(updated) => updateRule(i, updated)}
                   onRemove={() => removeRule(i)}
+                  onActivate={() => activateRule(i)}
                 />
               ))}
             </div>
@@ -463,7 +526,6 @@ export default function EndpointEditor({ endpoint, onSave, onDelete, isNew }) {
                   onChange={(updated) => updateResponse(idx, updated)}
                   onRemove={() => removeResponse(idx)}
                   canRemove={responses.length > 1}
-                  isDefault={resp.label === defaultLabel}
                 />
               ))}
             </div>

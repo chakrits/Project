@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, Star, StarOff } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import StatusBadge from '../common/StatusBadge';
 import JsonEditor from './JsonEditor';
 
@@ -36,17 +36,6 @@ export default function ResponseEditor({ response, index, onChange, onRemove, ca
         </button>
 
         <div className="flex items-center gap-1">
-          <button
-            onClick={() => updateField('isDefault', !response.isDefault)}
-            className={`p-1.5 rounded-md transition-all cursor-pointer ${
-              response.isDefault
-                ? 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20'
-                : 'text-text-muted hover:text-text-secondary hover:bg-surface-hover'
-            }`}
-            title={response.isDefault ? 'Default response' : 'Set as default'}
-          >
-            {response.isDefault ? <Star size={14} fill="currentColor" /> : <StarOff size={14} />}
-          </button>
           {canRemove && (
             <button
               onClick={onRemove}
@@ -57,6 +46,7 @@ export default function ResponseEditor({ response, index, onChange, onRemove, ca
             </button>
           )}
         </div>
+
       </div>
 
       {/* Expanded content */}

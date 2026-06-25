@@ -13,6 +13,7 @@ const postmanParser = require('../engine/postmanParser');
 
 const router = express.Router();
 const ENDPOINTS_PATH = path.join(__dirname, '..', 'db', 'endpoints.json');
+const COLLECTIONS_PATH = process.env.COLLECTIONS_PATH || path.join(__dirname, '..', 'db', 'collections.json');
 
 // Parse JSON bodies
 router.use(express.json({ limit: '10mb' }));
@@ -23,7 +24,7 @@ router.use(express.json({ limit: '10mb' }));
 
 function readEndpoints() {
   try {
-    const data = fs.readFileSync(ENDPOINTS_PATH, 'utf-8');
+    const data = fs.readFileSync(process.env.ENDPOINTS_PATH || ENDPOINTS_PATH, 'utf-8');
     return JSON.parse(data);
   } catch {
     return [];
@@ -31,8 +32,119 @@ function readEndpoints() {
 }
 
 function writeEndpoints(endpoints) {
-  fs.writeFileSync(ENDPOINTS_PATH, JSON.stringify(endpoints, null, 2), 'utf-8');
+  fs.writeFileSync(process.env.ENDPOINTS_PATH || ENDPOINTS_PATH, JSON.stringify(endpoints, null, 2), 'utf-8');
 }
+
+// ─────────────────────────────────────────────
+// Migration: old format (conditions on responses) → new format (rules array)
+// Applied on-read so existing data works without a one-time migration script.
+// ─────────────────────────────────────────────
+
+function migrateEndpoint(ep) {
+  if (ep.rules !== undefined) return ep; // already new format
+  const rules = [];
+  const responses = (ep.responses || []).map(r => {
+    if (r.conditions && r.conditions.length > 0) {
+      rules.push({
+        id: uuidv4().slice(0, 8),
+        name: `Rule for ${r.label}`,
+        active: rules.length === 0,
+        responseLabel: r.label,
+        conditions: r.conditions,
+      });
+    }
+    // eslint-disable-next-line no-unused-vars
+    const { conditions, isDefault, ...rest } = r;
+    return rest;
+  });
+  const defaultResp = (ep.responses || []).find(r => r.isDefault) || (ep.responses || [])[0];
+  return {
+    ...ep,
+    responses,
+    rules,
+    defaultResponseLabel: defaultResp?.label || responses[0]?.label || '',
+  };
+}
+
+function readCollections() {
+  try {
+    const data = fs.readFileSync(COLLECTIONS_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+}
+
+function writeCollections(collections) {
+  fs.writeFileSync(COLLECTIONS_PATH, JSON.stringify(collections, null, 2), 'utf-8');
+}
+
+// ─────────────────────────────────────────────
+// Collection CRUD
+// ─────────────────────────────────────────────
+
+router.get('/collections', (req, res) => {
+  res.json(readCollections());
+});
+
+router.get('/collections/:id', (req, res) => {
+  const collection = readCollections().find(c => c.id === req.params.id);
+  if (!collection) return res.status(404).json({ error: 'Collection not found' });
+  res.json(collection);
+});
+
+router.post('/collections', (req, res) => {
+  const { name, description, color } = req.body;
+  if (!name) return res.status(400).json({ error: 'name is required' });
+
+  const collections = readCollections();
+  const newCollection = {
+    id: uuidv4().slice(0, 8),
+    name,
+    description: description || '',
+    color: color || '#6366f1',
+    createdAt: new Date().toISOString(),
+  };
+  collections.push(newCollection);
+  writeCollections(collections);
+  res.status(201).json(newCollection);
+});
+
+router.put('/collections/:id', (req, res) => {
+  const collections = readCollections();
+  const index = collections.findIndex(c => c.id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: 'Collection not found' });
+
+  const { name, description, color } = req.body;
+  if (name !== undefined) collections[index].name = name;
+  if (description !== undefined) collections[index].description = description;
+  if (color !== undefined) collections[index].color = color;
+
+  writeCollections(collections);
+  res.json(collections[index]);
+});
+
+router.delete('/collections/:id', (req, res) => {
+  const collections = readCollections();
+  const index = collections.findIndex(c => c.id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: 'Collection not found' });
+
+  collections.splice(index, 1);
+  writeCollections(collections);
+
+  // Null out collectionId on all associated endpoints
+  const endpoints = readEndpoints();
+  let affected = 0;
+  for (const ep of endpoints) {
+    if (ep.collectionId === req.params.id) {
+      ep.collectionId = null;
+      affected++;
+    }
+  }
+  if (affected > 0) writeEndpoints(endpoints);
+
+  res.json({ message: 'Collection deleted', affected });
+});
 
 // ─────────────────────────────────────────────
 // Endpoint CRUD
@@ -43,7 +155,11 @@ function writeEndpoints(endpoints) {
  * List all endpoints
  */
 router.get('/endpoints', (req, res) => {
-  const endpoints = readEndpoints();
+  let endpoints = readEndpoints().map(migrateEndpoint);
+  if (req.query.collectionId !== undefined) {
+    const filterVal = req.query.collectionId === 'null' ? null : req.query.collectionId;
+    endpoints = endpoints.filter(ep => (ep.collectionId || null) === filterVal);
+  }
   res.json(endpoints);
 });
 
@@ -54,12 +170,12 @@ router.get('/endpoints', (req, res) => {
 router.get('/endpoints/:id', (req, res) => {
   const endpoints = readEndpoints();
   const endpoint = endpoints.find(e => e.id === req.params.id);
-  
+
   if (!endpoint) {
     return res.status(404).json({ error: 'Endpoint not found' });
   }
 
-  res.json(endpoint);
+  res.json(migrateEndpoint(endpoint));
 });
 
 /**
@@ -68,7 +184,7 @@ router.get('/endpoints/:id', (req, res) => {
  */
 router.post('/endpoints', (req, res) => {
   const endpoints = readEndpoints();
-  const { method, path: endpointPath, description, responses } = req.body;
+  const { method, path: endpointPath, description, responses, collectionId, rules, defaultResponseLabel } = req.body;
 
   // Validation
   if (!method || !endpointPath) {
@@ -79,26 +195,47 @@ router.post('/endpoints', (req, res) => {
     return res.status(400).json({ error: 'At least one response is required' });
   }
 
+  if (collectionId != null) {
+    const exists = readCollections().some(c => c.id === collectionId);
+    if (!exists) return res.status(400).json({ error: 'Collection not found' });
+  }
+
+  const cleanResponses = responses.map(r => ({
+    label:  r.label || 'Default',
+    status: r.status || 200,
+    delay:  r.delay || 0,
+    body:   r.body || {},
+  }));
+
+  const responseLabels = new Set(cleanResponses.map(r => r.label));
+  const cleanRules = Array.isArray(rules) ? rules.map(r => ({
+    id:            r.id || uuidv4().slice(0, 8),
+    name:          r.name || 'Unnamed Rule',
+    active:        r.active === true,
+    responseLabel: r.responseLabel || '',
+    conditions:    Array.isArray(r.conditions) ? r.conditions : [],
+  })).filter(r => responseLabels.has(r.responseLabel)) : [];
+
+  // Ensure only one rule is active
+  let foundActive = false;
+  for (const r of cleanRules) {
+    if (r.active) { if (foundActive) r.active = false; else foundActive = true; }
+  }
+
+  const resolvedDefault = defaultResponseLabel && responseLabels.has(defaultResponseLabel)
+    ? defaultResponseLabel
+    : cleanResponses[0]?.label || '';
+
   const newEndpoint = {
-    id: uuidv4().slice(0, 8), // Short ID for readability
+    id: uuidv4().slice(0, 8),
     method: method.toUpperCase(),
     path: endpointPath,
     description: description || '',
-    responses: responses.map(r => ({
-      label:      r.label || 'Default',
-      status:     r.status || 200,
-      delay:      r.delay || 0,
-      body:       r.body || {},
-      isDefault:  r.isDefault || false,
-      conditions: Array.isArray(r.conditions) ? r.conditions : [],
-    }))
+    collectionId: collectionId || null,
+    defaultResponseLabel: resolvedDefault,
+    responses: cleanResponses,
+    rules: cleanRules,
   };
-
-  // Ensure at least one default response
-  const hasDefault = newEndpoint.responses.some(r => r.isDefault);
-  if (!hasDefault) {
-    newEndpoint.responses[0].isDefault = true;
-  }
 
   endpoints.push(newEndpoint);
   writeEndpoints(endpoints);
@@ -118,28 +255,49 @@ router.put('/endpoints/:id', (req, res) => {
     return res.status(404).json({ error: 'Endpoint not found' });
   }
 
-  const { method, path: endpointPath, description, responses } = req.body;
+  const { method, path: endpointPath, description, responses, collectionId, rules, defaultResponseLabel } = req.body;
 
-  // Merge updates
+  if (collectionId !== undefined && collectionId !== null) {
+    const exists = readCollections().some(c => c.id === collectionId);
+    if (!exists) return res.status(400).json({ error: 'Collection not found' });
+  }
+
   if (method) endpoints[index].method = method.toUpperCase();
   if (endpointPath) endpoints[index].path = endpointPath;
   if (description !== undefined) endpoints[index].description = description;
-  
+  if (collectionId !== undefined) endpoints[index].collectionId = collectionId;
+
   if (Array.isArray(responses)) {
-    endpoints[index].responses = responses.map(r => ({
-      label:      r.label || 'Default',
-      status:     r.status || 200,
-      delay:      r.delay || 0,
-      body:       r.body || {},
-      isDefault:  r.isDefault || false,
-      conditions: Array.isArray(r.conditions) ? r.conditions : [],
+    const cleanResponses = responses.map(r => ({
+      label:  r.label || 'Default',
+      status: r.status || 200,
+      delay:  r.delay || 0,
+      body:   r.body || {},
     }));
 
-    // Ensure at least one default
-    const hasDefault = endpoints[index].responses.some(r => r.isDefault);
-    if (!hasDefault && endpoints[index].responses.length > 0) {
-      endpoints[index].responses[0].isDefault = true;
+    const responseLabels = new Set(cleanResponses.map(r => r.label));
+    const cleanRules = Array.isArray(rules) ? rules.map(r => ({
+      id:            r.id || uuidv4().slice(0, 8),
+      name:          r.name || 'Unnamed Rule',
+      active:        r.active === true,
+      responseLabel: r.responseLabel || '',
+      conditions:    Array.isArray(r.conditions) ? r.conditions : [],
+    })).filter(r => responseLabels.has(r.responseLabel)) : [];
+
+    let foundActive = false;
+    for (const r of cleanRules) {
+      if (r.active) { if (foundActive) r.active = false; else foundActive = true; }
     }
+
+    const resolvedDefault = defaultResponseLabel && responseLabels.has(defaultResponseLabel)
+      ? defaultResponseLabel
+      : cleanResponses[0]?.label || '';
+
+    endpoints[index].defaultResponseLabel = resolvedDefault;
+    endpoints[index].responses = cleanResponses;
+    endpoints[index].rules = cleanRules;
+    // Remove legacy fields if present
+    delete endpoints[index].isDefault;
   }
 
   writeEndpoints(endpoints);
@@ -249,38 +407,77 @@ router.post('/import/preview', (req, res) => {
  */
 router.post('/import', (req, res) => {
   try {
-    const { content, format: hintFormat, strategy } = req.body;
+    const { content, format: hintFormat, strategy, collectionId } = req.body;
 
     if (!content) {
       return res.status(400).json({ error: 'content is required' });
     }
 
-    const format = detectFormat(content, hintFormat || 'auto');
-
-    if (format === 'unknown') {
-      return res.status(400).json({ 
-        error: 'Unable to detect format. Please provide a valid OpenAPI/Swagger spec or Postman Collection.' 
-      });
+    // Validate collectionId if provided
+    if (collectionId != null) {
+      const exists = readCollections().some(c => c.id === collectionId);
+      if (!exists) return res.status(400).json({ error: 'Collection not found' });
     }
 
-    const parser = format === 'openapi' ? openApiParser : postmanParser;
-    const { endpoints: parsed, meta } = parser.parse(content);
+    // Detect if this is the combined export format { version, collections, endpoints }
+    let parsedContent;
+    try { parsedContent = JSON.parse(content); } catch { parsedContent = null; }
 
-    // Assign IDs to parsed endpoints
-    const newEndpoints = parsed.map(ep => ({
-      id: uuidv4().slice(0, 8),
-      ...ep
-    }));
+    const isCombinedFormat = parsedContent && parsedContent.version === 1
+      && Array.isArray(parsedContent.collections)
+      && Array.isArray(parsedContent.endpoints);
+
+    let newEndpoints;
+    let importedCollections = 0;
+    let meta = { format: 'mock-server-export', title: 'Mock Server Export' };
+
+    if (isCombinedFormat) {
+      // Restore collections from combined export
+      const existingCollections = readCollections();
+      const collectionIdMap = {}; // old id → resolved id
+
+      for (const col of parsedContent.collections) {
+        const duplicate = existingCollections.find(c => c.name === col.name);
+        if (duplicate) {
+          collectionIdMap[col.id] = duplicate.id;
+        } else {
+          const newCol = { ...col, id: uuidv4().slice(0, 8) };
+          collectionIdMap[col.id] = newCol.id;
+          existingCollections.push(newCol);
+          importedCollections++;
+        }
+      }
+      writeCollections(existingCollections);
+
+      newEndpoints = parsedContent.endpoints.map(ep => ({
+        ...ep,
+        id: uuidv4().slice(0, 8),
+        collectionId: ep.collectionId ? (collectionIdMap[ep.collectionId] || null) : null,
+      }));
+    } else {
+      const format = detectFormat(content, hintFormat || 'auto');
+      if (format === 'unknown') {
+        return res.status(400).json({
+          error: 'Unable to detect format. Please provide a valid OpenAPI/Swagger spec or Postman Collection.'
+        });
+      }
+      const parser = format === 'openapi' ? openApiParser : postmanParser;
+      const { endpoints: parsed, meta: m } = parser.parse(content);
+      meta = m;
+      newEndpoints = parsed.map(ep => ({
+        id: uuidv4().slice(0, 8),
+        ...ep,
+        collectionId: collectionId || null,
+      }));
+    }
 
     let imported = 0;
     let skipped = 0;
 
     if (strategy === 'replace') {
-      // Replace all existing endpoints
       writeEndpoints(newEndpoints);
       imported = newEndpoints.length;
     } else {
-      // Merge: add new, skip duplicates (by method+path)
       const existing = readEndpoints();
       const existingKeys = new Set(existing.map(e => `${e.method}::${e.path}`));
 
@@ -299,11 +496,12 @@ router.post('/import', (req, res) => {
     }
 
     res.json({
-      message: `Import complete`,
+      message: 'Import complete',
       format: meta.format,
       title: meta.title,
       imported,
       skipped,
+      importedCollections,
       total: readEndpoints().length
     });
   } catch (err) {
@@ -316,10 +514,11 @@ router.post('/import', (req, res) => {
  * Download current endpoints as JSON.
  */
 router.get('/export', (req, res) => {
-  const endpoints = readEndpoints();
+  const endpoints = readEndpoints().map(migrateEndpoint);
+  const collections = readCollections();
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Disposition', 'attachment; filename="mock-endpoints.json"');
-  res.json(endpoints);
+  res.setHeader('Content-Disposition', 'attachment; filename="mock-server-export.json"');
+  res.json({ version: 1, collections, endpoints });
 });
 
 module.exports = router;

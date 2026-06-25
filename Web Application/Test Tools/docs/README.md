@@ -31,8 +31,12 @@ Built with modern web technologies, this platform offers a secure, user-friendly
 - **Playwright E2E Tests** - Built-in configuration for Playwright End-to-End UI automation testing
 - **MCP Integration** - Read and run Playwright tests directly with Model Context Protocol (MCP) using batch scripts
 
-### 📝 **E-Forms**
-- **Auto Login Form** - Automated form filling and login testing utilities
+### ✍️ **eSignature**
+- **E-Forms** — Claim Form A Patient: automated form filling and testing
+- **eDocSign** — DocList (Web Portal): generate encrypted auto-login URLs for the eDocSign document list
+
+### 🔑 **BURT**
+- **Auto Login BURT** - Generate encrypted auto-login tokens for the BURT system
 
 ### 🛡️ **Security & Privacy**
 - **Client-side Processing** - All data processing happens locally in your browser
@@ -49,7 +53,10 @@ Built with modern web technologies, this platform offers a secure, user-friendly
 | **Base64 to PDF** | Decode Base64 strings to PDF files | Instant preview, download, validation, multiple input formats |
 | **PDF to Base64** | Encode PDF files to Base64 strings | Drag & drop upload, multiple output formats, progress tracking |
 | **Mock Server** | Local API mocking dashboard | Dynamic path matching, Prism-style responses, traffic inspector, cURL export |
-| **Auto Login** | Automated form testing | Form auto-fill, login testing, validation |
+| **Mini Postman** | HTTP API client | Send requests with custom headers/body, inspect responses |
+| **Claim Form A Patient** | eSignature / E-Forms | Auto-fill form testing for patient claim forms |
+| **DocList (Web Portal)** | eSignature / eDocSign | Generate encrypted auto-login URLs for the eDocSign document list |
+| **Auto Login BURT** | BURT | Generate encrypted tokens for BURT system auto-login |
 
 ## 🎨 **Dashboard Features**
 
@@ -71,8 +78,8 @@ Built with modern web technologies, this platform offers a secure, user-friendly
 ## 🔧 **Technical Stack**
 
 - **Backend:** Node.js + Express.js
-- **Framework:** Bootstrap 5 (main app), React 19 + Vite (Mock Server)
-- **CSS:** Custom CSS (main app), Tailwind CSS v4 (Mock Server)
+- **Framework:** Bootstrap 5 (main app content), React 19 + Vite (Mock Server dashboard)
+- **CSS:** Tailwind CSS (main app layout/sidebar), Bootstrap 5 + Custom CSS (tool page content), Tailwind CSS v4 (Mock Server)
 - **JavaScript:** jQuery + Vanilla JS (main app)
 - **Icons:** Font Awesome 5, Simple Line Icons, Lucide React
 - **Charts:** Chart.js, Sparkline
@@ -87,40 +94,44 @@ Built with modern web technologies, this platform offers a secure, user-friendly
 
 ```
 test-center/
-├── server.js                # Express.js server (Clean URLs + Mock Server)
-├── package.json             # Node.js dependencies
-├── index.html               # Main dashboard
-├── tools/
-│   ├── aes-encryption.html  # AES encryption tool
-│   ├── json-converter.html  # JSON conversion tool
-│   ├── base64-pdf.html      # Base64 to PDF converter
-│   ├── pdf-base64.html      # PDF to Base64 converter
-│   └── mini_postman.html    # Mini Postman API tester
-├── mock-server/             # 🆕 Mock Server feature
-│   ├── index.js             # Module entry point
-│   ├── engine/
-│   │   ├── pathMatcher.js   # Dynamic path matching (path-to-regexp)
-│   │   ├── responseSelector.js  # Prism-style response selection
-│   │   └── logger.js        # Transaction logging
-│   ├── routes/
-│   │   ├── mockRouter.js    # Catch-all /mock-api/* router
-│   │   └── managementApi.js # CRUD API for dashboard
-│   ├── db/
-│   │   ├── endpoints.json   # Mock endpoint definitions
-│   │   └── logs.json        # Traffic transaction logs
-│   └── frontend/            # React/Vite dashboard app
-│       ├── src/             # React components
-│       └── dist/            # Production build (served by Express)
-├── forms/
-│   └── auto-login.html      # Auto login form
-├── assets/
-│   ├── css/                 # Stylesheets
-│   ├── js/                  # JavaScript files
-│   └── img/                 # Images and icons
-├── components/              # Shared layout components
-├── tests/                   # Playwright E2E test suites
-├── playwright.config.js     # Playwright configuration
-└── run-test-ui.bat          # Script to run Playwright UI
+├── server.js                    # Express.js server (Clean URLs + Mock Server)
+├── package.json                 # Node.js dependencies
+├── playwright.config.js         # Playwright configuration
+├── run-test-ui.bat              # Script to run Playwright UI
+├── frontend/                    # Main frontend application
+│   ├── index.html               # Dashboard
+│   ├── tools/
+│   │   ├── aes-encryption.html  # AES encryption/decryption
+│   │   ├── json-converter.html  # JSON conversion & validation
+│   │   ├── base64-pdf.html      # Base64 to PDF converter
+│   │   ├── pdf-base64.html      # PDF to Base64 converter
+│   │   ├── mini_postman.html    # Mini Postman HTTP client
+│   │   └── url-generator.html  # DocList / eDocSign URL generator
+│   ├── forms/
+│   │   ├── auto-login.html      # Claim Form A Patient (eSignature)
+│   │   └── auto-login-burt.html # Auto Login BURT
+│   ├── assets/
+│   │   ├── css/                 # Stylesheets
+│   │   ├── js/                  # JavaScript files
+│   │   └── img/                 # Images and icons
+│   └── components/              # Shared layout components
+├── backend/
+│   └── mock-server/             # Mock Server feature
+│       ├── index.js             # Module entry point
+│       ├── engine/
+│       │   ├── pathMatcher.js   # Dynamic path matching (path-to-regexp)
+│       │   ├── responseSelector.js  # Prism-style response selection
+│       │   └── logger.js        # Transaction logging
+│       ├── routes/
+│       │   ├── mockRouter.js    # Catch-all /mock-api/* router
+│       │   └── managementApi.js # CRUD API for dashboard
+│       ├── db/
+│       │   ├── endpoints.json   # Mock endpoint definitions
+│       │   └── logs.json        # Traffic transaction logs
+│       └── frontend/            # React/Vite dashboard app
+│           ├── src/             # React components
+│           └── dist/            # Production build (served by Express)
+└── tests/                       # Playwright E2E test suites
 ```
 
 ## 🚀 **Getting Started**
@@ -139,29 +150,29 @@ npm install
 
 # 3. Start the server
 npm start
-# → http://localhost:3000
+# → http://localhost:5000
 ```
 
-Open your browser at **http://localhost:3000** and navigate to any tool from the sidebar.
+Open your browser at **http://localhost:5000** and navigate to any tool from the sidebar.
 
 ### **Mock Server — Quick Start**
 
-The Mock Server dashboard is accessible at **http://localhost:3000/tools/mock-server**
+The Mock Server dashboard is accessible at **http://localhost:5000/tools/mock-server**
 
 **Define a mock endpoint** via the dashboard UI, then send requests:
 
 ```bash
 # Default response
-curl http://localhost:3000/mock-api/api/users/123
+curl http://localhost:5000/mock-api/api/users/123
 
 # Force specific status code
-curl http://localhost:3000/mock-api/api/users/123?__code=404
+curl http://localhost:5000/mock-api/api/users/123?__code=404
 
 # Force specific example by label
-curl http://localhost:3000/mock-api/api/users/123?__example=not_found
+curl http://localhost:5000/mock-api/api/users/123?__example=not_found
 
 # Use Prefer header
-curl -H "Prefer: code=404" http://localhost:3000/mock-api/api/users/123
+curl -H "Prefer: code=404" http://localhost:5000/mock-api/api/users/123
 ```
 
 **Response selection priority (highest → lowest):**
@@ -176,26 +187,26 @@ curl -H "Prefer: code=404" http://localhost:3000/mock-api/api/users/123
 **Condition-based routing examples:**
 ```bash
 # Condition: IF body.role == "admin" → return AdminResponse
-curl -X POST http://localhost:3000/mock-api/api/login \
+curl -X POST http://localhost:5000/mock-api/api/login \
   -H "Content-Type: application/json" \
   -d '{"role":"admin"}'
 
 # Condition: IF header.authorization exists → return 200, else 401
-curl http://localhost:3000/mock-api/api/secure \
+curl http://localhost:5000/mock-api/api/secure \
   -H "Authorization: Bearer token123"
 
 # Condition: IF params.id == "1" → return SpecialItem
-curl http://localhost:3000/mock-api/api/items/1
+curl http://localhost:5000/mock-api/api/items/1
 ```
 
 **Template interpolation examples:**
 ```bash
 # {{query.name}} is replaced at request time
-curl "http://localhost:3000/mock-api/api/greet?name=chakrit"
+curl "http://localhost:5000/mock-api/api/greet?name=chakrit"
 # → {"message": "Hello chakrit"}
 
 # {{body.username}} is replaced from request body
-curl -X POST http://localhost:3000/mock-api/api/profile \
+curl -X POST http://localhost:5000/mock-api/api/profile \
   -H "Content-Type: application/json" \
   -d '{"username":"john"}'
 # → {"welcome": "Hi john"}

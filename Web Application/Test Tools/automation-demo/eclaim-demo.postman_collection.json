@@ -1,0 +1,209 @@
+{
+  "info": {
+    "name": "Test Tools - Automation Demo",
+    "description": "Newman API automation demo running against the built-in Mock Server (/mock-api/demo/*). Covers positive, negative, schema, latency, and chained-token scenarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/mock-api" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('returns a token', () => pm.expect(json.token).to.be.a('string').and.to.include('mock-jwt'));",
+                  "pm.test('echoes username (template interpolation)', () => pm.expect(json.user.username).to.eql(pm.variables.get('username')));",
+                  "pm.test('responds under 500ms', () => pm.expect(pm.response.responseTime).to.be.below(500));",
+                  "pm.collectionVariables.set('authToken', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/demo/login", "host": ["{{baseUrl}}"], "path": ["demo", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"P@ssw0rd\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login - invalid credentials (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', () => pm.response.to.have.status(401));",
+                  "const json = pm.response.json();",
+                  "pm.test('error code is INVALID_CREDENTIALS', () => pm.expect(json.error).to.eql('INVALID_CREDENTIALS'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/demo/login", "host": ["{{baseUrl}}"], "path": ["demo", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"wrong-password\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get user - success (path param + schema)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('id matches path param', () => pm.expect(json.id).to.eql('42'));",
+                  "pm.test('schema: required fields present', () => {",
+                  "  pm.expect(json).to.have.all.keys('id', 'name', 'email', 'active');",
+                  "  pm.expect(json.active).to.be.a('boolean');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/demo/users/42", "host": ["{{baseUrl}}"], "path": ["demo", "users", "42"] }
+          }
+        },
+        {
+          "name": "Get user - not found (negative via __code)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 404', () => pm.response.to.have.status(404));",
+                  "pm.test('error is NOT_FOUND', () => pm.expect(pm.response.json().error).to.eql('NOT_FOUND'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/demo/users/42?__code=404",
+              "host": ["{{baseUrl}}"],
+              "path": ["demo", "users", "42"],
+              "query": [{ "key": "__code", "value": "404" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create order - success (uses auth token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('status is PENDING', () => pm.expect(json.status).to.eql('PENDING'));",
+                  "pm.test('amount echoed back', () => pm.expect(json.amount).to.eql('1500'));",
+                  "pm.collectionVariables.set('orderId', json.orderId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/demo/orders", "host": ["{{baseUrl}}"], "path": ["demo", "orders"] },
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 1500\n}" }
+          }
+        },
+        {
+          "name": "Create order - validation error (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 400', () => pm.response.to.have.status(400));",
+                  "const json = pm.response.json();",
+                  "pm.test('returns errors array', () => pm.expect(json.errors).to.be.an('array').that.is.not.empty);",
+                  "pm.test('first error is AMOUNT_REQUIRED', () => pm.expect(json.errors[0].code).to.eql('AMOUNT_REQUIRED'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/demo/orders?__code=400",
+              "host": ["{{baseUrl}}"],
+              "path": ["demo", "orders"],
+              "query": [{ "key": "__code", "value": "400" }]
+            },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Create order - latency SLA (performance)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                  "pm.test('SLA: responds within 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/demo/orders?__example=slow",
+              "host": ["{{baseUrl}}"],
+              "path": ["demo", "orders"],
+              "query": [{ "key": "__example", "value": "slow" }]
+            },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        }
+      ]
+    }
+  ]
+}

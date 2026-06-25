@@ -18,7 +18,7 @@ export function buildCurl(request) {
   }
 
   // URL — construct full URL with host placeholder
-  let url = `http://localhost:3000${request.url}`;
+  let url = `http://localhost:5000${request.url}`;
   parts.push(`'${url}'`);
 
   // Headers

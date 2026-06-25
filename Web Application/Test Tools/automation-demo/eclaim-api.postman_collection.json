@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "Test Tools - eClaim API",
+    "description": "Newman suite for the REAL eClaim mock endpoints (collection 'eClaim' in the Mock Server). Covers patient lookup, claim form retrieval with rule-based auth, admission form, claim submission, and reservation cancellation — positive and negative paths.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/mock-api" }
+  ],
+  "item": [
+    {
+      "name": "Patient",
+      "item": [
+        {
+          "name": "Get patient - success (schema + payor)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('returns hn + encounter', () => {",
+                  "  pm.expect(json.hn).to.eql('01-18-045111');",
+                  "  pm.expect(json.en).to.eql('O01-20-0000002');",
+                  "});",
+                  "pm.test('Thai patient name present', () => pm.expect(json.names[0].firstName).to.eql('ปิติ'));",
+                  "pm.test('payorOffices is a non-empty array', () => pm.expect(json.payorOffices).to.be.an('array').that.is.not.empty);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/v2/h-ims/registration/get-patient", "host": ["{{baseUrl}}"], "path": ["v2", "h-ims", "registration", "get-patient"] },
+            "body": { "mode": "raw", "raw": "{\n  \"hn\": \"01-18-045111\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Claim Form",
+      "item": [
+        {
+          "name": "Get claim form - no auth returns 401 (rule)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401 without Bearer token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/get-claimform", "host": ["{{baseUrl}}"], "path": ["get-claimform"] },
+            "body": { "mode": "raw", "raw": "{\n  \"hn\": \"01-18-045111\"\n}" }
+          }
+        },
+        {
+          "name": "Get claim form - with Bearer returns 200 (rule)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200 with Bearer token', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('returns claim form for hn', () => pm.expect(json.hn).to.eql('01-18-045111'));",
+                  "pm.test('physician details present', () => pm.expect(json.physician.fullName).to.eql('Dr. John Thomas'));",
+                  "pm.test('icd10 diagnosis present', () => pm.expect(json.icd10s).to.be.an('array').that.is.not.empty);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer demo-token-123" }
+            ],
+            "url": { "raw": "{{baseUrl}}/get-claimform", "host": ["{{baseUrl}}"], "path": ["get-claimform"] },
+            "body": { "mode": "raw", "raw": "{\n  \"hn\": \"01-18-045111\"\n}" }
+          }
+        },
+        {
+          "name": "Get admission form - success (OPD)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('formType is OPD', () => pm.expect(json.formType).to.eql('OPD'));",
+                  "pm.test('expectedDaysToStay is a number', () => pm.expect(json.expectedDaysToStay).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/get-admissionform", "host": ["{{baseUrl}}"], "path": ["get-admissionform"] },
+            "body": { "mode": "raw", "raw": "{\n  \"hn\": \"01-18-045111\"\n}" }
+          }
+        },
+        {
+          "name": "Submit claim_form_a - success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/ims-hms-api/ws/patient/claim_form_a", "host": ["{{baseUrl}}"], "path": ["ims-hms-api", "ws", "patient", "claim_form_a"] },
+            "body": { "mode": "raw", "raw": "{\n  \"hn\": \"01-18-045111\",\n  \"formType\": \"B\"\n}" }
+          }
+        },
+        {
+          "name": "Submit claim_form_a - validation 400 (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 400', () => pm.response.to.have.status(400));",
+                  "const json = pm.response.json();",
+                  "pm.test('error code is E1003', () => pm.expect(json.errors[0].code).to.eql('E1003'));",
+                  "pm.test('severityLevel is ERROR', () => pm.expect(json.errors[0].severityLevel).to.eql('ERROR'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/ims-hms-api/ws/patient/claim_form_a?__code=400",
+              "host": ["{{baseUrl}}"],
+              "path": ["ims-hms-api", "ws", "patient", "claim_form_a"],
+              "query": [{ "key": "__code", "value": "400" }]
+            },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservation",
+      "item": [
+        {
+          "name": "Cancel reservation - success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/ims-hms-api/ws/patient/cancel_reserve_request", "host": ["{{baseUrl}}"], "path": ["ims-hms-api", "ws", "patient", "cancel_reserve_request"] },
+            "body": { "mode": "raw", "raw": "{\n  \"reservationNumber\": \"RES-0001\"\n}" }
+          }
+        },
+        {
+          "name": "Cancel reservation - not exists 400 (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 400', () => pm.response.to.have.status(400));",
+                  "const json = pm.response.json();",
+                  "pm.test('error code is RESERVATION_NUMBER_NOT_EXISTS', () => pm.expect(json.errors[0].code).to.eql('RESERVATION_NUMBER_NOT_EXISTS'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/ims-hms-api/ws/patient/cancel_reserve_request?__code=400",
+              "host": ["{{baseUrl}}"],
+              "path": ["ims-hms-api", "ws", "patient", "cancel_reserve_request"],
+              "query": [{ "key": "__code", "value": "400" }]
+            },
+            "body": { "mode": "raw", "raw": "{\n  \"reservationNumber\": \"RES-9999\"\n}" }
+          }
+        }
+      ]
+    }
+  ]
+}

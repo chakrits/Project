@@ -2,6 +2,7 @@ import { X, Copy, Clock, Hash } from 'lucide-react';
 import MethodBadge from '../common/MethodBadge';
 import StatusBadge from '../common/StatusBadge';
 import { buildCurl } from '../../utils/curlBuilder';
+import { copyToClipboard as safeCopyToClipboard } from '../../utils/clipboard';
 
 /**
  * LogDetail — Side-by-side Request vs Response detail view for a single log entry
@@ -11,8 +12,9 @@ export default function LogDetail({ log, onClose }) {
 
   const { request, response, matchedEndpoint, traceId, timestamp } = log;
 
-  const copyToClipboard = (text, label) => {
-    navigator.clipboard.writeText(text).then(() => {
+  const copyToClipboard = async (text, label) => {
+    const success = await safeCopyToClipboard(text);
+    if (success) {
       // Simple feedback — could use a toast system
       const el = document.getElementById('copy-feedback');
       if (el) {
@@ -20,7 +22,7 @@ export default function LogDetail({ log, onClose }) {
         el.classList.remove('opacity-0');
         setTimeout(() => el.classList.add('opacity-0'), 2000);
       }
-    });
+    }
   };
 
   const curlCommand = buildCurl(request);
