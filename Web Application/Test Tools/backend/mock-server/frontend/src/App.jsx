@@ -13,7 +13,11 @@ import {
   deleteEndpoint,
   fetchLogs,
   clearLogs,
-  exportEndpoints
+  exportEndpoints,
+  fetchCollections,
+  createCollection,
+  updateCollection,
+  deleteCollection,
 } from './utils/api';
 
 /**
@@ -24,6 +28,7 @@ export default function App() {
 
   // ─── Endpoint Manager State ─────────────────────────
   const [endpoints, setEndpoints] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [selectedEndpointId, setSelectedEndpointId] = useState(null);
   const [isNewEndpoint, setIsNewEndpoint] = useState(false);
   const [endpointLoading, setEndpointLoading] = useState(true);
@@ -49,9 +54,19 @@ export default function App() {
     }
   }, []);
 
+  const loadCollections = useCallback(async () => {
+    try {
+      const data = await fetchCollections();
+      setCollections(data);
+    } catch (err) {
+      console.error('Failed to load collections:', err);
+    }
+  }, []);
+
   useEffect(() => {
     loadEndpoints();
-  }, [loadEndpoints]);
+    loadCollections();
+  }, [loadEndpoints, loadCollections]);
 
   // ─── Load Logs ──────────────────────────────────────
   const loadLogs = useCallback(async () => {
@@ -138,6 +153,35 @@ export default function App() {
     });
   };
 
+  // ─── Collection Handlers ───────────────────────────
+  const handleCreateCollection = async (data) => {
+    const created = await createCollection(data);
+    setCollections(prev => [...prev, created]);
+    return created;
+  };
+
+  const handleUpdateCollection = async (id, data) => {
+    const updated = await updateCollection(id, data);
+    setCollections(prev => prev.map(c => c.id === id ? updated : c));
+  };
+
+  const handleDeleteCollection = (id) => {
+    const col = collections.find(c => c.id === id);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Collection',
+      message: `Delete "${col?.name}"? All endpoints in this collection will become uncollected.`,
+      confirmLabel: 'Delete',
+      variant: 'danger',
+      onConfirm: async () => {
+        await deleteCollection(id);
+        setCollections(prev => prev.filter(c => c.id !== id));
+        setEndpoints(prev => prev.map(e => e.collectionId === id ? { ...e, collectionId: null } : e));
+        closeConfirm();
+      }
+    });
+  };
+
   // ─── Derived ────────────────────────────────────────
   const selectedEndpoint = isNewEndpoint
     ? { method: 'GET', path: '', description: '', responses: [{ label: 'Success', status: 200, body: {}, isDefault: true }] }
@@ -162,11 +206,15 @@ export default function App() {
               ) : (
                 <EndpointList
                   endpoints={endpoints}
+                  collections={collections}
                   selectedId={selectedEndpointId}
                   onSelect={handleSelectEndpoint}
                   onAdd={handleAddEndpoint}
                   onImport={() => setShowImportModal(true)}
                   onExport={exportEndpoints}
+                  onCreateCollection={handleCreateCollection}
+                  onUpdateCollection={handleUpdateCollection}
+                  onDeleteCollection={handleDeleteCollection}
                 />
               )}
             </aside>
@@ -177,6 +225,7 @@ export default function App() {
                 <EndpointEditor
                   key={isNewEndpoint ? '__new__' : selectedEndpointId}
                   endpoint={selectedEndpoint}
+                  collections={collections}
                   onSave={handleSaveEndpoint}
                   onDelete={handleDeleteEndpoint}
                   isNew={isNewEndpoint}
@@ -224,9 +273,11 @@ export default function App() {
       {/* Import Modal */}
       <ImportModal
         isOpen={showImportModal}
+        collections={collections}
         onClose={() => setShowImportModal(false)}
         onImportComplete={() => {
           loadEndpoints();
+          loadCollections();
           setShowImportModal(false);
         }}
       />

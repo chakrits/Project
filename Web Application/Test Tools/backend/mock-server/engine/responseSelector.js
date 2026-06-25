@@ -155,6 +155,17 @@ function interpolateParams(body, params) {
 /**
  * Select the appropriate response from an endpoint based on Prism-style priority.
  *
+ * New model (rules array):
+ *   0. Active rule whose conditions all match → return rule's responseLabel
+ *   1. Query param ?__code=XXX
+ *   2. Query param ?__example=label
+ *   3. Prefer: code=XXX header
+ *   4. Prefer: example=label header
+ *   5. defaultResponseLabel field
+ *   6. Fallback: first response
+ *
+ * Legacy model (conditions on responses) is supported for backward compat.
+ *
  * @param {object} endpoint - The matched endpoint definition
  * @param {object} query - Request query parameters
  * @param {object} headers - Request headers
@@ -169,14 +180,25 @@ function selectResponse(endpoint, query, headers, params, body) {
     return { status: 200, body: { message: 'No responses configured' }, label: 'empty' };
   }
 
+  const byLabel = label => responses.find(r => r.label === label);
   let selected = null;
 
-  // Priority 0: Conditions match — first response whose ALL conditions match wins
-  for (const r of responses) {
-    if (r.conditions && r.conditions.length > 0) {
-      if (evaluateConditions(r.conditions, query, body, headers, params)) {
-        selected = r;
-        break;
+  // Priority 0a: New model — active rule whose conditions all match
+  if (Array.isArray(endpoint.rules)) {
+    const activeRule = endpoint.rules.find(r => r.active);
+    if (activeRule && activeRule.conditions && activeRule.conditions.length > 0) {
+      if (evaluateConditions(activeRule.conditions, query, body, headers, params)) {
+        selected = byLabel(activeRule.responseLabel);
+      }
+    }
+  } else {
+    // Priority 0b: Legacy model — first response whose conditions all match
+    for (const r of responses) {
+      if (r.conditions && r.conditions.length > 0) {
+        if (evaluateConditions(r.conditions, query, body, headers, params)) {
+          selected = r;
+          break;
+        }
       }
     }
   }
@@ -189,7 +211,7 @@ function selectResponse(endpoint, query, headers, params, body) {
 
   // Priority 2: Query param ?__example=label
   if (!selected && query.__example) {
-    selected = responses.find(r => 
+    selected = responses.find(r =>
       r.label && r.label.toLowerCase() === query.__example.toLowerCase()
     );
   }
@@ -197,7 +219,7 @@ function selectResponse(endpoint, query, headers, params, body) {
   // Priority 3 & 4: Prefer header
   if (!selected) {
     const prefer = parsePreferHeader(headers['prefer'] || headers['Prefer']);
-    
+
     // Priority 3: Prefer: code=XXX
     if (prefer.code) {
       selected = responses.find(r => r.status === prefer.code);
@@ -205,15 +227,19 @@ function selectResponse(endpoint, query, headers, params, body) {
 
     // Priority 4: Prefer: example=label
     if (!selected && prefer.example) {
-      selected = responses.find(r => 
+      selected = responses.find(r =>
         r.label && r.label.toLowerCase() === prefer.example.toLowerCase()
       );
     }
   }
 
-  // Priority 5: Default response (isDefault === true)
+  // Priority 5: defaultResponseLabel (new model) or isDefault flag (legacy)
   if (!selected) {
-    selected = responses.find(r => r.isDefault === true);
+    if (endpoint.defaultResponseLabel) {
+      selected = byLabel(endpoint.defaultResponseLabel);
+    } else {
+      selected = responses.find(r => r.isDefault === true);
+    }
   }
 
   // Priority 6: Fallback to first response

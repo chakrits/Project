@@ -1,0 +1,16 @@
+[
+  {
+    "id": "6bbe0d0a",
+    "name": "eClaim",
+    "description": "",
+    "color": "#6366f1",
+    "createdAt": "2026-06-02T09:53:16.998Z"
+  },
+  {
+    "id": "demo0001",
+    "name": "Automation Demo",
+    "description": "Endpoints for Newman automation demo",
+    "color": "#22c55e",
+    "createdAt": "2026-06-21T11:55:30.422Z"
+  }
+]

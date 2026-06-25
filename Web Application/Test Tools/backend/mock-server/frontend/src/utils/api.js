@@ -53,6 +53,46 @@ export async function deleteEndpoint(id) {
   return res.json();
 }
 
+// ─── Collections CRUD ────────────────────────────
+
+export async function fetchCollections() {
+  const res = await fetch(`${BASE}/collections`);
+  if (!res.ok) throw new Error('Failed to fetch collections');
+  return res.json();
+}
+
+export async function createCollection(data) {
+  const res = await fetch(`${BASE}/collections`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Failed to create collection');
+  }
+  return res.json();
+}
+
+export async function updateCollection(id, data) {
+  const res = await fetch(`${BASE}/collections/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Failed to update collection');
+  }
+  return res.json();
+}
+
+export async function deleteCollection(id) {
+  const res = await fetch(`${BASE}/collections/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Failed to delete collection');
+  return res.json();
+}
+
 // ─── Logs ────────────────────────────────────────
 
 export async function fetchLogs() {
@@ -82,11 +122,11 @@ export async function importPreview(content, format = 'auto') {
   return res.json();
 }
 
-export async function importEndpoints(content, format = 'auto', strategy = 'merge') {
+export async function importEndpoints(content, format = 'auto', strategy = 'merge', collectionId = null) {
   const res = await fetch(`${BASE}/import`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content, format, strategy })
+    body: JSON.stringify({ content, format, strategy, collectionId })
   });
   if (!res.ok) {
     const err = await res.json();
@@ -102,7 +142,7 @@ export async function exportEndpoints() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'mock-endpoints.json';
+  a.download = 'mock-server-export.json';
   a.click();
   URL.revokeObjectURL(url);
 }

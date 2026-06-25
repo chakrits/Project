@@ -36,3 +36,12 @@ mcp.json
 
 # Claude Code internal project files
 .claude/
+
+# Newman demo HTML reports
+automation-demo/report/
+
+# Playwright E2E screenshots (generated during test runs)
+automation-demo/screenshots/
+
+# Config files for local development
+frontend/assets/config/*

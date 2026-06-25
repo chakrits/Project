@@ -38,60 +38,7 @@
     </div>
 
     <!-- Nav -->
-    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
-
-      <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium mb-1">
-        <i class="fas fa-home w-4 text-center text-xs"></i>
-        <span>Dashboard</span>
-      </a>
-      <a href="/tools/mock-server" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-server w-4 text-center text-xs"></i>
-        <span>Mock Server</span>
-      </a>
-
-      <div class="pt-4 pb-1 px-3">
-        <span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Tools</span>
-      </div>
-
-      <a href="/tools/aes-encryption" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-lock w-4 text-center text-xs"></i>
-        <span>AES Encryption</span>
-      </a>
-      <a href="/tools/json-converter" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-code w-4 text-center text-xs"></i>
-        <span>JSON Converter</span>
-      </a>
-      <a href="/tools/base64-pdf" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-file-pdf w-4 text-center text-xs"></i>
-        <span>Base64 &#8644; PDF</span>
-      </a>
-      <a href="/tools/pdf-base64" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-file-export w-4 text-center text-xs"></i>
-        <span>PDF &#8594; Base64</span>
-      </a>
-      <a href="/tools/mini_postman" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-paper-plane w-4 text-center text-xs"></i>
-        <span>Mini Postman</span>
-      </a>
-      <a href="/tools/url-generator" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-list w-4 text-center text-xs"></i>
-        <span>URL Generator</span>
-      </a>
-
-      <div class="pt-4 pb-1 px-3">
-        <span class="text-xs font-semibold text-gray-600 uppercase tracking-wider">E-Forms</span>
-      </div>
-
-      <a href="/forms/auto-login" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-file-alt w-4 text-center text-xs"></i>
-        <span>Claim Form Patient</span>
-      </a>
-      <a href="/forms/auto-login-burt" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-sm transition-colors">
-        <i class="fas fa-id-card w-4 text-center text-xs"></i>
-        <span>Auto Login BURT</span>
-      </a>
-
-    </nav>
+    <nav id="sidebar-nav" class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5"></nav>
 
     <!-- Sidebar version badge -->
     <div class="px-5 py-3 border-t border-gray-700">
@@ -142,7 +89,7 @@
             </span>
             <span class="inline-flex items-center gap-1.5 bg-blue-950 text-blue-400 border border-blue-900 text-xs px-3 py-1.5 rounded-full font-medium">
               <i class="fas fa-bolt text-xs"></i>
-              6 Tools Available
+              5 Tools Available
             </span>
           </div>
         </div>
@@ -224,38 +171,81 @@
             </a>
           </div>
 
-          <!-- URL Generator -->
-          <div data-testid="tool-card" class="bg-gray-800 border border-gray-700 rounded-xl p-5 flex flex-col hover:border-yellow-500 hover:shadow-lg transition-all duration-200 group cursor-default">
-            <div class="flex items-start justify-between mb-4">
-              <div class="w-10 h-10 rounded-lg bg-yellow-950 border border-yellow-900 flex items-center justify-center">
-                <i class="fas fa-list text-yellow-400"></i>
-              </div>
-            </div>
-            <h3 class="font-semibold text-white text-sm mb-1">URL Generator</h3>
-            <p class="text-gray-500 text-xs mb-4 flex-1">Generate document lists and URL collections for structured testing workflows</p>
-            <a href="/tools/url-generator" class="inline-flex items-center gap-1.5 text-xs text-yellow-400 hover:text-yellow-300 font-medium group-hover:gap-2 transition-all">
-              Open <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-
         </div>
       </section>
 
-      <!-- E-Forms -->
+      <!-- eSignature -->
       <section>
-        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">E-Forms</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">eSignature</h2>
+        <div class="text-xs text-gray-600 uppercase tracking-wider mb-2 pl-1">E-Forms</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
 
-          <a href="/forms/auto-login" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
+          <a href="/forms/claim-form-a-patient" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
             <div class="w-9 h-9 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
               <i class="fas fa-file-alt text-gray-400 text-sm"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="text-sm font-medium text-white">Claim Form Patient</div>
+              <div class="text-sm font-medium text-white">Claim Form A Patient</div>
               <div class="text-xs text-gray-500">Auto-fill form testing</div>
             </div>
             <i class="fas fa-chevron-right text-gray-600 group-hover:text-gray-400 text-xs transition-colors"></i>
           </a>
+
+          <a href="/forms/fast-track" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
+            <div class="w-9 h-9 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-bolt text-gray-400 text-sm"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium text-white">Fast Track</div>
+              <div class="text-xs text-gray-500">Fast track claim form</div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-600 group-hover:text-gray-400 text-xs transition-colors"></i>
+          </a>
+
+          <a href="/forms/medical-expense-opd" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
+            <div class="w-9 h-9 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-file-invoice-dollar text-gray-400 text-sm"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium text-white">Medical Expense OPD</div>
+              <div class="text-xs text-gray-500">Outpatient medical expense</div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-600 group-hover:text-gray-400 text-xs transition-colors"></i>
+          </a>
+
+          <a href="/forms/medical-expense-ipd" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
+            <div class="w-9 h-9 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-file-invoice-dollar text-gray-400 text-sm"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium text-white">Medical Expense IPD</div>
+              <div class="text-xs text-gray-500">Inpatient medical expense</div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-600 group-hover:text-gray-400 text-xs transition-colors"></i>
+          </a>
+
+        </div>
+        <div class="text-xs text-gray-600 uppercase tracking-wider mb-2 pl-1">eDocSign</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+
+          <a href="/tools/url-generator" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
+            <div class="w-9 h-9 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-list text-gray-400 text-sm"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium text-white">DocList (Web Portal)</div>
+              <div class="text-xs text-gray-500">Generate eDocSign document list URLs</div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-600 group-hover:text-gray-400 text-xs transition-colors"></i>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- BURT -->
+      <section>
+        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">BURT</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
           <a href="/forms/auto-login-burt" class="flex items-center gap-3 bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-xl p-4 transition-colors group">
             <div class="w-9 h-9 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
@@ -286,15 +276,10 @@
   </div><!-- /main wrapper -->
 </div><!-- /flex root -->
 
+<script src="assets/js/load-nav.js"></script>
 <script>
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('-translate-x-full');
-    document.getElementById('sidebar-overlay').classList.toggle('hidden');
-  }
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.add('-translate-x-full');
-    document.getElementById('sidebar-overlay').classList.add('hidden');
-  }
+  // toggleSidebar and closeSidebar are provided by load-nav.js
+
 
   // Update hero badge with live endpoint count
   fetch('/api/mock-server/endpoints')

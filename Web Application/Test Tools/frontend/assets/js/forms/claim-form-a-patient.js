@@ -1,0 +1,21 @@
+initAutoLoginForm({
+  parameters: [
+    { name: "sc",                 label: "Screen Page - Mandatory",       type: "text",           defaultValue: "/digitsign/gen_form_a_patient", enabled: true  },
+    { name: "bu_code",            label: "Business Unit Code - Mandatory",type: "text",           defaultValue: "005",                          enabled: true  },
+    { name: "requested_datetime", label: "Request DateTime - Mandatory",  type: "datetime-local", defaultValue: "",                             enabled: true,  autoFill: "now"     },
+    { name: "clinic_location",    label: "Clinic Location",               type: "text",           defaultValue: "Medicine",                     enabled: false },
+    { name: "created",            label: "Created DateTime - Mandatory",  type: "datetime-local", defaultValue: "",                             enabled: true,  autoFill: "now"     },
+    { name: "template_code",      label: "Template Code",                 type: "text",           defaultValue: "claim_form_a",                 enabled: true  },
+    { name: "request_id",         label: "Request ID",                    type: "text",           defaultValue: "28",                           enabled: true  },
+    { name: "action",             label: "Action - Mandatory",            type: "text",           defaultValue: "gen_form_a_patient",            enabled: true  },
+    { name: "download_password",  label: "Download Password",             type: "password",       defaultValue: "15112000",                     enabled: false },
+    { name: "open_file_password", label: "Open File Password",            type: "password",       defaultValue: "15112000",                     enabled: false },
+    { name: "appointmant_id",     label: "Appointment ID",                type: "text",           defaultValue: "appointment001",               enabled: false },
+    { name: "hn",                 label: "Hospital Number - Mandatory",   type: "text",           defaultValue: "05-24-021566",                 enabled: true  },
+    { name: "patient_row_id",     label: "Patient Row ID",                type: "number",         defaultValue: "936346",                       enabled: true  },
+    { name: "en",                 label: "Encounter Number - Mandatory",  type: "text",           defaultValue: "O05-25-143267",                enabled: true  },
+    { name: "encounter_row_id",   label: "Encounter Row ID",              type: "number",         defaultValue: "2076966",                      enabled: true  },
+    { name: "visit_datetime",     label: "Visit DateTime",                type: "datetime-local", defaultValue: "",                             enabled: true,  autoFill: "today8am" },
+    { name: "requested_user",     label: "Requested User - Mandatory",    type: "text",           defaultValue: "Chakrit.Sa",                   enabled: true  },
+  ],
+});

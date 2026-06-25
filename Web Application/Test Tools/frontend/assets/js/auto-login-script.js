@@ -627,7 +627,7 @@ function getEnabledParameters() {
 }
 
 /**
- * Build query string from parameters (รองรับค่าว่าง)
+ * Build query string from parameters (Raw format without URI encoding)
  */
 function buildQueryString(params) {
   return params.map(p => `${p.name}=${p.value}`).join('&');
@@ -644,12 +644,7 @@ function convertToRequiredFormat(datetimeLocalValue) {
   return datetimeLocalValue;
 }
 
-/**
- * Build query string from parameters (without URI encoding)
- */
-function buildQueryString(params) {
-  return params.map((p) => `${p.name}=${p.value}`).join("&");
-}
+
 
 /**
  * Encrypt query string using AES (improved with IV and key size support)
@@ -746,9 +741,9 @@ function buildFinalUrl(encryptedKey) {
   const appId = $("#appId").val().trim();
 
   // URL encode the encrypted key
-  const encodedKey = encryptedKey;
+  const encodedKey = encodeURIComponent(encryptedKey);
 
-  return `${targetUrl}?org_code=${orgCode}&app_id=${appId}&key=${encodedKey}`;
+  return `${targetUrl}?org_code=${encodeURIComponent(orgCode)}&app_id=${encodeURIComponent(appId)}&key=${encodedKey}`;
 }
 
 /**
