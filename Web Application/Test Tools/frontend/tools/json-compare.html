@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>JSON Query &amp; Compare — Test Center</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="../assets/img/kaiadmin/tester-sign.ico" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } }</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+</head>
+<body class="bg-gray-950 text-gray-100">
+<div class="flex min-h-screen">
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+  <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 flex flex-col z-30 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-gray-700 flex items-center gap-3">
+      <span class="text-blue-400 text-lg">⚗</span>
+      <a href="/" class="text-white font-bold text-sm tracking-wide hover:text-blue-400 transition-colors">Test Center</a>
+    </div>
+    <nav id="sidebar-nav" class="flex-1 overflow-y-auto py-4 px-3 space-y-0.5"></nav>
+    <div class="px-5 py-3 border-t border-gray-700"><span class="text-xs text-gray-600">v1.0 · Test Center</span></div>
+  </aside>
+
+  <div class="flex flex-col flex-1 min-h-screen lg:ml-64">
+    <nav class="bg-gray-900 border-b border-gray-700 px-6 py-3 flex items-center justify-between flex-shrink-0 sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors p-1 rounded">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="text-gray-400 text-sm font-medium">JSON Query &amp; Compare</span>
+      </div>
+      <div class="flex items-center gap-2.5 text-sm text-gray-400">
+        <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-200 select-none">T</div>
+        <span class="hidden sm:inline">Tester</span>
+      </div>
+    </nav>
+
+    <main class="flex-1 overflow-auto">
+      <div class="container-fluid">
+        <div class="page-inner">
+          <div class="page-header">
+            <h3 class="fw-bold mb-3">JSON Query &amp; Compare Workbench</h3>
+            <ul class="breadcrumbs mb-3">
+              <li class="nav-home"><a href="/"><i class="icon-home"></i></a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">Tools</a></li>
+              <li class="separator"><i class="icon-arrow-right"></i></li>
+              <li class="nav-item"><a href="#">JSON Compare</a></li>
+            </ul>
+          </div>
+
+          <!-- SECTION 1: JSON INPUT PANELS -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between py-2">
+                  <div class="card-title mb-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-align-left text-blue-400"></i><strong>Left JSON</strong>
+                    <span id="left-badge" class="badge" style="display:none"></span>
+                  </div>
+                  <div class="d-flex gap-1">
+                    <label class="btn btn-xs btn-outline-secondary mb-0" title="Upload .json file">
+                      <i class="fas fa-folder-open"></i>
+                      <input type="file" accept=".json,application/json" style="display:none" onchange="loadFile('left',this)">
+                    </label>
+                    <button class="btn btn-xs btn-outline-info" onclick="formatJSON('left')" title="Format / Pretty print"><i class="fas fa-indent"></i></button>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="minifyJSON('left')" title="Minify"><i class="fas fa-compress-alt"></i></button>
+                    <button class="btn btn-xs btn-outline-success" onclick="copyJSON('left')" title="Copy"><i class="far fa-copy"></i></button>
+                    <button class="btn btn-xs btn-outline-danger" onclick="clearJSON('left')" title="Clear"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="card-body p-2">
+                  <textarea id="left-input" class="form-control json-textarea" rows="18"
+                    placeholder="Paste Left JSON here..." oninput="onInput('left')"></textarea>
+                  <div id="left-error" class="mt-1" style="display:none"></div>
+                  <div id="left-info" class="text-muted small mt-1" style="min-height:20px"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between py-2">
+                  <div class="card-title mb-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-align-right" style="color:#4ade80"></i><strong>Right JSON</strong>
+                    <span id="right-badge" class="badge" style="display:none"></span>
+                  </div>
+                  <div class="d-flex gap-1">
+                    <label class="btn btn-xs btn-outline-secondary mb-0" title="Upload .json file">
+                      <i class="fas fa-folder-open"></i>
+                      <input type="file" accept=".json,application/json" style="display:none" onchange="loadFile('right',this)">
+                    </label>
+                    <button class="btn btn-xs btn-outline-info" onclick="formatJSON('right')" title="Format / Pretty print"><i class="fas fa-indent"></i></button>
+                    <button class="btn btn-xs btn-outline-secondary" onclick="minifyJSON('right')" title="Minify"><i class="fas fa-compress-alt"></i></button>
+                    <button class="btn btn-xs btn-outline-success" onclick="copyJSON('right')" title="Copy"><i class="far fa-copy"></i></button>
+                    <button class="btn btn-xs btn-outline-danger" onclick="clearJSON('right')" title="Clear"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="card-body p-2">
+                  <textarea id="right-input" class="form-control json-textarea" rows="18"
+                    placeholder="Paste Right JSON here..." oninput="onInput('right')"></textarea>
+                  <div id="right-error" class="mt-1" style="display:none"></div>
+                  <div id="right-info" class="text-muted small mt-1" style="min-height:20px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: QUERY & INSPECTOR -->
+          <div class="row" id="query-section" style="display:none">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between py-2 flex-wrap gap-2">
+                  <div class="card-title mb-0"><i class="fas fa-search me-2" style="color:#fbbf24"></i><strong>Query &amp; Inspector</strong></div>
+                  <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <div class="d-flex align-items-center gap-2">
+                      <label class="text-muted small mb-0 text-nowrap">Active Path:</label>
+                      <select id="path-selector" class="form-select form-select-sm" style="min-width:180px" onchange="onPathChange()">
+                        <option value="@">@ (root)</option>
+                      </select>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                      <button id="btn-simple" class="btn btn-primary btn-sm" onclick="setQueryMode('simple')">Simple Filter</button>
+                      <button id="btn-advanced" class="btn btn-outline-primary btn-sm" onclick="setQueryMode('advanced')">JMESPath</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <!-- Simple Filter Builder -->
+                  <div id="simple-filter-section">
+                    <div id="filter-rows" class="mb-2"></div>
+                    <div class="d-flex gap-2 align-items-center mb-2">
+                      <button class="btn btn-xs btn-outline-secondary" onclick="addFilterRow()"><i class="fas fa-plus me-1"></i>Add Condition</button>
+                      <button class="btn btn-xs btn-outline-danger" onclick="clearFilters()"><i class="fas fa-times me-1"></i>Clear</button>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <label class="text-muted small mb-0 text-nowrap">Generated:</label>
+                      <code id="generated-expr" class="text-info small flex-1 p-1 rounded" style="background:rgba(0,0,0,.3);word-break:break-all">@</code>
+                    </div>
+                  </div>
+                  <!-- Advanced JMESPath -->
+                  <div id="advanced-filter-section" style="display:none">
+                    <textarea id="jmespath-expr" class="form-control mb-2" rows="2"
+                      style="font-family:monospace;font-size:13px;background:#1a1a2e;color:#e0e0e0;border-color:#374151"
+                      placeholder="e.g. data[?status == 'active'].{id: id, name: name}"
+                      oninput="onExprChange()"></textarea>
+                  </div>
+                  <!-- Query Controls -->
+                  <div class="d-flex gap-2 mt-3 flex-wrap align-items-center">
+                    <select id="query-target" class="form-select form-select-sm" style="width:auto">
+                      <option value="both">Apply to Both</option>
+                      <option value="left">Left Only</option>
+                      <option value="right">Right Only</option>
+                    </select>
+                    <button class="btn btn-sm btn-primary" onclick="runQuery()"><i class="fas fa-play me-1"></i>Run Query</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="clearQuery()"><i class="fas fa-times me-1"></i>Clear</button>
+                  </div>
+                  <!-- Query Result Preview -->
+                  <div id="query-result-panel" class="mt-3" style="display:none">
+                    <div class="d-flex gap-2 mb-2 align-items-center flex-wrap">
+                      <span class="text-muted small">Result:</span>
+                      <span id="query-result-meta" class="badge bg-secondary"></span>
+                      <div class="btn-group btn-group-sm ms-auto">
+                        <button id="btn-card-view" class="btn btn-xs btn-primary" onclick="setResultView('card')">Card</button>
+                        <button id="btn-table-view" class="btn btn-xs btn-outline-primary" onclick="setResultView('table')">Table</button>
+                        <button id="btn-tree-view" class="btn btn-xs btn-outline-primary" onclick="setResultView('tree')">Tree</button>
+                      </div>
+                    </div>
+                    <div id="query-result-error" class="text-danger small mb-1" style="display:none"></div>
+                    <div id="query-result-card" style="max-height:420px;overflow-y:auto"></div>
+                    <div id="query-result-table" style="display:none;overflow-x:auto;max-height:320px;overflow-y:auto"></div>
+                    <div id="query-result-tree" style="display:none;max-height:320px;overflow:auto"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: COMPARE CONFIGURATION -->
+          <div class="row" id="compare-section" style="display:none">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header py-2">
+                  <div class="card-title mb-0"><i class="fas fa-sliders-h me-2" style="color:#c084fc"></i><strong>Compare Configuration</strong></div>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3 align-items-end">
+                    <div class="col-md-2">
+                      <label class="form-label small text-muted fw-semibold mb-1">Compare Scope</label>
+                      <select id="compare-scope" class="form-select form-select-sm" onchange="updateCompareWarnings()">
+                        <option value="full">Full JSON</option>
+                        <option value="path">Active Data Path</option>
+                        <option value="query">Query Result</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small text-muted fw-semibold mb-1">Ignore Keys <small class="fw-normal">(comma-separated, recursive)</small></label>
+                      <input type="text" id="ignore-keys" class="form-control form-control-sm"
+                        placeholder="revision, created, updated, hmsLastUpdated" />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small text-muted fw-semibold mb-1">Match Keys <small class="fw-normal">(comma-separated, for array matching)</small></label>
+                      <input type="text" id="match-keys" class="form-control form-control-sm"
+                        placeholder="resourceType, hn, en" onchange="updateCompareWarnings()" />
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" id="ignore-order" checked>
+                        <label class="form-check-label small" for="ignore-order">Ignore Array Order</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="strict-type" checked>
+                        <label class="form-check-label small" for="strict-type">Strict Type</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="compare-warnings" class="mt-2" style="display:none"></div>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <button id="compare-btn" class="btn btn-primary" onclick="runCompare()">
+                      <i class="fas fa-balance-scale me-2"></i>Compare
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="clearCompare()">
+                      <i class="fas fa-times me-1"></i>Clear Results
+                    </button>
+                    <span id="compare-status-msg" class="text-muted small"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 4: COMPARE RESULTS -->
+          <div class="row" id="results-section" style="display:none">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between py-2">
+                  <div class="card-title mb-0"><i class="fas fa-chart-bar me-2" style="color:#22d3ee"></i><strong>Compare Results</strong></div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-xs btn-outline-secondary" onclick="copySummary()"><i class="far fa-copy me-1"></i>Copy Summary</button>
+                    <button class="btn btn-xs btn-outline-info" onclick="downloadReport()"><i class="fas fa-download me-1"></i>Download JSON</button>
+                    <button class="btn btn-xs btn-outline-danger" onclick="clearCompare()" title="Clear compare results"><i class="fas fa-times me-1"></i>Clear</button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div id="result-status-banner" class="alert mb-3"></div>
+                  <div id="result-counts" class="d-flex gap-2 flex-wrap mb-3"></div>
+                  <ul class="nav nav-tabs" id="result-tabs">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" data-tab="summary" href="#">Summary</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="added" href="#">Added <span id="tab-added-count" class="badge bg-success ms-1">0</span></a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="removed" href="#">Removed <span id="tab-removed-count" class="badge bg-danger ms-1">0</span></a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="modified" href="#">Modified <span id="tab-modified-count" class="badge bg-warning ms-1">0</span></a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="unchanged" href="#">Unchanged <span id="tab-unchanged-count" class="badge bg-secondary ms-1">0</span></a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="query-result" href="#">Query Result</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="norm-left" href="#">Normalized Left</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="norm-right" href="#">Normalized Right</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-tab="config" href="#">Config</a></li>
+                  </ul>
+                  <div id="result-tab-content" class="mt-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="border-t border-gray-700 bg-gray-900 text-gray-500 text-xs px-6 py-3 flex flex-wrap justify-between items-center gap-2 flex-shrink-0">
+      <nav class="flex gap-4"><a href="/" class="hover:text-gray-300 transition-colors">Test Center</a></nav>
+      <span>2025 &middot; Developed by <strong class="text-gray-400">Chakrit Salaeman &amp; Claude</strong></span>
+    </footer>
+  </div>
+</div>
+
+<script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jmespath@0.16.0/jmespath.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+<script>
+// ================================================================
+// JSDoc Typedefs
+// @typedef {{ value:any, error:ParseError|null, duplicateKeys:string[] }} ParseResult
+// @typedef {{ message:string, line:number|null, col:number|null }} ParseError
+// @typedef {{ path:string, count:number, sampleKeys:string[] }} ArrayPathInfo
+// @typedef {{ field:string, op:string, value:string }} FilterRow
+// @typedef {{ value:any, error:string|null, type:string, count:number|null }} QueryResult
+// @typedef {{ ignoreKeys:string[], matchKeys:string[], ignoreArrayOrder:boolean, scope:string }} CompareConfig
+// @typedef {{ status:string, summary:object, added:object[], removed:object[], modified:object[], unchanged:object[], warnings:string[], normalizedLeft:any, normalizedRight:any }} DiffResult
+// ================================================================
+
+// ================================================================
+// JsonParser — JSON.parse + duplicate key detection + line/col error
+// ================================================================
+const JsonParser = {
+  parse(text) {
+    if (!text || !text.trim()) return { value: null, error: null, duplicateKeys: [] };
+    let value = null;
+    try {
+      value = JSON.parse(text);
+    } catch (e) {
+      return { value: null, error: this._parseError(e, text), duplicateKeys: [] };
+    }
+    return { value, error: null, duplicateKeys: this._detectDuplicateKeys(text) };
+  },
+
+  _parseError(err, text) {
+    let line = null, col = null;
+    // V8 old: "at position N"
+    let m = err.message.match(/at position (\d+)/);
+    if (m) {
+      const pos = parseInt(m[1]);
+      const ls = text.substring(0, pos).split('\n');
+      line = ls.length; col = ls[ls.length - 1].length + 1;
+    }
+    // Firefox: "at line X column Y"
+    if (!line) { m = err.message.match(/line (\d+) column (\d+)/); if (m) { line = +m[1]; col = +m[2]; } }
+    // Node newer: "(char N)"
+    if (!line) {
+      m = err.message.match(/\(char (\d+)\)/);
+      if (m) { const ls = text.substring(0, +m[1]).split('\n'); line = ls.length; col = ls[ls.length - 1].length + 1; }
+    }
+    // Chrome V8 newer: 'Unexpected token X, ..."<snippet>" is not valid JSON'
+    // Extract snippet and locate it in the text to estimate position
+    if (!line) {
+      m = err.message.match(/\.\.\."(.{1,40})" is not valid JSON/);
+      if (m) {
+        const snippet = m[1];
+        const idx = text.indexOf(snippet);
+        if (idx >= 0) {
+          const pos = idx + snippet.length;
+          const ls = text.substring(0, pos).split('\n');
+          line = ls.length; col = ls[ls.length - 1].length + 1;
+        }
+      }
+    }
+    return { message: err.message, line, col };
+  },
+
+  _detectDuplicateKeys(text) {
+    const dupes = [];
+    let i = 0;
+    const len = text.length;
+    const skipWs = () => { while (i < len && ' \t\n\r'.includes(text[i])) i++; };
+    const readStr = () => {
+      let s = ''; i++;
+      while (i < len) {
+        const c = text[i];
+        if (c === '\\') { i += 2; continue; }
+        if (c === '"') { i++; break; }
+        s += c; i++;
+      }
+      return s;
+    };
+    const parseVal = () => {
+      skipWs(); if (i >= len) return;
+      const c = text[i];
+      if (c === '{') parseObj();
+      else if (c === '[') parseArr();
+      else if (c === '"') readStr();
+      else { while (i < len && !',[]{}'.includes(text[i]) && !' \t\n\r'.includes(text[i])) i++; }
+    };
+    const parseObj = () => {
+      i++;
+      const seen = new Set();
+      skipWs();
+      if (i < len && text[i] === '}') { i++; return; }
+      while (i < len) {
+        skipWs();
+        if (i >= len || text[i] !== '"') break;
+        const key = readStr();
+        if (seen.has(key) && !dupes.includes(key)) dupes.push(key);
+        seen.add(key);
+        skipWs();
+        if (i < len && text[i] === ':') i++;
+        parseVal(); skipWs();
+        if (i < len && text[i] === ',') { i++; continue; }
+        if (i < len && text[i] === '}') { i++; break; }
+        break;
+      }
+    };
+    const parseArr = () => {
+      i++; skipWs();
+      if (i < len && text[i] === ']') { i++; return; }
+      while (i < len) {
+        parseVal(); skipWs();
+        if (i < len && text[i] === ',') { i++; continue; }
+        if (i < len && text[i] === ']') { i++; break; }
+        break;
+      }
+    };
+    try { parseVal(); } catch (e) {}
+    return dupes;
+  }
+};
+
+// ================================================================
+// PathDetector — recursive array path scan + auto-select heuristic
+// ================================================================
+const PathDetector = {
+  detect(value) {
+    const paths = [];
+    this._walk(value, '', paths);
+    return this._rank(paths);
+  },
+  _walk(val, path, results) {
+    if (Array.isArray(val)) {
+      const ap = path || '@';
+      if (!results.find(r => r.path === ap))
+        results.push({ path: ap, count: val.length, sampleKeys: this._sampleKeys(val) });
+      if (val.length > 0 && val[0] && typeof val[0] === 'object' && !Array.isArray(val[0])) {
+        for (const k of Object.keys(val[0])) {
+          const child = val[0][k];
+          if (Array.isArray(child)) this._walk(child, (path ? path : '') + '[0].' + k, results);
+        }
+      }
+    } else if (val && typeof val === 'object') {
+      for (const k of Object.keys(val)) this._walk(val[k], path ? path + '.' + k : k, results);
+    }
+  },
+  _sampleKeys(arr) {
+    const obj = arr.find(x => x && typeof x === 'object' && !Array.isArray(x));
+    return obj ? Object.keys(obj).slice(0, 6) : [];
+  },
+  _rank(paths) {
+    const PRIO = ['@', 'data', 'items', 'results', 'records', 'rows'];
+    return paths.sort((a, b) => {
+      const ai = PRIO.indexOf(a.path), bi = PRIO.indexOf(b.path);
+      if (ai >= 0 && bi >= 0) return ai - bi;
+      if (ai >= 0) return -1; if (bi >= 0) return 1;
+      return b.count - a.count;
+    });
+  },
+  autoSelect(paths) { return paths.length > 0 ? paths[0].path : '@'; }
+};
+
+// ================================================================
+// FilterBuilder — simple filter rows → JMESPath codegen (13 operators)
+// ================================================================
+const FilterBuilder = {
+  OPS: [
+    { v: '==', l: '== equals' }, { v: '!=', l: '!= not equals' },
+    { v: 'contains', l: 'contains' }, { v: 'starts_with', l: 'starts_with' }, { v: 'ends_with', l: 'ends_with' },
+    { v: '>', l: '> greater than' }, { v: '>=', l: '>= greater or equal' },
+    { v: '<', l: '< less than' }, { v: '<=', l: '<= less or equal' },
+    { v: 'is_null', l: 'is null' }, { v: 'is_not_null', l: 'is not null' },
+    { v: 'is_empty', l: 'is empty' }, { v: 'is_not_empty', l: 'is not empty' },
+  ],
+  NO_VAL: ['is_null', 'is_not_null', 'is_empty', 'is_not_empty'],
+
+  toJMESPath(rows, dataPath) {
+    const conds = rows.filter(r => r.field.trim()).map(r => this._expr(r)).filter(Boolean);
+    if (!conds.length) return dataPath && dataPath !== '@' ? dataPath : '@';
+    const base = dataPath && dataPath !== '@' ? dataPath : '@';
+    return `${base}[?${conds.join(' && ')}]`;
+  },
+  _expr(row) {
+    // JMESPath identifiers: use bare name for simple fields, quoted for special chars
+    const raw = row.field.trim();
+    const needsQuote = /[^a-zA-Z0-9_]/.test(raw);
+    const f = needsQuote ? '"' + raw.replace(/"/g, '\\"') + '"' : raw;
+    const v = row.value || '';
+    const isNum = v !== '' && !isNaN(v) && !isNaN(parseFloat(v));
+    const lit = isNum ? '`' + v + '`' : "'" + v.replace(/'/g, "\\'") + "'";
+    switch (row.op) {
+      case '==': return `${f} == ${lit}`;
+      case '!=': return `${f} != ${lit}`;
+      case 'contains': return `contains(${f}, ${lit})`;
+      case 'starts_with': return `starts_with(${f}, ${lit})`;
+      case 'ends_with': return `ends_with(${f}, ${lit})`;
+      case '>': return `${f} > ${lit}`; case '>=': return `${f} >= ${lit}`;
+      case '<': return `${f} < ${lit}`; case '<=': return `${f} <= ${lit}`;
+      case 'is_null': return `${f} == \`null\``;
+      case 'is_not_null': return `${f} != \`null\``;
+      case 'is_empty': return `length(${f}) == \`0\``;
+      case 'is_not_empty': return `length(${f}) > \`0\``;
+      default: return '';
+    }
+  }
+};
+
+// ================================================================
+// QueryEngine — jmespath wrapper + root type detection
+// ================================================================
+const QueryEngine = {
+  run(value, expr) {
+    if (!expr || expr.trim() === '@') return { value, error: null, type: this.rootType(value), count: this._count(value) };
+    try {
+      const result = jmespath.search(value, expr);
+      return { value: result, error: null, type: this.rootType(result), count: this._count(result) };
+    } catch (e) { return { value: null, error: e.message, type: null, count: 0 }; }
+  },
+  rootType(val) {
+    if (val === null || val === undefined) return 'null';
+    if (Array.isArray(val)) return 'array';
+    return typeof val;
+  },
+  _count(val) {
+    if (Array.isArray(val)) return val.length;
+    if (val && typeof val === 'object') return Object.keys(val).length;
+    return null;
+  }
+};
+
+// ================================================================
+// Normalizer — sort keys alphabetically, remove ignore keys recursively
+// ================================================================
+const Normalizer = {
+  normalize(value, opts) {
+    return this._proc(value, opts.ignoreKeys || []);
+  },
+  _proc(val, ignore) {
+    if (Array.isArray(val)) return val.map(x => this._proc(x, ignore));
+    if (val && typeof val === 'object') {
+      const out = {};
+      for (const k of Object.keys(val).sort()) {
+        if (!ignore.includes(k)) out[k] = this._proc(val[k], ignore);
+      }
+      return out;
+    }
+    return val;
+  }
+};
+
+// ================================================================
+// ArrayMatcher — match by identity/composite keys, hash fallback, dup warning
+// ================================================================
+const ArrayMatcher = {
+  match(left, right, matchKeys) {
+    const warnings = [];
+    if (!matchKeys || !matchKeys.length) return this._hashMatch(left, right, warnings);
+    const getKey = item => matchKeys.map(k => item != null ? String(item[k] ?? '') : '').join('\x00');
+    const buildMap = (arr, side) => {
+      const map = new Map();
+      for (const item of arr) {
+        const k = getKey(item);
+        if (map.has(k)) { const msg = `Duplicate match key "${k}" in ${side}`; if (!warnings.includes(msg)) warnings.push(msg); }
+        map.set(k, item);
+      }
+      return map;
+    };
+    const lMap = buildMap(left, 'Left'), rMap = buildMap(right, 'Right');
+    const all = new Set([...lMap.keys(), ...rMap.keys()]);
+    return { pairs: [...all].map(k => ({ key: k, left: lMap.get(k) ?? null, right: rMap.get(k) ?? null })), warnings };
+  },
+  _hashMatch(left, right, warnings) {
+    if (left.length || right.length)
+      warnings.push('No match keys — hash-based fallback. Modified objects appear as separate removed+added pairs.');
+    const hash = obj => JSON.stringify(Normalizer.normalize(obj, { ignoreKeys: [] }));
+    const group = arr => { const m = new Map(); arr.forEach(x => { const h = hash(x); m.set(h, (m.get(h) || []).concat([x])); }); return m; };
+    const lMap = group(left), rMap = group(right);
+    const all = new Set([...lMap.keys(), ...rMap.keys()]);
+    const pairs = [];
+    for (const h of all) {
+      const ls = lMap.get(h) || [], rs = rMap.get(h) || [];
+      const min = Math.min(ls.length, rs.length);
+      for (let i = 0; i < min; i++) pairs.push({ key: h + i, left: ls[i], right: rs[i] });
+      for (let i = min; i < ls.length; i++) pairs.push({ key: h + 'l' + i, left: ls[i], right: null });
+      for (let i = min; i < rs.length; i++) pairs.push({ key: h + 'r' + i, left: null, right: rs[i] });
+    }
+    return { pairs, warnings };
+  }
+};
+
+// ================================================================
+// DiffEngine — ties Normalizer + ArrayMatcher → DiffResult
+// ================================================================
+const DiffEngine = {
+  compare(leftVal, rightVal, config) {
+    const { ignoreKeys = [], matchKeys = [], ignoreArrayOrder = true } = config;
+    const lNorm = Normalizer.normalize(leftVal, { ignoreKeys });
+    const rNorm = Normalizer.normalize(rightVal, { ignoreKeys });
+    const result = {
+      status: 'identical',
+      added: [], removed: [], modified: [], unchanged: [],
+      warnings: [], errors: [],
+      normalizedLeft: lNorm, normalizedRight: rNorm
+    };
+    this._diff(lNorm, rNorm, '@', result, { matchKeys, ignoreArrayOrder });
+    result.status = (result.added.length || result.removed.length || result.modified.length) ? 'different' : 'identical';
+    result.summary = { added: result.added.length, removed: result.removed.length, modified: result.modified.length, unchanged: result.unchanged.length };
+    result.leftCount = Array.isArray(leftVal) ? leftVal.length : (leftVal && typeof leftVal === 'object' ? Object.keys(leftVal).length : null);
+    result.rightCount = Array.isArray(rightVal) ? rightVal.length : (rightVal && typeof rightVal === 'object' ? Object.keys(rightVal).length : null);
+    result.leftIsArray = Array.isArray(leftVal);
+    result.rightIsArray = Array.isArray(rightVal);
+    return result;
+  },
+  _diff(left, right, path, result, opts) {
+    if (Array.isArray(left) && Array.isArray(right)) {
+      if (opts.ignoreArrayOrder !== false) {
+        const { pairs, warnings } = ArrayMatcher.match(left, right, opts.matchKeys || []);
+        result.warnings.push(...warnings);
+        for (const p of pairs) {
+          if (p.left === null) result.added.push({ path, value: p.right });
+          else if (p.right === null) result.removed.push({ path, value: p.left });
+          else if (JSON.stringify(p.left) === JSON.stringify(p.right)) result.unchanged.push({ path, value: p.left });
+          else result.modified.push({ path, left: p.left, right: p.right, diffs: this._fieldDiff(p.left, p.right, path) });
+        }
+      } else {
+        const max = Math.max(left.length, right.length);
+        for (let i = 0; i < max; i++) {
+          const ip = `${path}[${i}]`;
+          if (i >= left.length) result.added.push({ path: ip, value: right[i] });
+          else if (i >= right.length) result.removed.push({ path: ip, value: left[i] });
+          else if (JSON.stringify(left[i]) === JSON.stringify(right[i])) result.unchanged.push({ path: ip, value: left[i] });
+          else result.modified.push({ path: ip, left: left[i], right: right[i], diffs: this._fieldDiff(left[i], right[i], ip) });
+        }
+      }
+    } else {
+      if (JSON.stringify(left) === JSON.stringify(right)) result.unchanged.push({ path, value: left });
+      else result.modified.push({ path, left, right, diffs: this._fieldDiff(left, right, path) });
+    }
+  },
+  _fieldDiff(left, right, base) {
+    const diffs = [];
+    const lObj = left && typeof left === 'object' && !Array.isArray(left);
+    const rObj = right && typeof right === 'object' && !Array.isArray(right);
+    if (!lObj || !rObj) {
+      if (JSON.stringify(left) !== JSON.stringify(right)) diffs.push({ path: base, type: 'changed', left, right });
+      return diffs;
+    }
+    for (const k of new Set([...Object.keys(left), ...Object.keys(right)])) {
+      const p = `${base}.${k}`;
+      if (!(k in left)) diffs.push({ path: p, type: 'added', value: right[k] });
+      else if (!(k in right)) diffs.push({ path: p, type: 'removed', value: left[k] });
+      else if (JSON.stringify(left[k]) !== JSON.stringify(right[k])) {
+        const lk = left[k] && typeof left[k] === 'object' && !Array.isArray(left[k]);
+        const rk = right[k] && typeof right[k] === 'object' && !Array.isArray(right[k]);
+        if (lk && rk) diffs.push(...this._fieldDiff(left[k], right[k], p));
+        else diffs.push({ path: p, type: 'changed', left: left[k], right: right[k] });
+      }
+    }
+    return diffs;
+  }
+};
+
+// ================================================================
+// AppState
+// ================================================================
+const AppState = {
+  left:  { raw: '', parsed: null, error: null, dupeKeys: [] },
+  right: { raw: '', parsed: null, error: null, dupeKeys: [] },
+  paths: [],
+  activePath: '@',
+  filterRows: [{ field: '', op: '==', value: '' }],
+  queryMode: 'simple',
+  jmespathExpr: '',
+  queryResult: { left: null, right: null },
+  compareResult: null,
+  lastConfig: null,
+};
+
+// ================================================================
+// Utility
+// ================================================================
+function escHtml(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function prettyJson(val, max) {
+  const s = JSON.stringify(val, null, 2);
+  return max && s.length > max ? s.substring(0, max) + '\n... (truncated)' : s;
+}
+function showToast(msg, type) {
+  const t = document.createElement('div');
+  t.className = `position-fixed bottom-0 end-0 m-3 alert alert-${type || 'info'} py-1 px-3 small`;
+  t.style.zIndex = 9999;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+}
+
+// ================================================================
+// Editor Events
+// ================================================================
+function onInput(side) {
+  AppState[side].raw = document.getElementById(side + '-input').value;
+  const r = JsonParser.parse(AppState[side].raw);
+  AppState[side].parsed = r.value;
+  AppState[side].error = r.error;
+  AppState[side].dupeKeys = r.duplicateKeys;
+  renderEditorStatus(side, r);
+  updateSections();
+}
+
+function renderEditorStatus(side, r) {
+  const errEl = document.getElementById(side + '-error');
+  const infoEl = document.getElementById(side + '-info');
+  const badge = document.getElementById(side + '-badge');
+
+  if (r.error) {
+    errEl.style.display = '';
+    const loc = r.error.line ? ` at line ${r.error.line}, col ${r.error.col}` : '';
+    errEl.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0"><i class="fas fa-exclamation-circle me-1"></i><strong>Parse Error${loc}:</strong> ${escHtml(r.error.message)}</div>`;
+    badge.textContent = 'Invalid'; badge.className = 'badge bg-danger'; badge.style.display = '';
+    infoEl.textContent = ''; return;
+  }
+
+  errEl.style.display = 'none';
+  if (!AppState[side].raw.trim()) { badge.style.display = 'none'; infoEl.textContent = ''; return; }
+
+  const rt = QueryEngine.rootType(r.value);
+  let info = `Type: ${rt}`;
+  if (rt === 'array') info += ` · ${r.value.length} items`;
+  else if (rt === 'object') info += ` · ${Object.keys(r.value).length} keys`;
+
+  if (r.duplicateKeys.length) {
+    infoEl.innerHTML = `<span>${escHtml(info)}</span> <span class="badge bg-warning text-dark ms-1"><i class="fas fa-exclamation-triangle me-1"></i>Duplicate keys: ${escHtml(r.duplicateKeys.join(', '))}</span>`;
+    badge.textContent = 'Valid*'; badge.className = 'badge bg-warning text-dark'; badge.style.display = '';
+  } else {
+    infoEl.textContent = info;
+    badge.textContent = 'Valid'; badge.className = 'badge bg-success'; badge.style.display = '';
+  }
+}
+
+function updateSections() {
+  const hasL = AppState.left.parsed !== null && !AppState.left.error;
+  const hasR = AppState.right.parsed !== null && !AppState.right.error;
+  document.getElementById('query-section').style.display = (hasL || hasR) ? '' : 'none';
+  document.getElementById('compare-section').style.display = (hasL && hasR) ? '' : 'none';
+  if (hasL || hasR) updatePathSelector();
+  if (hasL && hasR) updateCompareWarnings();
+}
+
+// ================================================================
+// Path Selector
+// ================================================================
+function updatePathSelector() {
+  const val = AppState.left.parsed ?? AppState.right.parsed;
+  if (!val) return;
+  const paths = PathDetector.detect(val);
+  AppState.paths = paths;
+  const sel = document.getElementById('path-selector');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="@">@ (root)</option>';
+  for (const p of paths) {
+    if (p.path === '@') continue;
+    const opt = document.createElement('option');
+    opt.value = p.path;
+    opt.textContent = `${p.path} (${p.count} items)`;
+    if (p.sampleKeys.length) opt.title = 'Fields: ' + p.sampleKeys.join(', ');
+    sel.appendChild(opt);
+  }
+  const auto = PathDetector.autoSelect(paths);
+  // Preserve user's explicit selection only if they chose a non-@ path that still exists
+  const userChoseNonDefault = AppState.activePath !== '@' && paths.find(p => p.path === AppState.activePath);
+  sel.value = userChoseNonDefault ? AppState.activePath : (auto || '@');
+  AppState.activePath = sel.value;
+  updateGeneratedExpr();
+}
+
+function onPathChange() {
+  AppState.activePath = document.getElementById('path-selector').value;
+  updateGeneratedExpr();
+}
+
+// ================================================================
+// Query Mode + Filter Builder
+// ================================================================
+function setQueryMode(mode) {
+  AppState.queryMode = mode;
+  document.getElementById('simple-filter-section').style.display = mode === 'simple' ? '' : 'none';
+  document.getElementById('advanced-filter-section').style.display = mode === 'advanced' ? '' : 'none';
+  document.getElementById('btn-simple').className = mode === 'simple' ? 'btn btn-primary btn-sm' : 'btn btn-outline-primary btn-sm';
+  document.getElementById('btn-advanced').className = mode === 'advanced' ? 'btn btn-primary btn-sm' : 'btn btn-outline-primary btn-sm';
+}
+
+function addFilterRow() { AppState.filterRows.push({ field: '', op: '==', value: '' }); renderFilterRows(); }
+function clearFilters() { AppState.filterRows = [{ field: '', op: '==', value: '' }]; renderFilterRows(); }
+function removeFilterRow(i) {
+  AppState.filterRows.splice(i, 1);
+  if (!AppState.filterRows.length) AppState.filterRows = [{ field: '', op: '==', value: '' }];
+  renderFilterRows();
+}
+function updateFilterRow(i, key, val) { AppState.filterRows[i][key] = val; updateGeneratedExpr(); }
+
+function renderFilterRows() {
+  const container = document.getElementById('filter-rows');
+  container.innerHTML = AppState.filterRows.map((row, i) => {
+    const noVal = FilterBuilder.NO_VAL.includes(row.op);
+    const opOpts = FilterBuilder.OPS.map(o => `<option value="${o.v}" ${row.op === o.v ? 'selected' : ''}>${o.l}</option>`).join('');
+    return `<div class="d-flex gap-2 mb-1 align-items-center flex-wrap">
+      <input type="text" class="form-control form-control-sm" style="max-width:150px;font-family:monospace" placeholder="field"
+        value="${escHtml(row.field)}" oninput="updateFilterRow(${i},'field',this.value)" />
+      <select class="form-select form-select-sm" style="max-width:175px"
+        onchange="AppState.filterRows[${i}].op=this.value;renderFilterRows()">
+        ${opOpts}
+      </select>
+      <input type="text" class="form-control form-control-sm" style="max-width:150px" placeholder="value"
+        value="${escHtml(row.value)}" ${noVal ? 'disabled' : ''}
+        oninput="updateFilterRow(${i},'value',this.value)" />
+      <button class="btn btn-xs btn-outline-danger" onclick="removeFilterRow(${i})"><i class="fas fa-times"></i></button>
+    </div>`;
+  }).join('');
+  updateGeneratedExpr();
+}
+
+function updateGeneratedExpr() {
+  const expr = FilterBuilder.toJMESPath(AppState.filterRows, AppState.activePath);
+  document.getElementById('generated-expr').textContent = expr;
+}
+
+function onExprChange() { AppState.jmespathExpr = document.getElementById('jmespath-expr').value; }
+
+function getActiveExpr() {
+  if (AppState.queryMode === 'advanced') return AppState.jmespathExpr || AppState.activePath;
+  return FilterBuilder.toJMESPath(AppState.filterRows, AppState.activePath);
+}
+
+// ================================================================
+// Query Runner
+// ================================================================
+function runQuery() {
+  const expr = getActiveExpr();
+  const target = document.getElementById('query-target').value;
+  const panel = document.getElementById('query-result-panel');
+  panel.style.display = '';
+
+  if (target === 'right') AppState.queryResult.left = null;
+  if (target === 'left') AppState.queryResult.right = null;
+  if (target !== 'right' && AppState.left.parsed) AppState.queryResult.left = QueryEngine.run(AppState.left.parsed, expr);
+  if (target !== 'left' && AppState.right.parsed) AppState.queryResult.right = QueryEngine.run(AppState.right.parsed, expr);
+
+  const primary = target === 'right' ? AppState.queryResult.right : (AppState.queryResult.left || AppState.queryResult.right);
+  if (!primary) return;
+
+  const errEl = document.getElementById('query-result-error');
+  if (primary.error) {
+    errEl.style.display = '';
+    errEl.textContent = 'Error: ' + primary.error;
+    document.getElementById('query-result-meta').textContent = 'Error';
+    return;
+  }
+  errEl.style.display = 'none';
+  const cnt = primary.count != null ? ` · ${primary.count} items` : '';
+  document.getElementById('query-result-meta').textContent = primary.type + cnt;
+  // auto-select view: card for wide objects (>6 keys), table for narrow, tree for non-array
+  const autoView = (() => {
+    if (!Array.isArray(primary.value) || !primary.value.length) return 'tree';
+    const first = primary.value.find(x => x && typeof x === 'object' && !Array.isArray(x));
+    if (!first) return 'table';
+    return Object.keys(first).length > 6 ? 'card' : 'table';
+  })();
+  setResultView(autoView);
+}
+
+function clearQuery() {
+  AppState.queryResult = { left: null, right: null };
+  document.getElementById('query-result-panel').style.display = 'none';
+}
+
+function setResultView(view) {
+  document.getElementById('query-result-card').style.display = view === 'card' ? '' : 'none';
+  document.getElementById('query-result-table').style.display = view === 'table' ? '' : 'none';
+  document.getElementById('query-result-tree').style.display = view === 'tree' ? '' : 'none';
+  document.getElementById('btn-card-view').className = view === 'card' ? 'btn btn-xs btn-primary' : 'btn btn-xs btn-outline-primary';
+  document.getElementById('btn-table-view').className = view === 'table' ? 'btn btn-xs btn-primary' : 'btn btn-xs btn-outline-primary';
+  document.getElementById('btn-tree-view').className = view === 'tree' ? 'btn btn-xs btn-primary' : 'btn btn-xs btn-outline-primary';
+  renderQueryResultView(view);
+}
+
+function renderQueryResultView(view) {
+  const target = document.getElementById('query-target') ? document.getElementById('query-target').value : 'both';
+  const primary = target === 'right' ? AppState.queryResult.right : (AppState.queryResult.left || AppState.queryResult.right);
+  if (!primary || primary.error) return;
+  if (!view) {
+    // auto-select card for wide objects, else table
+    if (document.getElementById('query-result-card').style.display !== 'none') view = 'card';
+    else if (document.getElementById('query-result-table').style.display !== 'none') view = 'table';
+    else view = 'tree';
+  }
+  if (view === 'card') document.getElementById('query-result-card').innerHTML = renderCardView(primary.value);
+  else if (view === 'table') document.getElementById('query-result-table').innerHTML = renderTable(primary.value);
+  else document.getElementById('query-result-tree').innerHTML = `<pre class="json-pre">${escHtml(prettyJson(primary.value, 8000))}</pre>`;
+}
+
+function renderCardView(val) {
+  if (!Array.isArray(val)) {
+    if (val && typeof val === 'object') {
+      // single object — key/value grid
+      const entries = Object.entries(val);
+      if (!entries.length) return '<p class="text-muted small">Empty object</p>';
+      const pairs = entries.map(([k, v]) => {
+        const disp = v == null ? '<span class="text-muted">null</span>'
+          : typeof v === 'object' ? `<span class="text-muted small fst-italic">${Array.isArray(v) ? `[${v.length} items]` : '{object}'}</span>`
+          : `<span style="word-break:break-all">${escHtml(String(v))}</span>`;
+        return `<div style="min-width:0">
+          <div style="font-size:.72rem;color:#9ca3af;font-weight:500;margin-bottom:1px">${escHtml(k)}</div>
+          <div style="font-size:.82rem;color:#1f2937">${disp}</div>
+        </div>`;
+      }).join('');
+      return `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 16px;padding:8px 4px">${pairs}</div>`;
+    }
+    return `<pre class="json-pre">${escHtml(prettyJson(val, 4000))}</pre>`;
+  }
+  if (!val.length) return '<p class="text-muted small">Empty array</p>';
+
+  const show = Math.min(val.length, 100);
+  const cards = val.slice(0, show).map((item, i) => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      return `<div class="border rounded px-3 py-2 mb-1" style="background:#f9fafb">
+        <span class="badge bg-secondary me-2">${i}</span><span style="font-size:.85rem">${escHtml(String(item))}</span>
+      </div>`;
+    }
+    const entries = Object.entries(item);
+    const fields = entries.map(([k, v]) => {
+      const isLong = typeof v === 'object' && v !== null;
+      const disp = v == null ? '<span class="text-muted fst-italic">null</span>'
+        : isLong ? `<span class="text-muted small fst-italic">${Array.isArray(v) ? `[${v.length} items]` : '{…}'}</span>`
+        : `<span style="word-break:break-all;color:#1f2937">${escHtml(String(v))}</span>`;
+      return `<div style="min-width:0;padding:4px 8px;background:#fff;border:1px solid #e5e7eb;border-radius:5px">
+        <div style="font-size:.68rem;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">${escHtml(k)}</div>
+        <div style="font-size:.82rem;line-height:1.4">${disp}</div>
+      </div>`;
+    }).join('');
+    return `<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px">
+      <div style="font-size:.7rem;color:#94a3b8;font-weight:600;margin-bottom:8px">#${i}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px">${fields}</div>
+    </div>`;
+  }).join('');
+
+  const moreHtml = val.length > show
+    ? `<p class="text-muted small text-center mt-2">... and ${val.length - show} more items</p>` : '';
+  return `<div>${cards}${moreHtml}</div>`;
+}
+
+function renderTable(val) {
+  if (!Array.isArray(val)) return `<pre class="json-pre">${escHtml(prettyJson(val, 4000))}</pre>`;
+  if (!val.length) return '<p class="text-muted small">Empty array</p>';
+  const first = val.find(x => x && typeof x === 'object' && !Array.isArray(x));
+  if (!first) {
+    return `<table class="table table-sm table-dark table-hover mb-0"><thead><tr><th>#</th><th>Value</th></tr></thead><tbody>` +
+      val.slice(0, 100).map((x, i) => `<tr><td class="text-muted">${i}</td><td>${escHtml(String(x))}</td></tr>`).join('') +
+      (val.length > 100 ? `<tr><td colspan="2" class="text-muted small">... and ${val.length - 100} more</td></tr>` : '') +
+      '</tbody></table>';
+  }
+  const keys = [...new Set(val.flatMap(x => x && typeof x === 'object' ? Object.keys(x) : []))].slice(0, 20);
+  return `<table class="table table-sm table-dark table-hover mb-0">
+    <thead><tr><th class="text-muted">#</th>${keys.map(k => `<th>${escHtml(k)}</th>`).join('')}</tr></thead>
+    <tbody>
+      ${val.slice(0, 100).map((row, i) => `<tr><td class="text-muted">${i}</td>${keys.map(k => {
+        const v = row?.[k];
+        const disp = v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v);
+        return `<td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(JSON.stringify(v))}">${escHtml(disp)}</td>`;
+      }).join('')}</tr>`).join('')}
+      ${val.length > 100 ? `<tr><td colspan="${keys.length + 1}" class="text-muted small">... and ${val.length - 100} more rows</td></tr>` : ''}
+    </tbody>
+  </table>`;
+}
+
+// ================================================================
+// Compare
+// ================================================================
+function updateCompareWarnings() {
+  const el = document.getElementById('compare-warnings');
+  const btn = document.getElementById('compare-btn');
+  const warns = [];
+
+  // AC8/AC9: duplicate JSON object keys block compare
+  if (AppState.left.dupeKeys.length) warns.push(`Left JSON has duplicate object keys: ${AppState.left.dupeKeys.join(', ')}`);
+  if (AppState.right.dupeKeys.length) warns.push(`Right JSON has duplicate object keys: ${AppState.right.dupeKeys.join(', ')}`);
+
+  // AC9: pre-check for duplicate match key values in arrays
+  const matchKeys = getMatchKeys();
+  if (matchKeys.length) {
+    const checkDupMatchKeys = (arr, side) => {
+      if (!Array.isArray(arr)) return;
+      const getKey = item => matchKeys.map(k => item != null ? String(item[k] ?? '') : '').join('\x00');
+      const seen = new Set();
+      for (const item of arr) {
+        const k = getKey(item);
+        if (seen.has(k)) { warns.push(`Duplicate match key value "${k}" in ${side} — resolve before comparing`); break; }
+        seen.add(k);
+      }
+    };
+    if (AppState.left.parsed) checkDupMatchKeys(
+      Array.isArray(AppState.left.parsed) ? AppState.left.parsed
+        : AppState.left.parsed?.[AppState.activePath] ?? AppState.left.parsed, 'Left');
+    if (AppState.right.parsed) checkDupMatchKeys(
+      Array.isArray(AppState.right.parsed) ? AppState.right.parsed
+        : AppState.right.parsed?.[AppState.activePath] ?? AppState.right.parsed, 'Right');
+  }
+
+  if (warns.length) {
+    el.style.display = '';
+    el.innerHTML = warns.map(w => `<div class="alert alert-warning py-1 px-2 small mb-1"><i class="fas fa-exclamation-triangle me-1"></i>${escHtml(w)}</div>`).join('');
+    btn.disabled = true;
+  } else { el.style.display = 'none'; btn.disabled = false; }
+}
+
+function getMatchKeys() { return (document.getElementById('match-keys').value || '').split(',').map(s => s.trim()).filter(Boolean); }
+function getIgnoreKeys() { return (document.getElementById('ignore-keys').value || '').split(',').map(s => s.trim()).filter(Boolean); }
+
+function getCompareData() {
+  const scope = document.getElementById('compare-scope').value;
+  let lv = AppState.left.parsed, rv = AppState.right.parsed;
+  if (scope === 'path') {
+    const expr = AppState.activePath !== '@' ? AppState.activePath : null;
+    if (expr) { const lr = QueryEngine.run(lv, expr); const rr = QueryEngine.run(rv, expr); if (!lr.error) lv = lr.value; if (!rr.error) rv = rr.value; }
+  } else if (scope === 'query') {
+    const expr = getActiveExpr();
+    if (expr && expr !== '@') { const lr = QueryEngine.run(lv, expr); const rr = QueryEngine.run(rv, expr); if (!lr.error) lv = lr.value; if (!rr.error) rv = rr.value; }
+  }
+  return { leftVal: lv, rightVal: rv };
+}
+
+function runCompare() {
+  if (!AppState.left.parsed || !AppState.right.parsed) return;
+  const { leftVal, rightVal } = getCompareData();
+  const config = {
+    ignoreKeys: getIgnoreKeys(),
+    matchKeys: getMatchKeys(),
+    ignoreArrayOrder: document.getElementById('ignore-order').checked,
+    strictType: document.getElementById('strict-type').checked,
+    scope: document.getElementById('compare-scope').value,
+  };
+  document.getElementById('compare-status-msg').textContent = 'Comparing…';
+  setTimeout(() => {
+    try {
+      AppState.compareResult = DiffEngine.compare(leftVal, rightVal, config);
+      AppState.lastConfig = config;
+      renderResults(AppState.compareResult);
+      document.getElementById('compare-status-msg').textContent = '';
+    } catch (e) {
+      document.getElementById('compare-status-msg').textContent = 'Error: ' + e.message;
+    }
+  }, 10);
+}
+
+function clearCompare() {
+  AppState.compareResult = null;
+  document.getElementById('results-section').style.display = 'none';
+}
+
+// ================================================================
+// Results Rendering
+// ================================================================
+function renderResults(result) {
+  const sec = document.getElementById('results-section');
+  sec.style.display = '';
+
+  const banner = document.getElementById('result-status-banner');
+  if (result.status === 'identical') {
+    banner.className = 'alert alert-success mb-3';
+    banner.innerHTML = '<i class="fas fa-check-circle me-2"></i><strong>Identical</strong> — Both JSON values are semantically equal.';
+  } else {
+    banner.className = 'alert alert-warning mb-3';
+    banner.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i><strong>Different</strong> — ${result.summary.modified + result.summary.added + result.summary.removed} difference(s) found.`;
+  }
+
+  const { added, removed, modified, unchanged } = result.summary;
+  document.getElementById('result-counts').innerHTML = `
+    <span class="badge bg-success" style="font-size:.85rem">+${added} Added</span>
+    <span class="badge bg-danger" style="font-size:.85rem">−${removed} Removed</span>
+    <span class="badge bg-warning text-dark" style="font-size:.85rem">~${modified} Modified</span>
+    <span class="badge bg-secondary" style="font-size:.85rem">${unchanged} Unchanged</span>`;
+  document.getElementById('tab-added-count').textContent = added;
+  document.getElementById('tab-removed-count').textContent = removed;
+  document.getElementById('tab-modified-count').textContent = modified;
+  document.getElementById('tab-unchanged-count').textContent = unchanged;
+
+  document.querySelectorAll('#result-tabs .nav-link').forEach(a => {
+    a.onclick = (e) => { e.preventDefault(); showTab(a.dataset.tab); };
+  });
+
+  showTab('summary');
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showTab(tab) {
+  document.querySelectorAll('#result-tabs .nav-link').forEach(a => a.classList.toggle('active', a.dataset.tab === tab));
+  const result = AppState.compareResult;
+  const el = document.getElementById('result-tab-content');
+  if (!result) { el.innerHTML = ''; return; }
+
+  switch (tab) {
+    case 'summary': {
+      const warns = result.warnings.length
+        ? result.warnings.map(w => `<div class="alert alert-warning py-1 px-2 small">${escHtml(w)}</div>`).join('')
+        : '<p class="text-muted small">No warnings.</p>';
+      const lCount = result.leftCount != null ? result.leftCount : '—';
+      const rCount = result.rightCount != null ? result.rightCount : '—';
+      const lLabel = result.leftIsArray ? 'items' : 'keys';
+      const rLabel = result.rightIsArray ? 'items' : 'keys';
+      el.innerHTML = `<p>Status: <strong class="${result.status === 'identical' ? 'text-success' : 'text-warning'}">${result.status.toUpperCase()}</strong></p>
+        <p class="text-muted small">Left: <strong>${lCount}</strong> ${lLabel} &nbsp;|&nbsp; Right: <strong>${rCount}</strong> ${rLabel}</p>
+        <h6 class="mt-3">Warnings</h6>${warns}`;
+      break;
+    }
+    case 'added':    el.innerHTML = renderDiffList(result.added, 'success', 'added'); break;
+    case 'removed':  el.innerHTML = renderDiffList(result.removed, 'danger', 'removed'); break;
+    case 'modified': el.innerHTML = renderModifiedList(result.modified); break;
+    case 'unchanged': el.innerHTML = renderDiffList(result.unchanged, 'secondary', 'unchanged', true); break;
+    case 'query-result': {
+      const lv = AppState.queryResult.left ? AppState.queryResult.left.value : AppState.left.parsed;
+      const rv = AppState.queryResult.right ? AppState.queryResult.right.value : AppState.right.parsed;
+      el.innerHTML = `<div class="row">
+        <div class="col-md-6"><p class="text-blue-400 fw-semibold">Left</p><pre class="json-pre">${escHtml(prettyJson(lv, 6000))}</pre></div>
+        <div class="col-md-6"><p style="color:#4ade80" class="fw-semibold">Right</p><pre class="json-pre">${escHtml(prettyJson(rv, 6000))}</pre></div>
+      </div>`; break;
+    }
+    case 'norm-left':  el.innerHTML = `<pre class="json-pre">${escHtml(prettyJson(result.normalizedLeft, 12000))}</pre>`; break;
+    case 'norm-right': el.innerHTML = `<pre class="json-pre">${escHtml(prettyJson(result.normalizedRight, 12000))}</pre>`; break;
+    case 'config':     el.innerHTML = `<pre class="json-pre">${escHtml(prettyJson(AppState.lastConfig))}</pre>`; break;
+    default: el.innerHTML = '';
+  }
+}
+
+function renderDiffList(items, color, type, collapsed) {
+  if (!items.length) return `<p class="text-muted small">No ${type} items.</p>`;
+  const show = collapsed ? Math.min(5, items.length) : items.length;
+  const matchKeys = (AppState.lastConfig && AppState.lastConfig.matchKeys) || [];
+  const cssClass = type === 'added' ? 'diff-card-added' : type === 'removed' ? 'diff-card-removed' : 'diff-card-unchanged';
+  const iconHtml = type === 'added'
+    ? '<span style="color:#16a34a;font-weight:700;font-size:.9rem">+ Added</span>'
+    : type === 'removed'
+    ? '<span style="color:#dc2626;font-weight:700;font-size:.9rem">− Removed</span>'
+    : '<span style="color:#6b7280;font-size:.9rem">= Unchanged</span>';
+  let h = `<p class="text-muted small mb-2">${items.length} item(s)${collapsed && items.length > 5 ? ' — showing first 5' : ''}</p>`;
+  h += items.slice(0, show).map((item, i) => {
+    const id = `di-${type}-${i}`;
+    const val = item.value;
+    const identity = _recordIdentity(val, matchKeys);
+    // preview: pick a few readable fields to show in the card header
+    let previewHtml = '';
+    if (val && typeof val === 'object' && !Array.isArray(val)) {
+      const previewFields = ['item_name', 'name', 'item_code', 'order_type', 'item_type_name'];
+      const previews = previewFields.map(k => val[k] ? `<span class="me-3"><span style="color:#9ca3af;font-size:.75rem">${escHtml(k)}</span> <strong style="font-size:.8rem">${escHtml(String(val[k]))}</strong></span>` : '').filter(Boolean);
+      if (previews.length) previewHtml = `<div class="mt-2" style="line-height:1.8">${previews.join('')}</div>`;
+    }
+    return `<div class="diff-card ${cssClass}">
+      <div class="diff-card-header">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            ${iconHtml}
+            <code style="font-size:.78rem;color:#374151;word-break:break-all">${escHtml(item.path)}</code>
+          </div>
+          ${identity ? `<div class="diff-card-identity">${identity}</div>` : ''}
+          ${previewHtml}
+        </div>
+        <button class="btn btn-xs btn-outline-secondary flex-shrink-0" style="font-size:.75rem" onclick="toggleEl('${id}')">Full JSON</button>
+      </div>
+      <div id="${id}" style="display:none" class="diff-card-body">
+        <pre class="json-pre small">${escHtml(prettyJson(val, 3000))}</pre>
+      </div>
+    </div>`;
+  }).join('');
+  return h;
+}
+
+// Label fields shown in record identity header (in priority order)
+const IDENTITY_LABEL_FIELDS = ['en', 'hn', 'name', 'item_name', 'rowUID', 'rowId', 'id', 'code', 'visit_id'];
+
+function _recordIdentity(obj, matchKeys) {
+  if (!obj || typeof obj !== 'object') return '';
+  const parts = [];
+  // Match keys first
+  matchKeys.forEach(k => { if (obj[k] != null) parts.push(`<span class="text-info">${escHtml(k)}: ${escHtml(String(obj[k]))}</span>`); });
+  // Then human-readable labels not already shown
+  const shown = new Set(matchKeys);
+  IDENTITY_LABEL_FIELDS.forEach(k => {
+    if (!shown.has(k) && obj[k] != null && parts.length < 4) { parts.push(`<span class="text-muted">${escHtml(k)}: ${escHtml(String(obj[k]))}</span>`); shown.add(k); }
+  });
+  return parts.join(' · ');
+}
+
+function addToIgnore(field) {
+  const inp = document.getElementById('ignore-keys');
+  const cur = inp.value.split(',').map(s => s.trim()).filter(Boolean);
+  if (!cur.includes(field)) { cur.push(field); inp.value = cur.join(', '); }
+}
+
+function renderModifiedList(items) {
+  if (!items.length) return '<p class="text-muted small">No modified items.</p>';
+
+  const matchKeys = (AppState.lastConfig && AppState.lastConfig.matchKeys) || [];
+
+  // Field frequency summary — count how many items have each changed field
+  const fieldCount = {};
+  items.forEach(item => (item.diffs || []).forEach(d => {
+    const f = d.path.replace(/^.*\./, '');
+    fieldCount[f] = (fieldCount[f] || 0) + 1;
+  }));
+  const total = items.length;
+  const freqEntries = Object.entries(fieldCount).sort((a, b) => b[1] - a[1]);
+  const freqHtml = freqEntries.length
+    ? `<div class="alert alert-secondary py-2 px-3 mb-3" style="font-size:.82rem">
+        <strong class="me-2">Changed fields:</strong>
+        ${freqEntries.map(([f, n]) =>
+          `<span class="me-2"><code>${escHtml(f)}</code> <span class="badge bg-warning text-dark">${n}/${total}</span>
+           <button class="btn btn-xs btn-outline-secondary ms-1" style="font-size:.7rem;padding:0 4px" onclick="addToIgnore('${escHtml(f)}')" title="Add to Ignore Keys">+ignore</button></span>`
+        ).join('')}
+      </div>`
+    : '';
+
+  const cards = items.map((item, i) => {
+    const id = `dm-${i}`;
+    const diffs = item.diffs || [];
+
+    // Identity line: match-key values + human labels
+    const identity = _recordIdentity(item.left, matchKeys);
+
+    // Changed-field badges
+    const changedFields = diffs.map(d => {
+      const clr = d.type === 'added' ? 'success' : d.type === 'removed' ? 'danger' : 'warning';
+      const fieldName = d.path.replace(/^.*\./, '');
+      return `<span class="badge bg-${clr} ${d.type === 'changed' ? 'text-dark' : ''} me-1">${escHtml(fieldName)}</span>`;
+    }).join('');
+
+    // Field-level diff rows — always visible
+    const diffRows = diffs.length
+      ? diffs.map(d => {
+          const fieldName = d.path.replace(/^.*\./, '');
+          if (d.type === 'changed') {
+            const lv = JSON.stringify(d.left); const rv = JSON.stringify(d.right);
+            return `<tr>
+              <td class="pe-3 align-top" style="white-space:nowrap" rowspan="2"><code class="small text-warning">${escHtml(fieldName)}</code></td>
+              <td class="small" style="word-break:break-all;background:#fff1f2;border-radius:3px 3px 0 0;padding:2px 6px"><span style="color:#b91c1c;font-family:monospace">- ${escHtml(lv)}</span></td>
+            </tr><tr>
+              <td class="small" style="word-break:break-all;background:#f0fdf4;border-radius:0 0 3px 3px;padding:2px 6px"><span style="color:#15803d;font-family:monospace">+ ${escHtml(rv)}</span></td>
+            </tr>`;
+          } else if (d.type === 'added') {
+            return `<tr>
+              <td class="pe-3 align-top" style="white-space:nowrap"><code class="small text-success">${escHtml(fieldName)}</code></td>
+              <td class="small" style="word-break:break-all;background:#f0fdf4;border-radius:3px;padding:2px 6px"><span style="color:#15803d;font-family:monospace">+ ${escHtml(JSON.stringify(d.value))}</span></td>
+            </tr>`;
+          } else {
+            return `<tr>
+              <td class="pe-3 align-top" style="white-space:nowrap"><code class="small text-danger">${escHtml(fieldName)}</code></td>
+              <td class="small" style="word-break:break-all;background:#fff1f2;border-radius:3px;padding:2px 6px"><span style="color:#b91c1c;font-family:monospace">- ${escHtml(JSON.stringify(d.value))}</span></td>
+            </tr>`;
+          }
+        }).join('')
+      : `<tr><td colspan="2" class="text-muted small">No field-level diffs available</td></tr>`;
+
+    return `<div class="border border-warning rounded p-2 mb-2">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
+        <div>
+          <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+            <code class="text-warning small">${escHtml(item.path)}</code>
+            ${changedFields}
+          </div>
+          ${identity ? `<div class="small" style="font-size:.78rem">${identity}</div>` : ''}
+        </div>
+        <button class="btn btn-xs btn-outline-secondary flex-shrink-0" onclick="toggleEl('${id}')">Full JSON</button>
+      </div>
+      <div class="mt-2">
+        <table class="w-100" style="border-collapse:separate;border-spacing:0 2px">${diffRows}</table>
+      </div>
+      <div id="${id}" style="display:none;margin-top:8px">
+        <div class="row">
+          <div class="col-md-6"><small class="text-muted">Left:</small><pre class="json-pre small">${escHtml(prettyJson(item.left, 2000))}</pre></div>
+          <div class="col-md-6"><small class="text-muted">Right:</small><pre class="json-pre small">${escHtml(prettyJson(item.right, 2000))}</pre></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const matchNote = matchKeys.length === 0
+    ? `<div class="alert alert-warning py-1 px-2 mb-2" style="font-size:.78rem"><i class="fas fa-info-circle me-1"></i>ไม่มี Match Keys — records ถูกจับคู่ด้วย content hash (approximate) อาจเกิดการจับคู่ผิดตัว</div>`
+    : `<div class="alert alert-info py-1 px-2 mb-2" style="font-size:.78rem"><i class="fas fa-key me-1"></i>Matched by: <code>${escHtml(matchKeys.join(', '))}</code></div>`;
+  return `<p class="text-muted small">${items.length} modified item(s)</p>${matchNote}${freqHtml}${cards}`;
+}
+
+function toggleEl(id) { const e = document.getElementById(id); if (e) e.style.display = e.style.display === 'none' ? '' : 'none'; }
+
+// ================================================================
+// Toolbar Actions
+// ================================================================
+function loadFile(side, input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { document.getElementById(side + '-input').value = e.target.result; onInput(side); };
+  reader.readAsText(file); input.value = '';
+}
+function formatJSON(side) { const p = AppState[side].parsed; if (!p) return; document.getElementById(side + '-input').value = JSON.stringify(p, null, 2); onInput(side); }
+function minifyJSON(side) { const p = AppState[side].parsed; if (!p) return; document.getElementById(side + '-input').value = JSON.stringify(p); onInput(side); }
+function copyJSON(side) { const r = AppState[side].raw; if (!r) return; navigator.clipboard.writeText(r).then(() => showToast('Copied!', 'success')); }
+function clearJSON(side) {
+  document.getElementById(side + '-input').value = '';
+  AppState[side] = { raw: '', parsed: null, error: null, dupeKeys: [] };
+  renderEditorStatus(side, { error: null, value: null, duplicateKeys: [] });
+  updateSections();
+}
+
+function copySummary() {
+  if (!AppState.compareResult) return;
+  const { status, summary, warnings } = AppState.compareResult;
+  navigator.clipboard.writeText(JSON.stringify({ status, summary, warnings }, null, 2)).then(() => showToast('Summary copied!', 'success'));
+}
+
+function downloadReport() {
+  if (!AppState.compareResult) return;
+  const data = JSON.stringify({ ...AppState.compareResult, config: AppState.lastConfig, timestamp: new Date().toISOString() }, null, 2);
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([data], { type: 'application/json' })), download: 'json-compare-report.json' });
+  a.click();
+}
+
+// ================================================================
+// Init
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => { renderFilterRows(); });
+</script>
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
+</script>
+
+<style>
+.json-textarea{font-family:'Courier New',Courier,monospace;font-size:13px;resize:vertical;background:#1a1a2e;color:#e0e0e0;border-color:#374151;}
+.json-textarea:focus{background:#1a1a2e;color:#e0e0e0;border-color:#3b82f6;box-shadow:0 0 0 .2rem rgba(59,130,246,.25);}
+.json-pre{background:#0d1117;border:1px solid #374151;border-radius:4px;padding:10px;font-family:'Courier New',monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;max-height:400px;overflow-y:auto;color:#e0e0e0;margin:0;}
+#result-tabs{border-bottom:2px solid #e5e7eb;flex-wrap:wrap;}
+#result-tabs .nav-link{cursor:pointer;color:#6b7280;font-size:.82rem;font-weight:500;padding:7px 13px;border-radius:6px 6px 0 0;border:none;background:transparent;white-space:nowrap;}
+#result-tabs .nav-link.active{color:#1d4ed8;background:#eff6ff;border-bottom:3px solid #3b82f6;margin-bottom:-2px;font-weight:600;}
+#result-tabs .nav-link:hover:not(.active){color:#374151;background:#f3f4f6;}
+.diff-card{border-radius:8px;padding:12px 14px;margin-bottom:10px;border-left:4px solid;}
+.diff-card-added{background:#f0fdf4;border-left-color:#16a34a;border:1px solid #bbf7d0;border-left:4px solid #16a34a;}
+.diff-card-removed{background:#fff1f2;border-left-color:#dc2626;border:1px solid #fecaca;border-left:4px solid #dc2626;}
+.diff-card-unchanged{background:#f9fafb;border-left-color:#9ca3af;border:1px solid #e5e7eb;border-left:4px solid #9ca3af;}
+.diff-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.diff-card-identity{font-size:.8rem;color:#6b7280;margin-top:4px;line-height:1.5;}
+.diff-card-title{font-size:.85rem;font-weight:600;word-break:break-all;}
+.diff-card-body{margin-top:10px;}
+</style>
+<script src="../assets/js/load-nav.js"></script>
+</body>
+</html>
