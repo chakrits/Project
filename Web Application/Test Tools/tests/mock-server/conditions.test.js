@@ -451,3 +451,63 @@ describe('selectResponse — params source conditions', () => {
     expect(selectResponse(ep, {}, {}, { id: '9' }, { action: 'confirm' }).label).toBe('Default');
   });
 });
+
+// ─── Unit: endpoint.rules model (new — multi-active rules, top-down) ─────────
+
+describe('selectResponse — rules model', () => {
+  function makeRuleEndpoint(rules, responses) {
+    return { id: 'test', method: 'POST', path: '/test', rules, responses };
+  }
+
+  const responses = [
+    { label: 'Admin', status: 200, body: { role: 'admin' } },
+    { label: 'Guest', status: 200, body: { role: 'guest' } },
+    { label: 'Default', status: 400, body: { error: 'bad' }, isDefault: true }
+  ];
+
+  test('single active rule matches → its response is selected', () => {
+    const ep = makeRuleEndpoint([
+      { active: true, responseLabel: 'Admin', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'admin' }] },
+      { active: false, responseLabel: 'Guest', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'guest' }] }
+    ], responses);
+    expect(sel(ep, { role: 'admin' }).label).toBe('Admin');
+  });
+
+  test('multiple active rules — first matching rule (top-down) wins even if a later rule also matches', () => {
+    const ep = makeRuleEndpoint([
+      { active: true, responseLabel: 'Admin', conditions: [{ source: 'body', field: 'role', operator: 'exists' }] },
+      { active: true, responseLabel: 'Guest', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'admin' }] }
+    ], responses);
+    // Both rules match { role: 'admin' } — first rule (Admin) wins
+    expect(sel(ep, { role: 'admin' }).label).toBe('Admin');
+  });
+
+  test('multiple active rules — later rule matches when earlier active rule does not', () => {
+    const ep = makeRuleEndpoint([
+      { active: true, responseLabel: 'Admin', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'admin' }] },
+      { active: true, responseLabel: 'Guest', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'guest' }] }
+    ], responses);
+    expect(sel(ep, { role: 'guest' }).label).toBe('Guest');
+  });
+
+  test('inactive rule is skipped even if its conditions match', () => {
+    const ep = makeRuleEndpoint([
+      { active: false, responseLabel: 'Admin', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'admin' }] },
+      { active: true, responseLabel: 'Guest', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'guest' }] }
+    ], responses);
+    // Admin rule matches but is inactive; Guest rule is active but doesn't match role=admin
+    expect(sel(ep, { role: 'admin' }).label).toBe('Default');
+  });
+
+  test('no rule matches → falls through to Priority-1+ (fallback to Default)', () => {
+    const ep = makeRuleEndpoint([
+      { active: true, responseLabel: 'Admin', conditions: [{ source: 'body', field: 'role', operator: 'eq', value: 'admin' }] }
+    ], responses);
+    expect(sel(ep, { role: 'unknown' }).label).toBe('Default');
+  });
+
+  test('empty rules array → falls through to fallback (no crash)', () => {
+    const ep = makeRuleEndpoint([], responses);
+    expect(sel(ep, { role: 'admin' }).label).toBe('Default');
+  });
+});
