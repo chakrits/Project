@@ -183,12 +183,13 @@ function selectResponse(endpoint, query, headers, params, body) {
   const byLabel = label => responses.find(r => r.label === label);
   let selected = null;
 
-  // Priority 0a: New model — active rule whose conditions all match
+  // Priority 0a: New model — loop all active rules top-down, first match wins
   if (Array.isArray(endpoint.rules)) {
-    const activeRule = endpoint.rules.find(r => r.active);
-    if (activeRule && activeRule.conditions && activeRule.conditions.length > 0) {
-      if (evaluateConditions(activeRule.conditions, query, body, headers, params)) {
-        selected = byLabel(activeRule.responseLabel);
+    for (const rule of endpoint.rules) {
+      if (rule.active && rule.conditions?.length > 0 &&
+          evaluateConditions(rule.conditions, query, body, headers, params)) {
+        selected = byLabel(rule.responseLabel);
+        break;
       }
     }
   } else {

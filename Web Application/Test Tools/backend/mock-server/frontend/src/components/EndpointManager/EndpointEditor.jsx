@@ -276,7 +276,7 @@ export default function EndpointEditor({ endpoint, collections = [], onSave, onD
   };
 
   const activateRule = (i) => {
-    setRules(rules.map((r, idx) => ({ ...r, active: idx === i ? !r.active : false })));
+    setRules(rules.map((r, idx) => idx === i ? { ...r, active: !r.active } : r));
   };
 
   const removeRule = (i) => setRules(rules.filter((_, idx) => idx !== i));

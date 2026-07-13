@@ -216,12 +216,6 @@ router.post('/endpoints', (req, res) => {
     conditions:    Array.isArray(r.conditions) ? r.conditions : [],
   })).filter(r => responseLabels.has(r.responseLabel)) : [];
 
-  // Ensure only one rule is active
-  let foundActive = false;
-  for (const r of cleanRules) {
-    if (r.active) { if (foundActive) r.active = false; else foundActive = true; }
-  }
-
   const resolvedDefault = defaultResponseLabel && responseLabels.has(defaultResponseLabel)
     ? defaultResponseLabel
     : cleanResponses[0]?.label || '';
@@ -283,11 +277,6 @@ router.put('/endpoints/:id', (req, res) => {
       responseLabel: r.responseLabel || '',
       conditions:    Array.isArray(r.conditions) ? r.conditions : [],
     })).filter(r => responseLabels.has(r.responseLabel)) : [];
-
-    let foundActive = false;
-    for (const r of cleanRules) {
-      if (r.active) { if (foundActive) r.active = false; else foundActive = true; }
-    }
 
     const resolvedDefault = defaultResponseLabel && responseLabels.has(defaultResponseLabel)
       ? defaultResponseLabel
